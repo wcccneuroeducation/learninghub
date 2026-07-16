@@ -1,0 +1,135 @@
+{
+  "id": "brain_lobes",
+  "title": "Brain Lobes",
+  "subtitle": "Learn the four major lobes of the brain and their key functions.",
+  "reward": {
+    "xp": 50,
+    "brains": 1
+  },
+  "cards": [
+    {
+      "title": "",
+      "image": "foundations/images/brain_lobes.png",
+      "overlay": "foundations/images/frontal_overlay.png",
+      "frontPrompt": "Which highlighted lobe helps with planning, personality and voluntary movement?",
+      "backHeading": "Frontal Lobe",
+      "backPoints": [
+        "Planning and decision-making",
+        "Personality and behaviour",
+        "Voluntary movement",
+        "Speech production in the dominant hemisphere"
+      ],
+      "memoryLine": "Frontal lobe = the brain's organiser and decision-maker."
+    },
+    {
+      "title": "",
+      "image": "foundations/images/brain_lobes.png",
+      "overlay": "foundations/images/parietal_overlay.png",
+      "frontPrompt": "Which highlighted lobe processes touch and helps you understand where your body is?",
+      "backHeading": "Parietal Lobe",
+      "backPoints": [
+        "Processes touch and sensation",
+        "Helps with position sense",
+        "Supports spatial awareness",
+        "Combines sensory information"
+      ],
+      "memoryLine": "Parietal lobe = feeling your body and knowing where it is."
+    },
+    {
+      "title": "",
+      "image": "foundations/images/brain_lobes.png",
+      "overlay": "foundations/images/temporal_overlay.png",
+      "frontPrompt": "Which highlighted lobe is important for hearing, memory and understanding language?",
+      "backHeading": "Temporal Lobe",
+      "backPoints": [
+        "Processes hearing",
+        "Supports memory",
+        "Helps understand language",
+        "Recognises familiar sounds"
+      ],
+      "memoryLine": "Temporal lobe = hearing, memories and meaning."
+    },
+    {
+      "title": "",
+      "image": "foundations/images/brain_lobes.png",
+      "overlay": "foundations/images/occipital_overlay.png",
+      "frontPrompt": "Which highlighted lobe processes visual information?",
+      "backHeading": "Occipital Lobe",
+      "backPoints": [
+        "Processes vision",
+        "Recognises colour and shape",
+        "Interprets visual signals",
+        "Supports visual perception"
+      ],
+      "memoryLine": "Occipital lobe = the brain's visual processing centre."
+    }
+  ],
+  "questions": [
+    {
+      "question": "Which lobe is mainly responsible for vision?",
+      "options": [
+        "Frontal Lobe",
+        "Temporal Lobe",
+        "Occipital Lobe",
+        "Parietal Lobe"
+      ],
+      "answer": 2,
+      "feedback": "The occipital lobe processes visual information from the eyes."
+    },
+    {
+      "question": "Which lobe is most associated with planning, personality and decision-making?",
+      "options": [
+        "Parietal Lobe",
+        "Frontal Lobe",
+        "Temporal Lobe",
+        "Occipital Lobe"
+      ],
+      "answer": 1,
+      "feedback": "The frontal lobe supports executive functions, behaviour and voluntary movement."
+    },
+    {
+      "question": "Which lobe processes touch and body-position information?",
+      "options": [
+        "Temporal Lobe",
+        "Occipital Lobe",
+        "Parietal Lobe",
+        "Frontal Lobe"
+      ],
+      "answer": 2,
+      "feedback": "The parietal lobe processes sensation and helps with spatial and body awareness."
+    },
+    {
+      "question": "Which lobe is important for hearing and memory?",
+      "options": [
+        "Temporal Lobe",
+        "Frontal Lobe",
+        "Occipital Lobe",
+        "Parietal Lobe"
+      ],
+      "answer": 0,
+      "feedback": "The temporal lobe is strongly involved in hearing, memory and understanding language."
+    },
+    {
+      "question": "A patient develops poor judgement and a marked personality change. Which lobe may be affected?",
+      "options": [
+        "Occipital Lobe",
+        "Temporal Lobe",
+        "Frontal Lobe",
+        "Parietal Lobe"
+      ],
+      "answer": 2,
+      "feedback": "Frontal-lobe injury can affect judgement, behaviour, personality and planning."
+    },
+    {
+      "question": "A patient suddenly loses vision on one side. Which lobe is most likely affected?",
+      "options": [
+        "Occipital Lobe",
+        "Frontal Lobe",
+        "Parietal Lobe",
+        "Temporal Lobe"
+      ],
+      "answer": 0,
+      "feedback": "The occipital lobe is responsible for processing vision."
+    }
+  ]
+}
