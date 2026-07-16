@@ -37,10 +37,23 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 .card-overlay{
   opacity:1;
   pointer-events:none;
+  transform-origin:center;
   filter:
     drop-shadow(0 0 8px rgba(71,243,255,.9))
     drop-shadow(0 0 18px rgba(71,243,255,.55));
-  animation: anatomyPulse 2.2s ease-in-out infinite;
+  animation:anatomyPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes anatomyPulse{
+  0%,100%{
+    opacity:.8;
+    transform:scale(1);
+  }
+
+  50%{
+    opacity:1;
+    transform:scale(1.03);
+  }
 }
 .front-copy{padding:22px;text-align:center}
 .eyebrow{font-size:13px;color:var(--cyan);font-weight:900;text-transform:uppercase;letter-spacing:.8px}
