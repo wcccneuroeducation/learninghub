@@ -60,9 +60,50 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 .reward{font-size:28px;font-weight:900;color:var(--cyan);margin:18px 0}
 .small{color:var(--muted);font-size:13px}
 @media(max-width:650px){
-  header{padding:11px 12px}.brand-icon{font-size:28px}.hub-link{font-size:13px;padding:8px 10px}
-  main{padding-top:18px}.flip-card,.flip-inner{min-height:510px}.anatomy-image{height:320px}
-  .back{padding:22px}.option-grid{grid-template-columns:1fr}.controls{position:sticky;bottom:8px}
+  header{padding:11px 12px}
+  .brand-icon{font-size:28px}
+  .brand-title{font-size:clamp(18px,5.6vw,25px)}
+  .hub-link{font-size:13px;padding:8px 10px}
+
+  main{padding-top:18px;padding-bottom:34px}
+
+  /* Give the card enough height for the image and wrapped question text */
+  .flip-card,.flip-inner{min-height:610px}
+  .anatomy-image{height:285px}
+
+  .front-copy{padding:18px 18px 22px}
+  .front-copy h2,.back h2{
+    font-size:clamp(25px,7.2vw,34px);
+    line-height:1.12;
+  }
+  .front-copy p{font-size:16px}
+  .back{padding:22px}
+
+  .option-grid{grid-template-columns:1fr}
+
+  /* Keep controls below the card instead of floating over the teaching text */
+  .controls{
+    position:static;
+    bottom:auto;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+    margin-top:14px;
+  }
+  .controls .btn{
+    width:100%;
+    padding:12px 8px;
+    white-space:nowrap;
+  }
+
+  /* Result screen only has two controls */
+  .result-card .controls{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:390px){
+  .flip-card,.flip-inner{min-height:625px}
+  .anatomy-image{height:270px}
+  .controls .btn{font-size:14px}
 }
 </style>
 </head>
