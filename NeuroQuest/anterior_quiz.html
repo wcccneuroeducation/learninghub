@@ -4,443 +4,368 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Anterior Isle Quiz</title>
+
 <style>
-    body {
-
-font-family: Arial, sans-serif;
-
-background:
-linear-gradient(
-180deg,
-#050816,
-#0b1026);
-
-color:white;
-
-margin:0;
-
-padding:30px;
-
-text-align:center;
-
+:root{
+  --cyan:#47f3ff;
+  --purple:#9b5cff;
+  --pink:#ff4fd8;
+  --panel:rgba(8,18,35,.94);
+  --line:rgba(107,232,255,.28);
+  --muted:#c6d4e7;
 }
-    .card {
-
-background:
-rgba(
-10,
-15,
-30,
-0.92);
-
-max-width:860px;
-
-margin:0 auto;
-
-padding:28px;
-
-border-radius:14px;
-
-border:
-1px solid
-#00ffff;
-
-box-shadow:
-
-0 0 20px
-rgba(
-0,
-255,
-255,
-0.25);
-
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  min-height:100vh;
+  padding:16px;
+  font-family:Arial,sans-serif;
+  color:#fff;
+  text-align:center;
+  background:linear-gradient(180deg,#050816,#0b1026);
 }
-    h1 { margin-top: 0; }
-    select, input {
-padding: 14px;
-font-size: 18px;
-margin: 10px;
+button,select{font:inherit}
+.hidden{display:none!important}
+
+.card{
+  width:min(100%,860px);
+  margin:0 auto;
+  padding:18px;
+  border-radius:18px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  box-shadow:0 0 20px rgba(0,255,255,.16);
 }
 
-button {
-padding: 20px 32px;
-margin: 20px;
-font-size: 22px;
-border:none;
-border-radius:12px;
-cursor:pointer;
+.quiz-header{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:12px;
+  margin-bottom:16px;
+  text-align:left;
 }
-    .true-btn { background: #d7f5dc; }
-    .false-btn { background: #f9d7d7; }
-    .start-btn { background: #e2e8f0; }
-    #question {
-
-background:white;
-color:black;
-
-font-size:
-clamp(30px,6vw,44px);
-
-margin:22px 0;
-
-line-height:1.4;
-
-padding:28px;
-
-border-radius:12px;
-
-font-weight:
-600;
-
+.quiz-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
-    #feedback {
-
-font-size:
-28px;
-
-margin:25px;
-
-min-height:
-100px;
-
-line-height:
-1.5;
-
+.quiz-brand-icon{
+  font-size:30px;
+  filter:drop-shadow(0 0 8px rgba(71,243,255,.45));
 }
-    #progress {
-
-margin-top:
-15px;
-
-font-size:
-24px;
-
-color:
-#cccccc;
-
+.quiz-brand-title{
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:.6px;
 }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th{
+.quiz-brand-title span{
+  color:var(--cyan);
+  text-shadow:0 0 8px rgba(71,243,255,.38);
+}
+.quiz-context{
+  margin-top:2px;
+  color:var(--muted);
+  font-size:14px;
+}
+.map-link{
+  padding:9px 13px;
+  border-radius:11px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:800;
+  white-space:nowrap;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--line);
+}
+.map-link:hover{border-color:var(--cyan)}
 
-color:
-#ff4fd8;
-
+#setup{
+  padding:8px 0 2px;
+}
+.setup-title{
+  margin:4px 0 14px;
+  font-size:clamp(26px,5vw,38px);
+}
+.setup-copy{
+  margin:0 auto 18px;
+  max-width:600px;
+  color:var(--muted);
+  line-height:1.5;
+}
+.category-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+select{
+  min-width:180px;
+  padding:12px 14px;
+  color:#fff;
+  background:#10233c;
+  border:1px solid var(--line);
+  border-radius:10px;
+  font-size:17px;
+}
+.start-btn,.true-btn,.false-btn,.secondary-btn{
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:900;
+  transition:.18s ease;
+}
+.start-btn{
+  padding:14px 22px;
+  margin:16px 8px 4px;
+  color:#06111f;
+  background:linear-gradient(90deg,var(--cyan),#87f8ff);
+}
+.secondary-btn{
+  padding:13px 18px;
+  margin:8px;
+  color:#fff;
+  background:rgba(255,255,255,.07);
+  border:1px solid var(--line);
+}
+.start-btn:hover,.secondary-btn:hover,.true-btn:hover,.false-btn:hover{
+  transform:translateY(-2px);
 }
 
-td{
-
-color:
-#00ffff;
-
-}
-    .small {
-
-color:white;
-
-font-size:
-20px;
-
-line-height:
-1.5;
-
-}
-    .hidden { display: none; }
-    .award { font-size: 32px; margin: 15px; font-weight: bold; }
-    .brain3 {
-background:#9b59b6;
-color:white;
-}
-
-.brain2 {
-background:#3498db;
-color:white;
-}
-
-.brain1 {
-background:#6ab04c;
-color:white;
-}
-    .noaward { background: #f3f4f6; padding: 12px; border-radius: 10px; }
-  /*PC only*/
-  @media (min-width:769px){
-
+#videoContainer{margin-top:8px}
 #introVideo{
-
-width:100%;
-
-max-height:95vh;
-
-object-fit:contain;
-
+  width:100%;
+  max-height:78vh;
+  object-fit:contain;
+  border-radius:12px;
 }
 
+.quiz-meta{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin:4px 0 10px;
+  color:var(--muted);
+  font-size:15px;
 }
-    /* MOBILE ONLY */
-@media (max-width: 768px) {
-.award-name {
-display:none;
+.progress-shell{
+  height:8px;
+  margin-bottom:15px;
+  overflow:hidden;
+  border-radius:999px;
+  background:rgba(120,160,190,.18);
 }
-
-.award-cell {
-font-size:24px;
-white-space:normal;
+#questionProgressFill{
+  width:0;
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--cyan),var(--purple));
+  box-shadow:0 0 10px rgba(71,243,255,.35);
 }
-    table {
-
-font-size:
-16px;
-
-width:
-100%;
-
-table-layout:
-fixed;
-
+#question{
+  min-height:210px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0;
+  padding:24px;
+  border-radius:14px;
+  background:#fff;
+  color:#07111f;
+  font-size:clamp(26px,5.4vw,42px);
+  line-height:1.3;
+  font-weight:700;
+  overflow-wrap:anywhere;
 }
-
-th, td {
-
-padding:
-4px;
-
-text-align:
-center;
-
+.answer-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:16px;
 }
-
-th:nth-child(1),
-td:nth-child(1) {
-
-width:
-8%;
-
+.true-btn,.false-btn{
+  min-height:78px;
+  padding:18px;
+  margin:0;
+  font-size:23px;
+  color:#07111f;
 }
-
-th:nth-child(2),
-td:nth-child(2) {
-
-width:
-28%;
-
+.true-btn{background:#c9f4d1}
+.false-btn{background:#f7cdcd}
+#feedback{
+  min-height:92px;
+  margin:18px 4px 0;
+  font-size:24px;
+  line-height:1.35;
 }
-
-th:nth-child(3),
-td:nth-child(3) {
-
-width:
-18%;
-
+.small{
+  color:#fff;
+  font-size:18px;
+  line-height:1.45;
 }
-
-th:nth-child(4),
-td:nth-child(4) {
-
-width:
-14%;
-
-}
-
-th:nth-child(5),
-td:nth-child(5) {
-
-width:
-14%;
-
+#loadStatus{
+  margin:12px 0 0;
+  font-size:14px;
+  color:var(--muted);
 }
 
-th:nth-child(6),
-td:nth-child(6) {
-
-width:
-32%;
-
+.finish-card{
+  padding:8px 0 2px;
+}
+.finish-card h2{
+  margin:4px 0 6px;
+  font-size:clamp(30px,6vw,46px);
+}
+.finish-subtitle{
+  color:var(--cyan);
+  font-size:18px;
+  font-weight:800;
+}
+.result-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:20px 0;
+}
+.result-item{
+  padding:15px 10px;
+  border-radius:14px;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--line);
+}
+.result-label{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+.result-value{
+  margin-top:6px;
+  font-size:25px;
+  font-weight:900;
+}
+.award{
+  margin:16px auto;
+  padding:14px;
+  border-radius:13px;
+  font-size:29px;
+  font-weight:900;
+}
+.brain3{background:#9b59b6;color:#fff}
+.brain2{background:#3498db;color:#fff}
+.brain1{background:#6ab04c;color:#fff}
+.noaward{background:#e5e7eb;color:#111827}
+.finish-actions{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
 }
 
-/* hide date on mobile */
-
-th:nth-child(7),
-td:nth-child(7) {
-
-display:
-none;
-
+@media(max-width:600px){
+  body{padding:0}
+  .card{
+    min-height:100vh;
+    padding:12px;
+    border-radius:0;
+    border-left:none;
+    border-right:none;
+  }
+  .quiz-header{
+    margin-bottom:10px;
+  }
+  .quiz-brand-icon{font-size:25px}
+  .quiz-brand-title{font-size:21px}
+  .quiz-context{font-size:12px}
+  .map-link{
+    padding:8px 10px;
+    font-size:13px;
+  }
+  .setup-title{font-size:28px}
+  .category-row{
+    flex-direction:column;
+  }
+  select{width:100%;max-width:330px}
+  #question{
+    min-height:190px;
+    padding:20px 16px;
+    font-size:clamp(25px,7.6vw,35px);
+  }
+  .answer-row{gap:10px}
+  .true-btn,.false-btn{
+    min-height:74px;
+    font-size:21px;
+  }
+  #feedback{
+    min-height:82px;
+    margin-top:14px;
+    font-size:21px;
+  }
+  .small{font-size:16px}
+  .result-grid{
+    gap:8px;
+  }
+  .result-item{padding:12px 6px}
+  .result-value{font-size:21px}
+  .award{font-size:25px}
 }
-
-.award {
-font-size: 24px;
-}
-button {
-
-padding:26px 40px;
-font-size:26px;
-margin:20px;
-width:220px;
-height:90px;
-
-}
-
-.true-btn,
-.false-btn {
-
-display:block;
-margin:22px auto;
-width:240px;
-height:90px;
-
-}
-
-/* Mobile CSS Active Badge */
-/*
-body::after {
-
-content:
-"📱 Mobile CSS Active";
-
-position:
-fixed;
-
-bottom:
-50px;
-
-right:
-10px;
-
-background:
-green;
-
-padding:
-10px;
-
-border-radius:
-8px;
-
-color:
-white;
-
-font-size:
-14px;
-
-z-index:
-9999;
-
-}
-*/
-}
-
-#welcomeBox {
-  margin: 20px auto 10px;
-  text-align: center;
-}
-
-#welcomeText {
-  color: #00ffff;
-  font-size: 26px;
-  font-weight: bold;
-  text-shadow:
-    0 0 8px #00ffff,
-    0 0 16px #ff00ff;
-  margin: 10px 0;
-}
-
-#loginBtn {
-  background: #e2e8f0;
-}
-
-#signOutBtn {
-  background: transparent;
-  color: #00ffff;
-  border: 1px solid #00ffff;
-  font-size: 16px;
-  padding: 10px 18px;
-  margin: 8px;
-  box-shadow: 0 0 10px rgba(0,255,255,0.3);
-}
-
 </style>
+
 </head>
 <body>
 <div class="card">
 
-<img src="Quiz banner.png"
-style="
-width:100%;
-max-height:250px;
-object-fit:cover;
-border-radius:12px;
-margin-bottom:20px;
-">
+  <header class="quiz-header">
+    <div class="quiz-brand">
+      <div class="quiz-brand-icon">🧠</div>
+      <div>
+        <div class="quiz-brand-title">NEURO <span>QUEST</span></div>
+        <div id="quizContext" class="quiz-context">Anterior Isle</div>
+      </div>
+    </div>
+    <a class="map-link" href="anterior_isle.html">← Map</a>
+  </header>
 
-<h1 style="
-color:#ff00ff;
-font-size:48px;
-text-shadow:
-0 0 10px #ff00ff,
-0 0 20px #00ffff;
-">
-NEURO QUEST
-</h1>
-<div id="videoContainer"
-class="hidden">
+  <div id="videoContainer" class="hidden">
+    <video id="introVideo" controls>
+      <source id="videoSource" src="" type="video/mp4">
+    </video>
+  </div>
 
-<video
-id="introVideo"
-width="100%"
-controls
->
+  <section id="setup">
+    <h1 class="setup-title">Choose your territory</h1>
+    <p class="setup-copy">Watch the short introduction where available, then complete the true or false challenge.</p>
 
-<source
-id="videoSource"
-src=""
-type="video/mp4">
-
-</video>
-
-</div>
-    <div id="setup">
-        <p></p>
-        <p class="small"></p>
-
-        <label for="categorySelect">Choose category:</label>
-        <select id="categorySelect"></select>
-
-        <br>
-
-        <div id="welcomeBox" class="hidden">
-          <h3 id="welcomeText"></h3>
-          <button id="signOutBtn" onclick="logout()">Sign Out</button>
-        </div>
-
-        <button id="loginBtn" class="start-btn" onclick="googleLogin()">
-          Sign in with Google
-        </button>
-
-        <br>
-
-        <button class="start-btn"
-onclick="startIntro()">
-
-ENTER TERRITORY
-
-</button>
-        <button onclick="clearLeaderboards()">
-Leaderboard admin disabled
-</button>
-        <p id="loadStatus" class="small"></p>
-        <div id="setupLeaderboard"></div>
+    <div class="category-row">
+      <label for="categorySelect">Territory</label>
+      <select id="categorySelect"></select>
     </div>
 
-    <div id="quiz" class="hidden">
-        <div id="progress"></div>
-        <div id="question"></div>
+    <button class="start-btn" onclick="startIntro()">ENTER TERRITORY</button>
+    <p id="loadStatus"></p>
+  </section>
 
-        <button class="true-btn" onclick="answerQuestion(true)">TRUE</button>
-        <button class="false-btn" onclick="answerQuestion(false)">FALSE</button>
+  <section id="quiz" class="hidden">
+    <div class="quiz-meta">
+      <span id="progress"></span>
+      <span id="liveScore">Score: 0</span>
+    </div>
+    <div class="progress-shell"><div id="questionProgressFill"></div></div>
 
-        <div id="feedback"></div>
+    <div id="question"></div>
+
+    <div class="answer-row">
+      <button class="true-btn" onclick="answerQuestion(true)">TRUE</button>
+      <button class="false-btn" onclick="answerQuestion(false)">FALSE</button>
     </div>
 
-    <div id="finish" class="hidden"></div>
-    
+    <div id="feedback"></div>
+  </section>
+
+  <section id="finish" class="hidden"></section>
+
 </div>
 
 <script type="module">
@@ -449,10 +374,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 
 import {
   getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  onAuthStateChanged,
-  signOut
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
@@ -491,46 +413,14 @@ let leaderboardCache = {};
 let quizStartedAt = null;
 let quizStartedAtMs = null;
 
-window.googleLogin = async function () {
-  const provider = new GoogleAuthProvider();
-
-  try {
-    await signInWithPopup(auth, provider);
-  } catch (err) {
-    console.error(err);
-    alert("Login failed. Check console.");
-  }
-};
-
 onAuthStateChanged(auth, async user => {
-  currentUser = user;
-
-  const loginBtn = document.getElementById("loginBtn");
-  const welcomeBox = document.getElementById("welcomeBox");
-  const welcomeText = document.getElementById("welcomeText");
-
   if (!user) {
-    playerName = "";
-
-    if (loginBtn) loginBtn.classList.remove("hidden");
-    if (welcomeBox) welcomeBox.classList.add("hidden");
-
-    document.getElementById("loadStatus").innerHTML =
-      "Please sign in with Google to start Anterior Isle.";
-
+    window.location.replace("../index.html");
     return;
   }
 
+  currentUser = user;
   playerName = user.displayName || "NeuroQuest Player";
-
-  if (loginBtn) loginBtn.classList.add("hidden");
-
-  if (welcomeBox) welcomeBox.classList.remove("hidden");
-
-  if (welcomeText) {
-    welcomeText.textContent =
-      "Welcome back, " + playerName;
-  }
 
   await set(ref(db, `${APP_ROOT}/users/${user.uid}`), {
     displayName: playerName,
@@ -540,34 +430,13 @@ onAuthStateChanged(auth, async user => {
 
   await loadProgress();
 
-  document.getElementById("loadStatus").innerHTML =
-    "✅ Signed in. Choose a territory to begin.";
+  document.getElementById("loadStatus").textContent =
+    "Ready to begin.";
 
   if (allQuestions.length > 0) {
     populateCategories();
   }
 });
-
-window.logout = async function () {
-  try {
-    await signOut(auth);
-    leaderboardCache = {};
-    playerProgress = {};
-  } catch (err) {
-    console.error(err);
-    alert("Sign out failed. Check console.");
-  }
-};
-
-function addLoginButton() {
-  const loginBtn = document.getElementById("loginBtn");
-  const welcomeBox = document.getElementById("welcomeBox");
-
-  if (!currentUser) {
-    if (loginBtn) loginBtn.classList.remove("hidden");
-    if (welcomeBox) welcomeBox.classList.add("hidden");
-  }
-}
 
 async function loadProgress() {
   if (!currentUser) return;
@@ -592,8 +461,6 @@ fetch("questions.csv")
 
     if (currentUser) {
       populateCategories();
-    } else {
-      addLoginButton();
     }
   })
   .catch(error => {
@@ -652,7 +519,7 @@ function parseCSV(text) {
 
 window.startIntro = function () {
   if (!currentUser) {
-    alert("Please sign in with Google first.");
+    window.location.replace("../index.html");
     return;
   }
 
@@ -742,9 +609,13 @@ async function populateCategories() {
     select.value = "ICA";
   }
 
-  select.onchange = updateSetupLeaderboard;
+  select.onchange = () => {
+    document.getElementById("quizContext").textContent =
+      "Anterior Isle • " + select.value;
+  };
 
-  await updateSetupLeaderboard();
+  document.getElementById("quizContext").textContent =
+    "Anterior Isle • " + select.value;
 }
 
 function isCompleted(level) {
@@ -776,6 +647,8 @@ function startQuiz() {
 
   selectedCategory = document.getElementById("categorySelect").value;
   playerName = currentUser?.displayName || "NeuroQuest Player";
+  document.getElementById("quizContext").textContent =
+    "Anterior Isle • " + selectedCategory;
 
   let categoryQuestions = allQuestions.filter(q =>
     q.Category.trim().toUpperCase() === selectedCategory.trim().toUpperCase()
@@ -818,9 +691,17 @@ function showQuestion() {
 
   let q = quizQuestions[currentIndex];
 
-  document.getElementById("progress").innerHTML =
-    "Question " + (currentIndex + 1) + " of " + quizQuestions.length +
-    " | Score: " + score;
+  const questionNumber = currentIndex + 1;
+  const progressPercent = Math.round((currentIndex / quizQuestions.length) * 100);
+
+  document.getElementById("progress").textContent =
+    "Question " + questionNumber + " of " + quizQuestions.length;
+
+  document.getElementById("liveScore").textContent =
+    "Score: " + score;
+
+  document.getElementById("questionProgressFill").style.width =
+    progressPercent + "%";
 
   document.getElementById("question").innerHTML = q.Question;
   document.getElementById("feedback").innerHTML = "";
@@ -844,6 +725,7 @@ window.answerQuestion = function (choice) {
 };
 
 async function finishQuiz() {
+  document.getElementById("questionProgressFill").style.width = "100%";
   document.getElementById("quiz").classList.add("hidden");
 
   let percent = Math.round((score / quizQuestions.length) * 100);
@@ -875,11 +757,23 @@ async function finishQuiz() {
   );
 
   let finishHTML =
-    "<h2>Finished</h2>" +
-    "<h3>" + playerName + ": " + score + "/" + quizQuestions.length + " (" + percent + "%)</h3>" +
-    "<div class='award " + award.className + "'>" + award.emoji + " " + award.name + "</div>" +
-    "<button class='start-btn' onclick=\"returnToMap()\">Continue</button>" +
-    await renderLeaderboard(selectedCategory);
+    "<div class='finish-card'>" +
+      "<div class='finish-subtitle'>" + escapeHTML(selectedCategory) + " complete</div>" +
+      "<h2>Challenge finished</h2>" +
+      "<div class='result-grid'>" +
+        "<div class='result-item'><div class='result-label'>Score</div><div class='result-value'>" +
+          score + "/" + quizQuestions.length + "</div></div>" +
+        "<div class='result-item'><div class='result-label'>Accuracy</div><div class='result-value'>" +
+          percent + "%</div></div>" +
+        "<div class='result-item'><div class='result-label'>Brains</div><div class='result-value'>" +
+          award.brains + "</div></div>" +
+      "</div>" +
+      "<div class='award " + award.className + "'>" + award.emoji + " " + award.name + "</div>" +
+      "<div class='finish-actions'>" +
+        "<button class='secondary-btn' onclick='retryQuiz()'>Try again</button>" +
+        "<button class='start-btn' onclick='returnToMap()'>Return to map</button>" +
+      "</div>" +
+    "</div>";
 
   document.getElementById("finish").innerHTML = finishHTML;
   document.getElementById("finish").classList.remove("hidden");
@@ -1020,42 +914,6 @@ function formatDuration(seconds) {
   return mins + "m " + String(secs).padStart(2, "0") + "s";
 }
 
-async function renderLeaderboard(category) {
-  let scores = await getScoresForCategory(category);
-
-  if (scores.length === 0) {
-    return "<h2>" + category + " Leaderboard</h2><p>No scores yet.</p>";
-  }
-
-  let html =
-    "<h2>" + category + " Leaderboard</h2>" +
-    "<table>" +
-    "<tr><th>Rank</th><th>Name</th><th>Score</th><th>%</th><th>Time</th><th>Award</th><th>Date</th></tr>";
-
-  scores.forEach((s, index) => {
-    html += "<tr>" +
-      "<td>" + (index + 1) + "</td>" +
-      "<td>" + escapeHTML(s.name || "Player") + "</td>" +
-      "<td>" + (s.score || 0) + "/" + (s.total || 0) + "</td>" +
-      "<td>" + (s.percent || 0) + "%</td>" +
-      "<td>" + formatDuration(s.durationSeconds) + "</td>" +
-      "<td class='award-cell'>" + (s.awardEmoji || "") + "<br><span class='award-name'>" + escapeHTML(s.awardName || "") + "</span></td>" +
-      "<td>" + escapeHTML(s.date || "") + "</td>" +
-      "</tr>";
-  });
-
-  html += "</table>";
-  return html;
-}
-
-async function updateSetupLeaderboard() {
-  let category = document.getElementById("categorySelect").value;
-  if (!category) return;
-
-  document.getElementById("setupLeaderboard").innerHTML =
-    await renderLeaderboard(category);
-}
-
 function shuffle(array) {
   let copy = [...array];
 
@@ -1067,16 +925,10 @@ function shuffle(array) {
   return copy;
 }
 
-window.clearLeaderboards = function () {
-  alert("Firebase leaderboard clearing is disabled in this test version.");
-};
 
-window.goHome = function () {
+window.retryQuiz = function () {
   document.getElementById("finish").classList.add("hidden");
-  document.getElementById("setup").classList.remove("hidden");
-
-  populateCategories();
-  updateSetupLeaderboard();
+  startQuiz();
 };
 
 window.returnToMap = function () {
