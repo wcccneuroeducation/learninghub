@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Neuro Quest Dashboard</title>
+<style>
+:root{--cyan:#47f3ff;--purple:#9b5cff;--panel:rgba(7,22,42,.88);--line:rgba(107,232,255,.25)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{min-height:100vh;padding:20px;background:radial-gradient(circle at top,#21486e 0%,#10253f 40%,#050b15 100%);font-family:Arial,sans-serif;color:#fff}
+.hidden{display:none!important}
+#loginBox{width:min(92vw,520px);margin:80px auto;padding:38px;text-align:center;border-radius:24px;background:rgba(8,18,35,.92);border:1px solid rgba(0,255,255,.35);box-shadow:0 0 20px rgba(0,255,255,.15),inset 0 0 20px rgba(0,255,255,.05);backdrop-filter:blur(8px)}
+.login-brand{display:flex;align-items:center;justify-content:center;gap:14px}
+.login-brand h1{margin:0;font-size:clamp(38px,7vw,58px);color:#6be8ff;text-shadow:0 0 8px rgba(107,232,255,.6),0 0 18px rgba(107,232,255,.35)}
+.login-brain{font-size:46px;filter:drop-shadow(0 0 10px rgba(71,243,255,.55))}
+#loginSubtitle{margin:18px 0 30px;color:#b9dfff;line-height:1.6}
+button{font:inherit}
+.google-btn,.signout-btn{border:none;border-radius:999px;color:#fff;font-weight:800;cursor:pointer;transition:.2s}
+.google-btn{padding:14px 28px;font-size:18px;background:linear-gradient(180deg,#1a8cff,#0066ff)}
+.signout-btn{padding:10px 18px;background:rgba(255,255,255,.08);border:1px solid var(--line)}
+.google-btn:hover,.signout-btn:hover{transform:translateY(-2px);box-shadow:0 0 16px rgba(71,243,255,.35)}
+body.dashboard-active{padding:0;background:#07111f}
+#dashboardBox{min-height:100vh;background:linear-gradient(180deg,#163451 0%,#0d2239 45%,#07111f 100%)}
+.dashboard-header{position:sticky;top:0;z-index:1000;padding:18px 28px;display:grid;grid-template-columns:1.35fr 1fr auto;gap:18px;align-items:center;background:rgba(3,10,22,.94);border-bottom:1px solid var(--line);box-shadow:0 0 24px rgba(0,0,0,.45);backdrop-filter:blur(10px)}
+.brand-block,.user-block{display:flex;align-items:center;gap:14px}
+.brand-icon{font-size:42px;filter:drop-shadow(0 0 8px rgba(107,232,255,.55))}
+.brand-title{font-size:clamp(24px,3vw,38px);font-weight:900;letter-spacing:1px}
+.brand-title span{color:var(--cyan);text-shadow:0 0 10px rgba(71,243,255,.45)}
+.brand-tagline{font-size:13px;color:#d9e7ff;letter-spacing:1px;margin-top:3px}
+.welcome-block{padding-left:22px;text-align:left;border-left:1px solid var(--line)}
+.welcome-title{font-size:clamp(23px,3vw,38px);font-weight:900}
+.welcome-subtitle{margin-top:5px;color:#d9e7ff}
+.user-block{justify-content:flex-end;text-align:right}
+.user-avatar{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);object-fit:cover;background:#10253f}
+.user-name{font-weight:800}.user-email{margin-top:3px;font-size:12px;color:#b9c9df}
+.dashboard-main{width:min(1180px,calc(100% - 40px));margin:0 auto;padding:46px 0 60px}
+.hero{margin-bottom:30px;padding:26px;text-align:left;border-radius:22px;background:linear-gradient(135deg,rgba(71,243,255,.10),rgba(155,92,255,.09));border:1px solid var(--line);box-shadow:0 0 24px rgba(71,243,255,.08)}
+.hero h2{margin:0 0 10px;font-size:clamp(27px,4vw,42px)}.hero p{margin:0;max-width:760px;color:#d9e7ff;line-height:1.6}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+.stat-card{padding:18px;border-radius:17px;background:var(--panel);border:1px solid var(--line)}
+.stat-label{color:var(--cyan);font-size:13px;font-weight:800}.stat-value{margin-top:7px;font-size:28px;font-weight:900}
+.progress-bar{height:9px;margin-top:10px;border-radius:999px;overflow:hidden;background:rgba(120,160,190,.20)}
+.progress-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--cyan),var(--purple));box-shadow:0 0 12px rgba(71,243,255,.45)}
+.section-title{margin:4px 0 16px;text-align:left;font-size:23px}
+.app-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.app-card{position:relative;min-height:190px;padding:24px;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;text-align:left;color:#fff;text-decoration:none;border-radius:22px;background:var(--panel);border:1px solid var(--line);box-shadow:0 0 18px rgba(71,243,255,.08);transition:.2s}
+.app-card:hover{transform:translateY(-4px);border-color:rgba(71,243,255,.62);box-shadow:0 0 24px rgba(71,243,255,.22)}
+.app-top{display:flex;gap:16px;align-items:flex-start}.app-icon{font-size:42px}.app-title{margin:0;font-size:25px}.app-description{margin-top:8px;color:#d9e7ff;line-height:1.5}
+.app-footer{margin-top:24px;display:flex;justify-content:space-between;align-items:center;color:var(--cyan);font-weight:800}
+.badge{padding:5px 9px;border-radius:999px;background:rgba(71,243,255,.10);border:1px solid var(--line);color:#dffcff;font-size:12px}
+.dashboard-footer{padding:24px 20px 34px;text-align:center;color:#9fb1c8;font-size:13px}
+@media(max-width:900px){.dashboard-header{grid-template-columns:1fr}.welcome-block{padding-left:0;border-left:none}.user-block{justify-content:space-between;text-align:left}}
+@media(max-width:680px){body{padding:12px}#loginBox{margin:42px auto;padding:28px 22px}.dashboard-header{padding:14px}.brand-icon{font-size:34px}.brand-title{font-size:27px}.brand-tagline{font-size:11px}.dashboard-main{width:min(100% - 24px,1180px);padding-top:26px}.stats-grid,.app-grid{grid-template-columns:1fr}.hero{padding:20px}.app-card{min-height:165px}.user-email{display:none}}
+</style>
+</head>
+<body>
+<section id="loginBox">
+  <div class="login-brand"><div class="login-brain">🧠</div><h1>Neuro Quest</h1></div>
+  <div id="loginSubtitle">People learn because they are curious,<br>not because they are told to remember.</div>
+  <button class="google-btn" onclick="googleLogin()">Sign in with Google</button>
+</section>
+
+<section id="dashboardBox" class="hidden">
+<header class="dashboard-header">
+  <div class="brand-block"><div class="brand-icon">🧠</div><div><div class="brand-title">NEURO <span>QUEST</span></div><div class="brand-tagline">THINK • IDENTIFY • ACT</div></div></div>
+  <div class="welcome-block"><div class="welcome-title">Welcome back</div><div class="welcome-subtitle">Choose where you want to continue learning.</div></div>
+  <div class="user-block"><img id="userAvatar" class="user-avatar" alt=""><div><div id="userName" class="user-name">Explorer</div><div id="userEmail" class="user-email"></div></div><button class="signout-btn" onclick="googleLogout()">Sign out</button></div>
+</header>
+
+<main class="dashboard-main">
+<section class="hero"><h2>Your neuro learning hub</h2><p>Continue your Neuro Quest journey, complete a short Daily Neuro activity, review the leaderboard, or check your learning record.</p></section>
+
+<section class="stats-grid">
+  <article class="stat-card"><div class="stat-label">Anterior Isle</div><div class="stat-value"><span id="completedVessels">0</span> / 5</div><div class="progress-bar"><div id="completionFill" class="progress-fill"></div></div></article>
+  <article class="stat-card"><div class="stat-label">Brains Earned</div><div class="stat-value">🧠 <span id="totalBrains">0</span> / 15</div><div class="progress-bar"><div id="brainFill" class="progress-fill"></div></div></article>
+  <article class="stat-card"><div class="stat-label">Brain Level</div><div class="stat-value">Level <span id="brainLevel">1</span></div><div class="progress-bar"><div id="levelFill" class="progress-fill"></div></div></article>
+</section>
+
+<h2 class="section-title">Choose your path</h2>
+<section class="app-grid">
+  <a class="app-card" href="anterior_isle.html"><div class="app-top"><div class="app-icon">🏝️</div><div><h3 class="app-title">Anterior Isle</h3><div class="app-description">Explore the anterior circulation, unlock vessels and earn Brains.</div></div></div><div class="app-footer"><span>Continue journey</span><span>→</span></div></a>
+  <a class="app-card" href="daily_neuro.html"><div class="app-top"><div class="app-icon">🎯</div><div><h3 class="app-title">Daily Neuro</h3><div class="app-description">Short, focused neuro learning with a quick knowledge check.</div></div></div><div class="app-footer"><span>Start today’s learning</span><span>→</span></div></a>
+  <a class="app-card" href="leaderboard.html"><div class="app-top"><div class="app-icon">🏆</div><div><h3 class="app-title">Leaderboard</h3><div class="app-description">See the top explorers and compare Neuro Quest progress.</div></div></div><div class="app-footer"><span>View leaderboard</span><span>→</span></div></a>
+  <a class="app-card" href="cpd.html"><div class="app-top"><div class="app-icon">📘</div><div><h3 class="app-title">My CPD</h3><div class="app-description">Review your learning record, time spent and completed activities.</div></div></div><div class="app-footer"><span>Open CPD record</span><span class="badge">Link ready</span></div></a>
+</section>
+</main>
+<footer class="dashboard-footer">Neuro Quest — people learn because they are curious.</footer>
+</section>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQOx2eQRwPFlHC2EmQREtdFYb9Mha7zuQ",
+  authDomain: "neuro-itu-monitor-sim.firebaseapp.com",
+  databaseURL: "https://neuro-itu-monitor-sim-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "neuro-itu-monitor-sim",
+  storageBucket: "neuro-itu-monitor-sim.firebasestorage.app",
+  messagingSenderId: "610257056899",
+  appId: "1:610257056899:web:4763a538136eaf95a8d7b6"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getDatabase(app);
+const provider=new GoogleAuthProvider();
+const APP_ROOT="neuroQuest";
+
+window.googleLogin=async()=>{try{await signInWithPopup(auth,provider)}catch(error){console.error(error);alert("Login failed. Check the browser console.")}};
+window.googleLogout=async()=>{try{await signOut(auth)}catch(error){console.error(error);alert("Sign out failed.")}};
+
+const getBrains=(progress,level)=>Number(progress?.[level]?.brains||0);
+const isCompleted=(progress,level)=>progress?.[level]?.completed===true;
+
+function updateDashboard(progress={}){
+  const levels=["ICA","ACA","MCA","ACom","AChA"];
+  const completed=levels.filter(level=>isCompleted(progress,level)).length;
+  const brains=levels.reduce((sum,level)=>sum+getBrains(progress,level),0);
+  const completionPercent=Math.round((completed/levels.length)*100);
+  const brainPercent=Math.round((brains/15)*100);
+  const totalXp=brains*20;
+  const level=Math.max(1,Math.floor(totalXp/100)+1);
+  const levelXp=totalXp%100;
+  document.getElementById("completedVessels").textContent=completed;
+  document.getElementById("completionFill").style.width=`${completionPercent}%`;
+  document.getElementById("totalBrains").textContent=brains;
+  document.getElementById("brainFill").style.width=`${brainPercent}%`;
+  document.getElementById("brainLevel").textContent=level;
+  document.getElementById("levelFill").style.width=`${levelXp}%`;
+}
+
+onAuthStateChanged(auth,async user=>{
+  const loginBox=document.getElementById("loginBox");
+  const dashboardBox=document.getElementById("dashboardBox");
+  if(!user){
+    document.body.classList.remove("dashboard-active");
+    loginBox.classList.remove("hidden");
+    dashboardBox.classList.add("hidden");
+    return;
+  }
+  document.body.classList.add("dashboard-active");
+  document.getElementById("userName").textContent=user.displayName||"Neuro Explorer";
+  document.getElementById("userEmail").textContent=user.email||"";
+  const avatar=document.getElementById("userAvatar");
+  if(user.photoURL){avatar.src=user.photoURL;avatar.classList.remove("hidden")}else{avatar.classList.add("hidden")}
+  await update(ref(db,`${APP_ROOT}/users/${user.uid}`),{displayName:user.displayName||"",email:user.email||"",photoURL:user.photoURL||"",lastLogin:new Date().toISOString()});
+  const snap=await get(ref(db,`${APP_ROOT}/progress/${user.uid}`));
+  updateDashboard(snap.exists()?snap.val():{});
+  loginBox.classList.add("hidden");
+  dashboardBox.classList.remove("hidden");
+});
+</script>
+</body>
+</html>
