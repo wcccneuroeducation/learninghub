@@ -2,26 +2,275 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Neuro Foundations</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Neuro Foundations — Brain Anatomy</title>
 <style>
-:root{--cyan:#47f3ff;--purple:#9b5cff;--panel:rgba(7,22,42,.9);--line:rgba(107,232,255,.25)}
+:root{
+  --cyan:#47f3ff;--purple:#9b5cff;--panel:rgba(7,22,42,.9);
+  --line:rgba(107,232,255,.25);--muted:#c7d5e8;--good:#61f5a9;--bad:#ff7597;
+}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;padding:20px;display:grid;place-items:center;background:linear-gradient(180deg,#163451 0%,#0d2239 45%,#07111f 100%);font-family:Arial,sans-serif;color:#fff;text-align:center}
-.card{width:min(92vw,720px);padding:36px;border-radius:24px;background:var(--panel);border:1px solid var(--line);box-shadow:0 0 24px rgba(71,243,255,.12)}
-.icon{font-size:58px}
-h1{margin:14px 0 10px;font-size:clamp(34px,7vw,54px)}
-p{color:#d9e7ff;line-height:1.6;font-size:18px}
-a{display:inline-block;margin-top:18px;padding:12px 18px;border-radius:12px;color:#fff;text-decoration:none;font-weight:800;background:rgba(255,255,255,.07);border:1px solid var(--line)}
-a:hover{border-color:var(--cyan)}
+body{margin:0;min-height:100vh;background:linear-gradient(180deg,#163451 0%,#0d2239 45%,#07111f 100%);font-family:Arial,sans-serif;color:#fff}
+button,a{font:inherit}
+.hidden{display:none!important}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 20px;background:rgba(3,10,22,.94);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-icon{font-size:34px}
+.brand-title{font-size:clamp(20px,4vw,30px);font-weight:900}
+.brand-title span{color:var(--cyan)}
+.hub-link{padding:9px 12px;border:1px solid var(--line);border-radius:11px;color:#fff;text-decoration:none;font-weight:800}
+main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
+.hero{text-align:center;margin-bottom:20px}
+.hero h1{margin:0;font-size:clamp(30px,7vw,50px)}
+.hero p{margin:8px auto 0;max-width:700px;color:var(--muted);line-height:1.55}
+.top-progress{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:18px 0 12px;color:var(--cyan);font-weight:800}
+.progress{height:9px;border-radius:99px;overflow:hidden;background:rgba(120,160,190,.2)}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--purple));transition:width .3s}
+.flip-card{perspective:1400px;min-height:560px}
+.flip-inner{position:relative;width:100%;min-height:560px;transition:transform .65s;transform-style:preserve-3d}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:24px;overflow:hidden;background:var(--panel);border:1px solid var(--line);box-shadow:0 0 24px rgba(71,243,255,.11)}
+.back{transform:rotateY(180deg);padding:28px;display:flex;flex-direction:column;justify-content:center}
+.card-image{width:100%;height:390px;object-fit:cover;display:block;background:#000}
+.front-copy{padding:22px;text-align:center}
+.eyebrow{font-size:13px;color:var(--cyan);font-weight:900;text-transform:uppercase;letter-spacing:.8px}
+.front-copy h2,.back h2{margin:8px 0 10px;font-size:clamp(26px,5vw,38px)}
+.front-copy p{margin:0;color:var(--muted);font-size:18px;line-height:1.5}
+.back ul{padding-left:22px;margin:10px 0 16px}
+.back li{margin:10px 0;color:#e7f0fb;line-height:1.45}
+.memory{padding:14px;border-radius:14px;background:rgba(71,243,255,.08);border:1px solid var(--line);color:var(--cyan);font-weight:800}
+.controls{display:flex;gap:10px;justify-content:center;margin-top:16px}
+.btn{border:none;border-radius:13px;padding:12px 17px;font-weight:900;cursor:pointer;color:#fff;background:linear-gradient(135deg,#167be8,#7349dd)}
+.btn.secondary{background:rgba(255,255,255,.08);border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.quiz-card,.result-card{padding:26px;border-radius:24px;background:var(--panel);border:1px solid var(--line);box-shadow:0 0 24px rgba(71,243,255,.10)}
+.quiz-card h2,.result-card h2{margin-top:0}
+.option-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.option{padding:15px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:#fff;text-align:left;font-weight:800;cursor:pointer}
+.option.correct{border-color:var(--good);background:rgba(97,245,169,.12)}
+.option.wrong{border-color:var(--bad);background:rgba(255,117,151,.12)}
+.feedback{min-height:48px;margin-top:16px;color:var(--muted);line-height:1.5}
+.reward{font-size:28px;font-weight:900;color:var(--cyan);margin:18px 0}
+.small{color:var(--muted);font-size:13px}
+@media(max-width:650px){
+  header{padding:11px 12px}.brand-icon{font-size:28px}.hub-link{font-size:13px;padding:8px 10px}
+  main{padding-top:18px}.flip-card,.flip-inner{min-height:510px}.card-image{height:320px}
+  .back{padding:22px}.option-grid{grid-template-columns:1fr}.controls{position:sticky;bottom:8px}
+}
 </style>
 </head>
 <body>
-<main class="card">
-  <div class="icon">🧠</div>
-  <h1>Neuro Foundations</h1>
-  <p>The pathway is ready. The first learning modules will be added here next.</p>
-  <a href="index.html">← Back to Learning Hub</a>
+<header>
+  <div class="brand"><div class="brand-icon">🧠</div><div class="brand-title">NEURO <span>FOUNDATIONS</span></div></div>
+  <a class="hub-link" href="index.html">← Hub</a>
+</header>
+
+<main>
+  <section class="hero">
+    <h1 id="moduleTitle">Brain Anatomy</h1>
+    <p id="moduleSubtitle">Loading module…</p>
+  </section>
+
+  <section id="lessonSection">
+    <div class="top-progress"><span id="cardCounter">Card 1 of 4</span><span>Tap the card to flip</span></div>
+    <div class="progress"><div id="lessonFill"></div></div>
+
+    <div id="flipCard" class="flip-card" tabindex="0" role="button" aria-label="Flip learning card">
+      <div class="flip-inner">
+        <article class="face front">
+          <img id="cardImage" class="card-image" alt="">
+          <div class="front-copy">
+            <div class="eyebrow" id="cardTitle"></div>
+            <h2 id="frontPrompt"></h2>
+            <p>Tap anywhere on the card to reveal the answer.</p>
+          </div>
+        </article>
+        <article class="face back">
+          <div class="eyebrow">Key teaching</div>
+          <h2 id="backHeading"></h2>
+          <ul id="backPoints"></ul>
+          <div class="memory" id="memoryLine"></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="previousBtn" class="btn secondary">Previous</button>
+      <button id="flipBtn" class="btn secondary">Flip card</button>
+      <button id="nextBtn" class="btn">Next card</button>
+    </div>
+  </section>
+
+  <section id="quizSection" class="hidden">
+    <div class="top-progress"><span id="questionCounter">Question 1 of 5</span><span id="scoreText">Score: 0</span></div>
+    <div class="progress"><div id="quizFill"></div></div>
+    <article class="quiz-card">
+      <div class="eyebrow">Knowledge check</div>
+      <h2 id="questionText"></h2>
+      <div id="options" class="option-grid"></div>
+      <div id="feedback" class="feedback"></div>
+      <button id="quizNextBtn" class="btn hidden">Next question</button>
+    </article>
+  </section>
+
+  <section id="resultSection" class="hidden">
+    <article class="result-card">
+      <div class="eyebrow">Module complete</div>
+      <h2 id="resultHeading">Excellent work</h2>
+      <p id="resultText"></p>
+      <div class="reward">+50 XP &nbsp; 🧠 +1 Brain</div>
+      <p class="small">Completion is saved once per account. Repeating the module will not duplicate the reward.</p>
+      <div class="controls">
+        <a class="btn secondary" href="index.html" style="text-decoration:none">Return to Hub</a>
+        <button id="restartBtn" class="btn">Review again</button>
+      </div>
+    </article>
+  </section>
 </main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyDQOx2eQRwPFlHC2EmQREtdFYb9Mha7zuQ",
+  authDomain:"neuro-itu-monitor-sim.firebaseapp.com",
+  databaseURL:"https://neuro-itu-monitor-sim-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"neuro-itu-monitor-sim",
+  storageBucket:"neuro-itu-monitor-sim.firebasestorage.app",
+  messagingSenderId:"610257056899",
+  appId:"1:610257056899:web:4763a538136eaf95a8d7b6"
+};
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getDatabase(app);
+const APP_ROOT="neuroQuest";
+const TOTAL_FOUNDATION_MODULES=8;
+
+let user=null,moduleData=null,cardIndex=0,questionIndex=0,score=0,answered=false;
+
+async function loadModule(){
+  const response=await fetch("foundations/brain_anatomy.json");
+  if(!response.ok) throw new Error("Could not load Brain Anatomy content.");
+  moduleData=await response.json();
+  document.getElementById("moduleTitle").textContent=moduleData.title;
+  document.getElementById("moduleSubtitle").textContent=moduleData.subtitle;
+  showCard();
+}
+
+function showCard(){
+  const c=moduleData.cards[cardIndex];
+  document.getElementById("flipCard").classList.remove("flipped");
+  document.getElementById("cardCounter").textContent=`Card ${cardIndex+1} of ${moduleData.cards.length}`;
+  document.getElementById("lessonFill").style.width=`${((cardIndex+1)/moduleData.cards.length)*100}%`;
+  document.getElementById("cardImage").src=c.image;
+  document.getElementById("cardImage").alt=c.title;
+  document.getElementById("cardTitle").textContent=c.title;
+  document.getElementById("frontPrompt").textContent=c.frontPrompt;
+  document.getElementById("backHeading").textContent=c.backHeading;
+  document.getElementById("backPoints").innerHTML=c.backPoints.map(p=>`<li>${p}</li>`).join("");
+  document.getElementById("memoryLine").textContent=c.memoryLine;
+  document.getElementById("previousBtn").disabled=cardIndex===0;
+  document.getElementById("nextBtn").textContent=cardIndex===moduleData.cards.length-1?"Start knowledge check":"Next card";
+}
+
+function flipCard(){document.getElementById("flipCard").classList.toggle("flipped")}
+document.getElementById("flipCard").onclick=flipCard;
+document.getElementById("flipCard").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipCard()}};
+document.getElementById("flipBtn").onclick=flipCard;
+document.getElementById("previousBtn").onclick=()=>{if(cardIndex>0){cardIndex--;showCard()}};
+document.getElementById("nextBtn").onclick=()=>{
+  if(cardIndex<moduleData.cards.length-1){cardIndex++;showCard()}
+  else startQuiz();
+};
+
+function startQuiz(){
+  document.getElementById("lessonSection").classList.add("hidden");
+  document.getElementById("quizSection").classList.remove("hidden");
+  questionIndex=0;score=0;showQuestion();
+}
+function showQuestion(){
+  answered=false;
+  const q=moduleData.questions[questionIndex];
+  document.getElementById("questionCounter").textContent=`Question ${questionIndex+1} of ${moduleData.questions.length}`;
+  document.getElementById("scoreText").textContent=`Score: ${score}`;
+  document.getElementById("quizFill").style.width=`${((questionIndex+1)/moduleData.questions.length)*100}%`;
+  document.getElementById("questionText").textContent=q.question;
+  document.getElementById("feedback").textContent="";
+  document.getElementById("quizNextBtn").classList.add("hidden");
+  const box=document.getElementById("options");box.innerHTML="";
+  q.options.forEach((option,index)=>{
+    const b=document.createElement("button");
+    b.className="option";b.textContent=option;
+    b.onclick=()=>answerQuestion(index,b);
+    box.appendChild(b);
+  });
+}
+function answerQuestion(index,button){
+  if(answered)return;answered=true;
+  const q=moduleData.questions[questionIndex];
+  [...document.querySelectorAll(".option")].forEach((b,i)=>{
+    b.disabled=true;
+    if(i===q.answer)b.classList.add("correct");
+  });
+  if(index===q.answer){score++;document.getElementById("feedback").textContent=`Correct. ${q.feedback}`}
+  else{button.classList.add("wrong");document.getElementById("feedback").textContent=`Not quite. ${q.feedback}`}
+  document.getElementById("scoreText").textContent=`Score: ${score}`;
+  document.getElementById("quizNextBtn").textContent=questionIndex===moduleData.questions.length-1?"See result":"Next question";
+  document.getElementById("quizNextBtn").classList.remove("hidden");
+}
+document.getElementById("quizNextBtn").onclick=()=>{
+  if(questionIndex<moduleData.questions.length-1){questionIndex++;showQuestion()}
+  else finishModule();
+};
+
+async function finishModule(){
+  document.getElementById("quizSection").classList.add("hidden");
+  document.getElementById("resultSection").classList.remove("hidden");
+  const passed=score>=4;
+  document.getElementById("resultHeading").textContent=passed?"Brain Anatomy complete":"Good first attempt";
+  document.getElementById("resultText").textContent=passed
+    ?`You scored ${score} out of ${moduleData.questions.length}. Your reward has been added to your Learning Hub.`
+    :`You scored ${score} out of ${moduleData.questions.length}. Review the cards and try again to earn the module reward.`;
+  document.querySelector(".reward").classList.toggle("hidden",!passed);
+  if(passed&&user) await saveCompletion();
+}
+async function saveCompletion(){
+  const progressRef=ref(db,`${APP_ROOT}/foundationsProgress/${user.uid}`);
+  const snap=await get(progressRef);
+  const current=snap.exists()?snap.val():{};
+  const completed=current.completedModules||{};
+  if(completed[moduleData.id]===true)return;
+
+  completed[moduleData.id]=true;
+  const completedCount=Object.values(completed).filter(Boolean).length;
+  const brains=Number(current.brains||0)+Number(moduleData.reward.brains||0);
+  const xp=Number(current.xp||0)+Number(moduleData.reward.xp||0);
+  const percentComplete=Math.round((completedCount/TOTAL_FOUNDATION_MODULES)*100);
+
+  await update(progressRef,{
+    completedModules:completed,
+    completedCount,
+    totalModules:TOTAL_FOUNDATION_MODULES,
+    percentComplete,
+    brains,
+    xp,
+    lastCompletedModule:moduleData.id,
+    lastCompletedAt:new Date().toISOString()
+  });
+}
+document.getElementById("restartBtn").onclick=()=>{
+  document.getElementById("resultSection").classList.add("hidden");
+  document.getElementById("lessonSection").classList.remove("hidden");
+  cardIndex=0;showCard();window.scrollTo({top:0,behavior:"smooth"});
+};
+
+onAuthStateChanged(auth,async currentUser=>{
+  if(!currentUser){window.location.replace("index.html");return}
+  user=currentUser;
+  try{await loadModule()}catch(error){console.error(error);alert(error.message)}
+});
+</script>
 </body>
 </html>
