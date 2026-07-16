@@ -24,12 +24,13 @@
     {
       "title": "Cerebellum",
       "image": "foundations/images/brain_sagittal.png",
+      "overlay": "foundations/images/cerebellum_overlay.png",
       "frontPrompt": "Which structure helps make movement smooth and coordinated?",
       "backHeading": "The Cerebellum",
       "backPoints": [
         "Located behind the brainstem.",
-        "Coordinates balance, posture and movement.",
-        "Helps fine-tune motor activity.",
+        "Helps with balance.",
+        "Helps coordinate movement.",
         "Cerebellar damage can affect balance and coordination."
       ],
       "memoryLine": "Think: balance and coordination."
@@ -37,19 +38,21 @@
     {
       "title": "Brainstem",
       "image": "foundations/images/brain_sagittal.png",
+      "overlay": "foundations/images/brainstem_overlay.png",
       "frontPrompt": "Which structure connects the brain to the spinal cord?",
       "backHeading": "The Brainstem",
       "backPoints": [
         "Made up of the midbrain, pons and medulla.",
-        "Carries pathways between the brain and spinal cord.",
-        "Supports consciousness, breathing and cardiovascular control.",
-        "Helps control breathing, heart rate and consciousness."
+        "Connects the brain to the spinal cord.",
+        "Helps control breathing and heart rate.",
+        "Supports consciousness."
       ],
       "memoryLine": "Think: connection and vital functions."
     },
     {
       "title": "Ventricles",
       "image": "foundations/images/ventricles.png",
+      "overlay": "foundations/images/ventricles_overlay.png",
       "frontPrompt": "Which spaces contain and circulate cerebrospinal fluid?",
       "backHeading": "The Ventricular System",
       "backPoints": [
