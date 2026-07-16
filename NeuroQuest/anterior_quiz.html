@@ -448,9 +448,9 @@ async function loadProgress() {
   playerProgress = snap.exists() ? snap.val() : {};
 }
 
-fetch("questions.csv")
+fetch("anterior_quiz.csv")
   .then(response => {
-    if (!response.ok) throw new Error("Could not load questions.csv");
+    if (!response.ok) throw new Error("Could not load anterior_quiz.csv");
     return response.text();
   })
   .then(csvText => {
@@ -465,7 +465,7 @@ fetch("questions.csv")
   })
   .catch(error => {
     document.getElementById("loadStatus").innerHTML =
-      "❌ Could not load questions.csv. If testing locally, run through Live Server rather than double-clicking the HTML file.";
+      "❌ Could not load anterior_quiz.csv. If testing locally, run through Live Server rather than double-clicking the HTML file.";
     console.error(error);
   });
 
