@@ -34,7 +34,7 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 .anatomy-image{position:relative;width:100%;height:390px;overflow:hidden;background:#000}
 .card-image,.card-overlay{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
 .card-image{opacity:.28;filter:saturate(.75) brightness(.72)}
-.card-overlay{opacity:1;pointer-events:none;filter:drop-shadow(0 0 10px rgba(71,243,255,.85));animation:anatomyPulse 2.2s ease-in-out infinite}
+.card-overlay{opacity:1;pointer-events:none;filter:drop-shadow(0 0 10px rgba(71,243,255,.85))}
 @keyframes anatomyPulse{
   0%,100%{opacity:.82;transform:scale(1)}
   50%{opacity:1;transform:scale(1.012)}
@@ -204,10 +204,42 @@ let user=null,moduleData=null,cardIndex=0,questionIndex=0,score=0,answered=false
 async function loadModule(){
   const response=await fetch("foundations/brain_anatomy.json");
   if(!response.ok) throw new Error("Could not load Brain Anatomy content.");
+
   moduleData=await response.json();
+
   document.getElementById("moduleTitle").textContent=moduleData.title;
+  document.getElementById("moduleSubtitle").textContent="Loading teaching images...";
+
+  await preloadModuleImages();
+
   document.getElementById("moduleSubtitle").textContent=moduleData.subtitle;
   showCard();
+}
+
+async function preloadModuleImages(){
+  const imagePaths=[
+    ...new Set(
+      moduleData.cards.flatMap(card=>
+        [card.image,card.overlay].filter(Boolean)
+      )
+    )
+  ];
+
+  await Promise.all(
+    imagePaths.map(src=>
+      new Promise(resolve=>{
+        const image=new Image();
+
+        image.onload=resolve;
+        image.onerror=()=>{
+          console.warn(`Could not preload image: ${src}`);
+          resolve();
+        };
+
+        image.src=src;
+      })
+    )
+  );
 }
 
 function showCard(){
