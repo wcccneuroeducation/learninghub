@@ -9,7 +9,8 @@
   "cards": [
     {
       "title": "Cerebrum",
-      "image": "foundations/images/brain_lobes.png",
+      "image": "foundations/images/brain_sagittal.png",
+      "overlay": "foundations/images/cerebrum_overlay.png",
       "frontPrompt": "Which structure forms the largest part of the brain?",
       "backHeading": "The Cerebrum",
       "backPoints": [
@@ -29,7 +30,7 @@
         "Located behind the brainstem.",
         "Coordinates balance, posture and movement.",
         "Helps fine-tune motor activity.",
-        "Cerebellar injury can cause ataxia and poor coordination."
+        "Cerebellar damage can affect balance and coordination."
       ],
       "memoryLine": "Think: balance and coordination."
     },
@@ -42,7 +43,7 @@
         "Made up of the midbrain, pons and medulla.",
         "Carries pathways between the brain and spinal cord.",
         "Supports consciousness, breathing and cardiovascular control.",
-        "Many cranial nerve nuclei are located here."
+        "Helps control breathing, heart rate and consciousness."
       ],
       "memoryLine": "Think: connection and vital functions."
     },
@@ -54,67 +55,68 @@
       "backPoints": [
         "Includes the two lateral ventricles, third ventricle and fourth ventricle.",
         "Contains cerebrospinal fluid (CSF).",
-        "CSF is mainly produced by the choroid plexus.",
+        "CSF is produced inside the ventricles.",
         "Obstruction to CSF flow can cause hydrocephalus."
       ],
       "memoryLine": "Think: CSF production, circulation and protection."
     }
   ],
   "questions": [
-    {
-      "question": "Which structure is responsible for conscious thought, sensation and voluntary movement?",
-      "options": [
-        "Cerebrum",
-        "Cerebellum",
-        "Brainstem",
-        "Fourth ventricle"
-      ],
-      "answer": 0,
-      "feedback": "The cerebrum supports higher cognitive function, sensation and voluntary movement."
-    },
-    {
-      "question": "A patient has marked ataxia and poor coordination. Which structure may be affected?",
-      "options": [
-        "Cerebellum",
-        "Lateral ventricle",
-        "Frontal horn",
-        "Medulla only"
-      ],
-      "answer": 0,
-      "feedback": "The cerebellum coordinates balance and smooth, accurate movement."
-    },
-    {
-      "question": "Which three parts make up the brainstem?",
-      "options": [
-        "Midbrain, pons and medulla",
-        "Frontal, parietal and temporal lobes",
-        "Thalamus, hypothalamus and cerebellum",
-        "Lateral, third and fourth ventricles"
-      ],
-      "answer": 0,
-      "feedback": "The brainstem consists of the midbrain, pons and medulla."
-    },
-    {
-      "question": "Where is cerebrospinal fluid found?",
-      "options": [
-        "Within the ventricular system",
-        "Only inside arteries",
-        "Only beneath the scalp",
-        "Inside the cerebral cortex"
-      ],
-      "answer": 0,
-      "feedback": "CSF circulates through the ventricles and the subarachnoid space."
-    },
-    {
-      "question": "Obstruction of CSF flow can lead to:",
-      "options": [
-        "Hydrocephalus",
-        "Ataxia only",
-        "Aphasia only",
-        "Peripheral neuropathy"
-      ],
-      "answer": 0,
-      "feedback": "Blocked CSF circulation can enlarge the ventricles and cause hydrocephalus."
-    }
-  ]
+  {
+    "question": "Which is the largest part of the brain?",
+    "options": [
+      "Brainstem",
+      "Cerebrum",
+      "Cerebellum",
+      "Fourth ventricle"
+    ],
+    "answer": 1,
+    "feedback": "The cerebrum is the largest part of the brain."
+  },
+  {
+    "question": "Which part of the brain helps with balance and coordination?",
+    "options": [
+      "Ventricles",
+      "Brainstem",
+      "Cerebellum",
+      "Cerebrum"
+    ],
+    "answer": 2,
+    "feedback": "The cerebellum coordinates balance and smooth movement."
+  },
+  {
+    "question": "What is the main job of the brainstem?",
+    "options": [
+      "Memory and language",
+      "Balance and coordination",
+      "CSF production",
+      "Breathing and consciousness"
+    ],
+    "answer": 3,
+    "feedback": "The brainstem helps control breathing, consciousness and other vital functions."
+  },
+  {
+    "question": "Where is cerebrospinal fluid (CSF) found?",
+    "options": [
+      "Within the ventricular system",
+      "Only inside arteries",
+      "Only beneath the scalp",
+      "Inside the cerebral cortex"
+    ],
+    "answer": 0,
+    "feedback": "CSF circulates through the ventricles and around the brain and spinal cord."
+  },
+  {
+    "question": "What can happen if CSF flow becomes blocked?",
+    "options": [
+      "Peripheral neuropathy",
+      "Hydrocephalus",
+      "Ataxia",
+      "Aphasia"
+    ],
+    "answer": 1,
+    "feedback": "Blocked CSF flow can cause hydrocephalus."
+  }
+]
+
 }
