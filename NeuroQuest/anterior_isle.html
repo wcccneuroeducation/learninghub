@@ -841,6 +841,10 @@ const db = getDatabase(app);
 
 const APP_ROOT = "neuroQuest";
 
+// Keep this true while you are building and testing.
+// Change it to false when you are ready to enforce the Foundations unlock.
+const DEVELOPMENT_UNLOCK_ALL = true;
+
 let currentUser = null;
 let playerProgress = {};
 
@@ -852,12 +856,37 @@ onAuthStateChanged(auth, async user => {
 
   currentUser = user;
 
-document.body.classList.add("map-active");
+  document.body.classList.add("map-active");
+
   await set(ref(db, `${APP_ROOT}/users/${user.uid}`), {
     displayName: user.displayName,
     email: user.email,
     lastLogin: new Date().toISOString()
   });
+
+  const [foundationsSnap, accessSnap] = await Promise.all([
+    get(ref(db, `${APP_ROOT}/foundationsProgress/${user.uid}`)),
+    get(ref(db, `${APP_ROOT}/access/${user.uid}`))
+  ]);
+
+  const foundationsData = foundationsSnap.exists() ? foundationsSnap.val() : {};
+  const accessData = accessSnap.exists() ? accessSnap.val() : {};
+
+  const foundationsPercent = Number(
+    foundationsData.percentComplete ??
+    foundationsData.percent ??
+    0
+  );
+
+  const hasQuestAccess =
+    DEVELOPMENT_UNLOCK_ALL ||
+    accessData.accessOverride === true ||
+    foundationsPercent >= 100;
+
+  if (!hasQuestAccess) {
+    window.location.replace("../index.html?locked=neuroQuest");
+    return;
+  }
 
   await loadProgress();
 

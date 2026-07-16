@@ -46,6 +46,10 @@ body.dashboard-active{padding:0;background:#07111f}
 .app-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .app-card{position:relative;min-height:190px;padding:24px;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;text-align:left;color:#fff;text-decoration:none;border-radius:22px;background:var(--panel);border:1px solid var(--line);box-shadow:0 0 18px rgba(71,243,255,.08);transition:.2s}
 .app-card:hover{transform:translateY(-4px);border-color:rgba(71,243,255,.62);box-shadow:0 0 24px rgba(71,243,255,.22)}
+.app-card.locked{opacity:.62;filter:grayscale(.35);cursor:not-allowed}
+.app-card.locked:hover{transform:none;border-color:var(--line);box-shadow:0 0 18px rgba(71,243,255,.08)}
+.lock-pill{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:#d9e7ff;font-size:12px;font-weight:800}
+.path-note{margin:-6px 0 18px;text-align:left;color:#b9c9df;font-size:14px}
 .app-top{display:flex;gap:16px;align-items:flex-start}.app-icon{font-size:42px}.app-title{margin:0;font-size:25px}.app-description{margin-top:8px;color:#d9e7ff;line-height:1.5}
 .app-footer{margin-top:24px;display:flex;justify-content:space-between;align-items:center;color:var(--cyan);font-weight:800}
 .badge{padding:5px 9px;border-radius:999px;background:rgba(71,243,255,.10);border:1px solid var(--line);color:#dffcff;font-size:12px}
@@ -69,20 +73,54 @@ body.dashboard-active{padding:0;background:#07111f}
 </header>
 
 <main class="dashboard-main">
-<section class="hero"><h2>Your neuro learning hub</h2><p>Continue your Neuro Quest journey, complete a short Daily Neuro activity, review the leaderboard, or check your learning record.</p></section>
+<section class="hero"><h2>Your neuro learning hub</h2><p>Begin with Neuro Foundations, unlock Daily Neuro as you progress, then open Neuro Quest when Foundations is complete.</p></section>
 
 <section class="stats-grid">
-  <article class="stat-card"><div class="stat-label">Anterior Isle</div><div class="stat-value"><span id="completedVessels">0</span> / 5</div><div class="progress-bar"><div id="completionFill" class="progress-fill"></div></div></article>
-  <article class="stat-card"><div class="stat-label">Brains Earned</div><div class="stat-value">🧠 <span id="totalBrains">0</span> / 15</div><div class="progress-bar"><div id="brainFill" class="progress-fill"></div></div></article>
-  <article class="stat-card"><div class="stat-label">Brain Level</div><div class="stat-value">Level <span id="brainLevel">1</span></div><div class="progress-bar"><div id="levelFill" class="progress-fill"></div></div></article>
+  <article class="stat-card">
+    <div class="stat-label">Neuro Foundations</div>
+    <div class="stat-value"><span id="foundationsPercent">0</span>%</div>
+    <div class="progress-bar"><div id="foundationsFill" class="progress-fill"></div></div>
+  </article>
+  <article class="stat-card">
+    <div class="stat-label">Daily Neuro</div>
+    <div class="stat-value" id="dailyUnlockText">Locked</div>
+    <div class="progress-bar"><div id="dailyUnlockFill" class="progress-fill"></div></div>
+  </article>
+  <article class="stat-card">
+    <div class="stat-label">Neuro Quest</div>
+    <div class="stat-value" id="questUnlockText">Locked</div>
+    <div class="progress-bar"><div id="questUnlockFill" class="progress-fill"></div></div>
+  </article>
 </section>
 
-<h2 class="section-title">Choose your path</h2>
+<h2 class="section-title">Your learning pathway</h2>
+<p class="path-note">Neuro Foundations opens first. Daily Neuro unlocks at 50%, and Anterior Isle unlocks when Foundations is complete.</p>
+
 <section class="app-grid">
-  <a class="app-card" href="NeuroQuest/anterior_isle.html"><div class="app-top"><div class="app-icon">🏝️</div><div><h3 class="app-title">Anterior Isle</h3><div class="app-description">Explore the anterior circulation, unlock vessels and earn Brains.</div></div></div><div class="app-footer"><span>Continue journey</span><span>→</span></div></a>
-  <a class="app-card" href="daily_neuro.html"><div class="app-top"><div class="app-icon">🎯</div><div><h3 class="app-title">Daily Neuro</h3><div class="app-description">Short, focused neuro learning with a quick knowledge check.</div></div></div><div class="app-footer"><span>Start today’s learning</span><span>→</span></div></a>
-  <a class="app-card" href="leaderboard.html"><div class="app-top"><div class="app-icon">🏆</div><div><h3 class="app-title">Leaderboard</h3><div class="app-description">See the top explorers and compare Neuro Quest progress.</div></div></div><div class="app-footer"><span>Coming Soon</span><span>→</span></div></a>
-  <a class="app-card" href="cpd.html"><div class="app-top"><div class="app-icon">📘</div><div><h3 class="app-title">My CPD</h3><div class="app-description">Review your learning record, time spent and completed activities.</div></div></div><div class="app-footer"><span>Coming Soon</span><span class="badge">Link ready</span></div></a>
+  <a id="foundationsCard" class="app-card" href="neuro_foundations.html">
+    <div class="app-top"><div class="app-icon">🧠</div><div><h3 class="app-title">Neuro Foundations</h3><div class="app-description">Build the essential knowledge needed for safe neurocritical care practice.</div></div></div>
+    <div class="app-footer"><span>Start Foundations</span><span>→</span></div>
+  </a>
+
+  <a id="dailyCard" class="app-card locked" href="daily_neuro.html" data-required="50">
+    <div class="app-top"><div class="app-icon">🎯</div><div><h3 class="app-title">Daily Neuro</h3><div class="app-description">Short, focused learning that strengthens confidence and keeps knowledge active.</div></div></div>
+    <div class="app-footer"><span id="dailyCardText">Unlocks at 50% Foundations</span><span class="lock-pill" id="dailyLock">🔒 Locked</span></div>
+  </a>
+
+  <a id="questCard" class="app-card locked" href="NeuroQuest/anterior_isle.html" data-required="100">
+    <div class="app-top"><div class="app-icon">🏝️</div><div><h3 class="app-title">Neuro Quest: Anterior Isle</h3><div class="app-description">Explore the anterior circulation, unlock vessels and earn Brains.</div></div></div>
+    <div class="app-footer"><span id="questCardText">Complete Foundations to unlock</span><span class="lock-pill" id="questLock">🔒 Locked</span></div>
+  </a>
+
+  <a class="app-card" href="leaderboard.html">
+    <div class="app-top"><div class="app-icon">🏆</div><div><h3 class="app-title">Leaderboard</h3><div class="app-description">See the top explorers and compare Neuro Quest progress.</div></div></div>
+    <div class="app-footer"><span>Coming Soon</span><span>→</span></div>
+  </a>
+
+  <a class="app-card" href="cpd.html">
+    <div class="app-top"><div class="app-icon">📘</div><div><h3 class="app-title">My CPD</h3><div class="app-description">Review your learning record, time spent and completed activities.</div></div></div>
+    <div class="app-footer"><span>Coming Soon</span><span class="badge">Link ready</span></div>
+  </a>
 </section>
 </main>
 <footer class="dashboard-footer">Neuro Quest — people learn because they are curious.</footer>
@@ -112,24 +150,62 @@ const APP_ROOT="neuroQuest";
 window.googleLogin=async()=>{try{await signInWithPopup(auth,provider)}catch(error){console.error(error);alert("Login failed. Check the browser console.")}};
 window.googleLogout=async()=>{try{await signOut(auth)}catch(error){console.error(error);alert("Sign out failed.")}};
 
-const getBrains=(progress,level)=>Number(progress?.[level]?.brains||0);
-const isCompleted=(progress,level)=>progress?.[level]?.completed===true;
+// Keep this true while you are building and testing.
+// Change it to false when you are ready to enforce Firebase access rules.
+const DEVELOPMENT_UNLOCK_ALL = true;
 
-function updateDashboard(progress={}){
-  const levels=["ICA","ACA","MCA","ACom","AChA"];
-  const completed=levels.filter(level=>isCompleted(progress,level)).length;
-  const brains=levels.reduce((sum,level)=>sum+getBrains(progress,level),0);
-  const completionPercent=Math.round((completed/levels.length)*100);
-  const brainPercent=Math.round((brains/15)*100);
-  const totalXp=brains*20;
-  const level=Math.max(1,Math.floor(totalXp/100)+1);
-  const levelXp=totalXp%100;
-  document.getElementById("completedVessels").textContent=completed;
-  document.getElementById("completionFill").style.width=`${completionPercent}%`;
-  document.getElementById("totalBrains").textContent=brains;
-  document.getElementById("brainFill").style.width=`${brainPercent}%`;
-  document.getElementById("brainLevel").textContent=level;
-  document.getElementById("levelFill").style.width=`${levelXp}%`;
+function setCardAccess(cardId, unlocked, unlockedText, lockedText) {
+  const card = document.getElementById(cardId);
+  const lock = document.getElementById(cardId === "dailyCard" ? "dailyLock" : "questLock");
+  const text = document.getElementById(cardId === "dailyCard" ? "dailyCardText" : "questCardText");
+
+  card.classList.toggle("locked", !unlocked);
+  card.setAttribute("aria-disabled", String(!unlocked));
+
+  if (lock) {
+    lock.textContent = unlocked ? "🔓 Open" : "🔒 Locked";
+  }
+
+  if (text) {
+    text.textContent = unlocked ? unlockedText : lockedText;
+  }
+
+  card.onclick = event => {
+    if (!unlocked) {
+      event.preventDefault();
+      alert(lockedText);
+    }
+  };
+}
+
+function updateDashboard(foundationsPercent = 0, accessOverride = false) {
+  const percent = Math.max(0, Math.min(100, Number(foundationsPercent || 0)));
+  const fullAccess = DEVELOPMENT_UNLOCK_ALL || accessOverride === true;
+  const dailyUnlocked = fullAccess || percent >= 50;
+  const questUnlocked = fullAccess || percent >= 100;
+
+  document.getElementById("foundationsPercent").textContent = percent;
+  document.getElementById("foundationsFill").style.width = `${percent}%`;
+
+  document.getElementById("dailyUnlockText").textContent = dailyUnlocked ? "Open" : `${percent}% / 50%`;
+  document.getElementById("dailyUnlockFill").style.width = `${Math.min(100, percent * 2)}%`;
+
+  document.getElementById("questUnlockText").textContent = questUnlocked ? "Open" : `${percent}% / 100%`;
+  document.getElementById("questUnlockFill").style.width = `${percent}%`;
+
+  setCardAccess(
+    "dailyCard",
+    dailyUnlocked,
+    "Start today’s learning",
+    "Unlocks at 50% Foundations"
+  );
+
+  setCardAccess(
+    "questCard",
+    questUnlocked,
+    "Continue journey",
+    "Complete Neuro Foundations to unlock"
+  );
 }
 
 onAuthStateChanged(auth,async user=>{
@@ -146,9 +222,28 @@ onAuthStateChanged(auth,async user=>{
   document.getElementById("userEmail").textContent=user.email||"";
   const avatar=document.getElementById("userAvatar");
   if(user.photoURL){avatar.src=user.photoURL;avatar.classList.remove("hidden")}else{avatar.classList.add("hidden")}
-  await update(ref(db,`${APP_ROOT}/users/${user.uid}`),{displayName:user.displayName||"",email:user.email||"",photoURL:user.photoURL||"",lastLogin:new Date().toISOString()});
-  const snap=await get(ref(db,`${APP_ROOT}/progress/${user.uid}`));
-  updateDashboard(snap.exists()?snap.val():{});
+  await update(ref(db,`${APP_ROOT}/users/${user.uid}`),{
+    displayName:user.displayName||"",
+    email:user.email||"",
+    photoURL:user.photoURL||"",
+    lastLogin:new Date().toISOString()
+  });
+
+  const [foundationsSnap, accessSnap] = await Promise.all([
+    get(ref(db,`${APP_ROOT}/foundationsProgress/${user.uid}`)),
+    get(ref(db,`${APP_ROOT}/access/${user.uid}`))
+  ]);
+
+  const foundationsData = foundationsSnap.exists() ? foundationsSnap.val() : {};
+  const accessData = accessSnap.exists() ? accessSnap.val() : {};
+
+  const foundationsPercent = Number(
+    foundationsData.percentComplete ??
+    foundationsData.percent ??
+    0
+  );
+
+  updateDashboard(foundationsPercent, accessData.accessOverride === true);
   loginBox.classList.add("hidden");
   dashboardBox.classList.remove("hidden");
 });
