@@ -60,7 +60,24 @@ body.dashboard-active{padding:0;background:#07111f}
 .badge{padding:5px 9px;border-radius:999px;background:rgba(71,243,255,.10);border:1px solid var(--line);color:#dffcff;font-size:12px}
 .dashboard-footer{padding:24px 20px 34px;text-align:center;color:#9fb1c8;font-size:13px}
 @media(max-width:900px){.dashboard-header{grid-template-columns:1fr}.welcome-block{padding-left:0;border-left:none}.user-block{justify-content:space-between;text-align:left}}
-@media(max-width:680px){body{padding:12px}#loginBox{margin:42px auto;padding:28px 22px}.dashboard-header{padding:14px}.brand-icon{font-size:34px}.brand-title{font-size:27px}.brand-tagline{font-size:11px}.dashboard-main{width:min(100% - 24px,1180px);padding-top:26px}.rewards-grid,.stats-grid,.app-grid{grid-template-columns:1fr}.hero{padding:20px}.app-card{min-height:165px}.user-email{display:none}}
+@media(max-width:680px){body{padding:12px}#loginBox{margin:42px auto;padding:28px 22px}.dashboard-header{padding:14px}.brand-icon{font-size:34px}.brand-title{font-size:27px}.brand-tagline{font-size:11px}.dashboard-main{width:min(100% - 24px,1180px);padding-top:26px}
+.rewards-grid,.stats-grid{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  padding-bottom:6px;
+  scroll-snap-type:x proximity;
+  scrollbar-width:none;
+}
+.rewards-grid::-webkit-scrollbar,.stats-grid::-webkit-scrollbar{display:none}
+.rewards-card,.stat-card{
+  flex:0 0 min(78vw,270px);
+  scroll-snap-align:start;
+}
+.app-grid{grid-template-columns:1fr}
+.hero{padding:20px}
+.app-card{min-height:165px}
+.user-email{display:none}}
 </style>
 </head>
 <body>
