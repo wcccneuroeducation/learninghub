@@ -37,6 +37,11 @@ body.dashboard-active{padding:0;background:#07111f}
 .dashboard-main{width:min(1180px,calc(100% - 40px));margin:0 auto;padding:46px 0 60px}
 .hero{margin-bottom:30px;padding:26px;text-align:left;border-radius:22px;background:linear-gradient(135deg,rgba(71,243,255,.10),rgba(155,92,255,.09));border:1px solid var(--line);box-shadow:0 0 24px rgba(71,243,255,.08)}
 .hero h2{margin:0 0 10px;font-size:clamp(27px,4vw,42px)}.hero p{margin:0;max-width:760px;color:#d9e7ff;line-height:1.6}
+.rewards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px}
+.rewards-card{padding:20px;border-radius:19px;background:linear-gradient(135deg,rgba(71,243,255,.11),rgba(155,92,255,.09));border:1px solid rgba(107,232,255,.34);box-shadow:0 0 20px rgba(71,243,255,.10)}
+.rewards-label{color:var(--cyan);font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.6px}
+.rewards-value{margin-top:8px;font-size:31px;font-weight:900}
+.rewards-note{margin-top:6px;color:#b9c9df;font-size:12px}
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
 .stat-card{padding:18px;border-radius:17px;background:var(--panel);border:1px solid var(--line)}
 .stat-label{color:var(--cyan);font-size:13px;font-weight:800}.stat-value{margin-top:7px;font-size:28px;font-weight:900}
@@ -55,7 +60,7 @@ body.dashboard-active{padding:0;background:#07111f}
 .badge{padding:5px 9px;border-radius:999px;background:rgba(71,243,255,.10);border:1px solid var(--line);color:#dffcff;font-size:12px}
 .dashboard-footer{padding:24px 20px 34px;text-align:center;color:#9fb1c8;font-size:13px}
 @media(max-width:900px){.dashboard-header{grid-template-columns:1fr}.welcome-block{padding-left:0;border-left:none}.user-block{justify-content:space-between;text-align:left}}
-@media(max-width:680px){body{padding:12px}#loginBox{margin:42px auto;padding:28px 22px}.dashboard-header{padding:14px}.brand-icon{font-size:34px}.brand-title{font-size:27px}.brand-tagline{font-size:11px}.dashboard-main{width:min(100% - 24px,1180px);padding-top:26px}.stats-grid,.app-grid{grid-template-columns:1fr}.hero{padding:20px}.app-card{min-height:165px}.user-email{display:none}}
+@media(max-width:680px){body{padding:12px}#loginBox{margin:42px auto;padding:28px 22px}.dashboard-header{padding:14px}.brand-icon{font-size:34px}.brand-title{font-size:27px}.brand-tagline{font-size:11px}.dashboard-main{width:min(100% - 24px,1180px);padding-top:26px}.rewards-grid,.stats-grid,.app-grid{grid-template-columns:1fr}.hero{padding:20px}.app-card{min-height:165px}.user-email{display:none}}
 </style>
 </head>
 <body>
@@ -74,6 +79,25 @@ body.dashboard-active{padding:0;background:#07111f}
 
 <main class="dashboard-main">
 <section class="hero"><h2>Your neuro learning hub</h2><p>Begin with Neuro Foundations, unlock Daily Neuro as you progress, then open Neuro Quest when Foundations is complete.</p></section>
+
+<section class="rewards-grid" aria-label="Overall learning rewards">
+  <article class="rewards-card">
+    <div class="rewards-label">Total XP</div>
+    <div class="rewards-value"><span id="totalXp">0</span> XP</div>
+    <div class="rewards-note">Across Foundations, Daily Neuro and Neuro Quest</div>
+  </article>
+  <article class="rewards-card">
+    <div class="rewards-label">Total Brains</div>
+    <div class="rewards-value">🧠 <span id="hubTotalBrains">0</span></div>
+    <div class="rewards-note">Your combined Learning Hub rewards</div>
+  </article>
+  <article class="rewards-card">
+    <div class="rewards-label">Hub Level</div>
+    <div class="rewards-value">Level <span id="hubLevel">1</span></div>
+    <div class="progress-bar"><div id="hubLevelFill" class="progress-fill"></div></div>
+    <div class="rewards-note"><span id="hubLevelXp">0</span> / 100 XP to next level</div>
+  </article>
+</section>
 
 <section class="stats-grid">
   <article class="stat-card">
@@ -178,11 +202,48 @@ function setCardAccess(cardId, unlocked, unlockedText, lockedText) {
   };
 }
 
-function updateDashboard(foundationsPercent = 0, accessOverride = false) {
+function updateDashboard({
+  foundationsPercent = 0,
+  foundationsBrains = 0,
+  foundationsXp = 0,
+  dailyBrains = 0,
+  dailyXp = 0,
+  questProgress = {},
+  accessOverride = false
+} = {}) {
   const percent = Math.max(0, Math.min(100, Number(foundationsPercent || 0)));
   const fullAccess = DEVELOPMENT_UNLOCK_ALL || accessOverride === true;
   const dailyUnlocked = fullAccess || percent >= 50;
   const questUnlocked = fullAccess || percent >= 100;
+
+  const questLevels = ["ICA", "ACA", "MCA", "ACom", "AChA"];
+  const questBrains = questLevels.reduce(
+    (sum, level) => sum + Number(questProgress?.[level]?.brains || 0),
+    0
+  );
+
+  // Neuro Quest currently awards 20 XP per Brain.
+  // Foundations and Daily Neuro can store their own XP totals when those pages are built.
+  const questXp = questBrains * 20;
+
+  const totalBrains =
+    Number(foundationsBrains || 0) +
+    Number(dailyBrains || 0) +
+    questBrains;
+
+  const totalXp =
+    Number(foundationsXp || 0) +
+    Number(dailyXp || 0) +
+    questXp;
+
+  const hubLevel = Math.max(1, Math.floor(totalXp / 100) + 1);
+  const hubLevelXp = totalXp % 100;
+
+  document.getElementById("totalXp").textContent = totalXp;
+  document.getElementById("hubTotalBrains").textContent = totalBrains;
+  document.getElementById("hubLevel").textContent = hubLevel;
+  document.getElementById("hubLevelXp").textContent = hubLevelXp;
+  document.getElementById("hubLevelFill").style.width = `${hubLevelXp}%`;
 
   document.getElementById("foundationsPercent").textContent = percent;
   document.getElementById("foundationsFill").style.width = `${percent}%`;
@@ -229,21 +290,31 @@ onAuthStateChanged(auth,async user=>{
     lastLogin:new Date().toISOString()
   });
 
-  const [foundationsSnap, accessSnap] = await Promise.all([
+  const [foundationsSnap, dailySnap, questSnap, accessSnap] = await Promise.all([
     get(ref(db,`${APP_ROOT}/foundationsProgress/${user.uid}`)),
+    get(ref(db,`${APP_ROOT}/dailyNeuroProgress/${user.uid}`)),
+    get(ref(db,`${APP_ROOT}/progress/${user.uid}`)),
     get(ref(db,`${APP_ROOT}/access/${user.uid}`))
   ]);
 
   const foundationsData = foundationsSnap.exists() ? foundationsSnap.val() : {};
+  const dailyData = dailySnap.exists() ? dailySnap.val() : {};
+  const questProgress = questSnap.exists() ? questSnap.val() : {};
   const accessData = accessSnap.exists() ? accessSnap.val() : {};
 
-  const foundationsPercent = Number(
-    foundationsData.percentComplete ??
-    foundationsData.percent ??
-    0
-  );
-
-  updateDashboard(foundationsPercent, accessData.accessOverride === true);
+  updateDashboard({
+    foundationsPercent: Number(
+      foundationsData.percentComplete ??
+      foundationsData.percent ??
+      0
+    ),
+    foundationsBrains: Number(foundationsData.brains || 0),
+    foundationsXp: Number(foundationsData.xp || 0),
+    dailyBrains: Number(dailyData.brains || 0),
+    dailyXp: Number(dailyData.xp || 0),
+    questProgress,
+    accessOverride: accessData.accessOverride === true
+  });
   loginBox.classList.add("hidden");
   dashboardBox.classList.remove("hidden");
 });
