@@ -67,8 +67,8 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 
   main{padding-top:18px;padding-bottom:34px}
 
-  /* Give the card enough height for the image and wrapped question text */
-  .flip-card,.flip-inner{min-height:610px}
+  /* Keep the mobile card compact while still allowing wrapped question text */
+  .flip-card,.flip-inner{min-height:525px}
   .anatomy-image{height:285px}
 
   .front-copy{padding:18px 18px 22px}
@@ -92,16 +92,22 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   }
   .controls .btn{
     width:100%;
+    min-width:0;
     padding:12px 8px;
-    white-space:nowrap;
+    white-space:normal;
+    line-height:1.15;
   }
+
+  /* On the final teaching card, give the longer quiz button its own row */
+  .controls.quiz-start{grid-template-columns:1fr 1fr}
+  .controls.quiz-start #nextBtn{grid-column:1 / -1}
 
   /* Result screen only has two controls */
   .result-card .controls{grid-template-columns:1fr 1fr}
 }
 
 @media(max-width:390px){
-  .flip-card,.flip-inner{min-height:625px}
+  .flip-card,.flip-inner{min-height:535px}
   .anatomy-image{height:270px}
   .controls .btn{font-size:14px}
 }
@@ -267,7 +273,9 @@ function showCard(){
   document.getElementById("backPoints").innerHTML=c.backPoints.map(p=>`<li>${p}</li>`).join("");
   document.getElementById("memoryLine").textContent=c.memoryLine;
   document.getElementById("previousBtn").disabled=cardIndex===0;
-  document.getElementById("nextBtn").textContent=cardIndex===moduleData.cards.length-1?"Start knowledge check":"Next card";
+  const isLastCard=cardIndex===moduleData.cards.length-1;
+  document.getElementById("nextBtn").textContent=isLastCard?"Start knowledge check":"Next card";
+  document.querySelector("#lessonSection > .controls").classList.toggle("quiz-start",isLastCard);
 }
 
 function flipCard(){document.getElementById("flipCard").classList.toggle("flipped")}
