@@ -34,25 +34,10 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 .anatomy-image{position:relative;width:100%;height:390px;overflow:hidden;background:#000}
 .card-image,.card-overlay{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
 .card-image{opacity:.28;filter:saturate(.75) brightness(.72)}
-.card-overlay{
-  opacity:1;
-  pointer-events:none;
-  filter:
-    drop-shadow(0 0 8px rgba(71,243,255,.9))
-    drop-shadow(0 0 18px rgba(71,243,255,.55));
-  animation:anatomyPulse 2.2s ease-in-out infinite;
-}
-
+.card-overlay{opacity:1;pointer-events:none;filter:drop-shadow(0 0 10px rgba(71,243,255,.85))}
 @keyframes anatomyPulse{
-  0%,100%{
-    opacity:.8;
-    transform:scale(1);
-  }
-
-  50%{
-    opacity:1;
-    transform:scale(1.03);
-  }
+  0%,100%{opacity:.82;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.012)}
 }
 .front-copy{padding:22px;text-align:center}
 .eyebrow{font-size:13px;color:var(--cyan);font-weight:900;text-transform:uppercase;letter-spacing:.8px}
@@ -80,18 +65,23 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   .brand-title{font-size:clamp(18px,5.6vw,25px)}
   .hub-link{font-size:13px;padding:8px 10px}
 
-  main{padding-top:18px;padding-bottom:34px}
+  main{padding-top:10px;padding-bottom:28px}
+
+  /* Make the module heading much more compact on phones */
+  .hero{margin-bottom:10px}
+  .hero h1{font-size:clamp(24px,6.5vw,30px);line-height:1.08}
+  .hero p{margin-top:4px;font-size:14px;line-height:1.3}
 
   /* Keep the mobile card compact while still allowing wrapped question text */
-  .flip-card,.flip-inner{min-height:525px}
-  .anatomy-image{height:285px}
+  .flip-card,.flip-inner{min-height:485px}
+  .anatomy-image{height:260px}
 
-  .front-copy{padding:18px 18px 22px}
+  .front-copy{padding:14px 16px 16px}
   .front-copy h2,.back h2{
-    font-size:clamp(25px,7.2vw,34px);
+    font-size:clamp(23px,6.8vw,32px);
     line-height:1.12;
   }
-  .front-copy p{font-size:16px}
+  .front-copy p{font-size:15px;line-height:1.35}
   .back{padding:22px}
 
   .option-grid{grid-template-columns:1fr}
@@ -122,8 +112,8 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 }
 
 @media(max-width:390px){
-  .flip-card,.flip-inner{min-height:535px}
-  .anatomy-image{height:270px}
+  .flip-card,.flip-inner{min-height:500px}
+  .anatomy-image{height:250px}
   .controls .btn{font-size:14px}
 }
 </style>
