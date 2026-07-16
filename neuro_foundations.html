@@ -288,7 +288,7 @@ function showCard(){
     cardOverlay.classList.add("hidden");
   }
 
-  document.getElementById("cardTitle").textContent=c.title;
+  document.getElementById("cardTitle").textContent="";
   document.getElementById("frontPrompt").textContent=c.frontPrompt;
   document.getElementById("backHeading").textContent=c.backHeading;
   document.getElementById("backPoints").innerHTML=c.backPoints.map(p=>`<li>${p}</li>`).join("");
