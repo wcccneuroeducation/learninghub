@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Anterior Isle</title>
+<style>
+   body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 20px;
+
+    background:
+      radial-gradient(
+        circle at top,
+        #21486e 0%,
+        #10253f 40%,
+        #050b15 100%
+      );
+
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: #ffffff;
+}
+body.map-active {
+  padding: 0;
+  background: #07111f;
+}
+    h1 {
+        margin: 10px 0 20px;
+        font-size: clamp(32px, 7vw, 56px);
+    }
+
+    .map-wrap {
+        position: relative;
+  width: min(95vw, 650px);
+  margin: 70px auto 0;
+    }
+.map-inner {
+  position: relative;
+  transform: translateY(70px);
+}
+    .base-map {
+width: 100%;
+height: auto;
+display: block;
+}
+
+    .hotspot {
+position:absolute;
+  border-radius:50%;
+  border: none;
+  background:none;
+  padding:0;
+  margin:0;
+  appearance:none;
+  -webkit-appearance:none;
+  cursor:pointer;
+  z-index:3;
+}
+
+    /* testing target areas - adjust these if needed */
+    .ica  { top: 17%; left: 38%; width: 12%; height: 8%; }
+    .aca  { top: 42%; left: 17%; width: 12%; height: 8%; }
+    .mca  { top: 40%; left: 60%; width: 12%; height: 8%; }
+    .acom { top: 71%; left: 38%; width: 12%; height: 8%; }
+.acha { 
+   top: -1.8%;
+  left: 57%;
+  width: 11%;
+  height: 7%; 
+}
+    .hotspot-label {
+        position: absolute;
+        background:transparent;
+        color: white;
+        padding: 5px 8px;
+        border-radius: 8px;
+        font-size: 14px;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+    }
+/*
+    .ica-label  { top: 15%; left: 50%; }
+    .aca-label  { top: 39%; left: 23%; }
+    .mca-label  { top: 39%; left: 76%; }
+    .acom-label { top: 71%; left: 50%; }
+
+   .locked {
+        filter: grayscale(0.2);
+        opacity: 0.55;
+    }
+       */ 
+
+    .note {
+        max-width: 650px;
+        margin: 18px auto 0;
+        font-size: 16px;
+        color: #444;
+    }
+
+    /* When testing is finished, switch .hotspot to transparent */
+    /*
+    .hotspot {
+        border: none;
+        background: transparent;
+    }
+    .hotspot-label { display: none; }
+    */
+
+    .locked{
+/*filter: grayscale(100%);
+opacity:0.5;
+*/
+pointer-events:none;
+}
+.hidden {
+display:none;
+}
+.course-overlay{
+position:absolute;
+pointer-events:none;
+}
+.csf-wave-1{
+  top:0;
+  left:0;
+  width:100%;
+  height:auto;
+  z-index:1;
+  opacity:0;
+  animation: csfWaveOne 3s infinite ease-in-out;
+  filter:
+    brightness(1.4)
+    contrast(1.15)
+    drop-shadow(0 0 4px white);
+}
+
+@keyframes csfWaveOne {
+  0%   { opacity:0; }
+  25%  { opacity:0.3; }
+  55%  { opacity:0; }
+  100% { opacity:0; }
+}
+
+.acha-wave-1{
+  top:-8%;
+  left:32%;
+  width:60%;
+  height:auto;
+  z-index:3;
+  opacity:0;
+  animation: achaWaveOne 3s infinite ease-in-out;
+  filter:
+    brightness(1.4)
+    contrast(1.15)
+   ;
+}
+
+@keyframes achaWaveOne {
+  0%   { opacity:0; }
+  25%  { opacity:0.3; }
+  55%  { opacity:0; }
+  100% { opacity:0; }
+}
+
+.csf-bubbles{
+  position:absolute;
+  top:88%;
+  left:33%;
+  width:8%;
+  height:8%;
+  z-index:5;
+  pointer-events:none;
+}
+
+.csf-bubbles span{
+  position:absolute;
+  bottom:0;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:rgba(255,255,240,1);
+  box-shadow:0 0 4px white;
+  animation:bubbleRise 1.2s infinite ease-out;
+}
+
+.csf-bubbles span:nth-child(1){
+  left:20%;
+  animation-delay:0s;
+}
+
+.csf-bubbles span:nth-child(2){
+  left:45%;
+  animation-delay:0.6s;
+  width:6px;
+  height:6px;
+}
+
+.csf-bubbles span:nth-child(3){
+  left:65%;
+  animation-delay:1.1s;
+  width:5px;
+  height:5px;
+}
+
+@keyframes bubbleRise{
+  0%{
+    transform:translateY(0) scale(0.6);
+    opacity:0;
+  }
+  30%{
+    opacity:1;
+  }
+  100%{
+    transform:translateY(-12px) scale(1.1);
+    opacity:0;
+  }
+}
+
+@media (max-width: 700px) {
+  .csf-wave-1,
+  .acha-wave-1 {
+    filter: brightness(1.2) contrast(1.05);
+  }
+}
+/* ICA overlay position */
+
+.ica-overlay{
+
+top:18%;
+left:40%;
+
+width:9%;
+height:4.5%;
+z-index:2;
+}
+.ica-star-overlay{
+
+top:18%;
+left:40%;
+
+width:9%;
+height:4.5%;
+
+z-index:2;
+
+}
+/* ACA overlay position */
+.aca-overlay{
+
+top:43%;
+left: 18.7%;
+
+width:8.5%;
+height:4.5%;
+
+z-index:2;
+
+}
+
+.aca-star-overlay{
+
+top:43%;
+left:18.7%;
+
+width:8.5%;
+height:4.5%;
+
+z-index:2;
+}
+/* MCA overlay position */
+
+.mca-overlay{
+
+top:41.5%;
+left:61.7%;
+
+width:8.2%;
+height:4.5%;
+
+z-index:2;
+
+}
+
+.mca-star-overlay{
+
+top:41.5%;
+left:61.8%;
+
+width:8.2%;
+height:4.5%;
+
+z-index:2;
+
+}
+/* ACom overlay position */
+
+.acom-overlay{
+
+top:72.5%;
+left:39.5%;
+
+width:9%;
+height:4.5%;
+
+z-index:2;
+
+}
+
+.acom-star-overlay{
+
+top:72.5%;
+left:39.7%;
+
+width:9%;
+height:4.5%;
+
+z-index:2;
+
+}
+.acha-overlay {
+  top: -8%;
+  left: 32%;
+  width: 60%;
+  height: auto;
+  z-index: 2;
+}
+.acha-red-overlay,
+.acha-star-overlay {
+  top: -1.7%;
+  left: 57%;
+  width: 11.5%;
+  height: auto;
+  z-index: 4;
+}
+
+/* ===== Neuro Quest dashboard header ===== */
+#mapBox {
+  width: 100%;
+  min-height: 100vh;
+  padding-bottom: 70px;
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      180deg,
+      #163451 0%,
+      #0d2239 45%,
+      #07111f 100%
+    );
+}
+.quest-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+ margin: 0 0 24px;
+  padding: 18px 28px;
+
+  display: grid;
+  grid-template-columns: 1.4fr 1fr auto;
+  gap: 18px;
+  align-items: center;
+
+  background: rgba(3, 10, 22, 0.92);
+  border-bottom: 1px solid rgba(107,232,255,0.22);
+  box-shadow: 0 0 24px rgba(0,0,0,0.45);
+  backdrop-filter: blur(10px);
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+}
+
+.brand-icon {
+  font-size: 42px;
+  filter: drop-shadow(0 0 8px rgba(107,232,255,0.55));
+}
+
+.brand-title {
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.brand-title span {
+  color: #47f3ff;
+  text-shadow: 0 0 10px rgba(71,243,255,0.45);
+}
+
+.brand-tagline {
+  font-size: 13px;
+  color: #d9e7ff;
+  letter-spacing: 1px;
+  margin-top: 3px;
+}
+
+.isle-block {
+  text-align: left;
+  border-left: 1px solid rgba(107,232,255,0.25);
+  padding-left: 22px;
+}
+
+.isle-title {
+  font-size: clamp(24px, 3vw, 42px);
+  font-weight: 800;
+}
+
+.isle-subtitle {
+  margin-top: 4px;
+  font-size: 18px;
+  color: #e8f2ff;
+}
+
+.isle-subtitle strong {
+  color: #47f3ff;
+}
+
+.stats-row {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.stat-card {
+  min-width: 135px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(7, 22, 42, 0.82);
+  border: 1px solid rgba(107,232,255,0.22);
+  box-shadow: inset 0 0 18px rgba(107,232,255,0.04);
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #47f3ff;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.stat-note {
+  margin-top: 4px;
+  color: #d9e7ff;
+  font-size: 13px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 9px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: rgba(120,160,190,0.2);
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #47f3ff, #9b5cff);
+  box-shadow: 0 0 12px rgba(71,243,255,0.5);
+}
+
+.map-intro {
+  color: #47f3ff;
+  font-size: 21px;
+  margin: 10px auto -30px;
+  max-width: 800px;
+  text-shadow: 0 0 8px rgba(71,243,255,0.22);
+}
+
+.map-actions {
+  position: fixed;
+  right: 28px;
+  top: 220px;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.action-card {
+  min-width: 210px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(7, 22, 42, 0.84);
+  border: 1px solid rgba(107,232,255,0.35);
+  color: white;
+  text-decoration: none;
+  box-shadow: 0 0 14px rgba(71,243,255,0.12);
+}
+
+.action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 18px rgba(71,243,255,0.35);
+}
+
+.action-icon {
+  font-size: 28px;
+}
+
+.action-title {
+  font-weight: 800;
+  text-align: left;
+}
+
+.action-subtitle {
+  font-size: 13px;
+  color: #d9e7ff;
+  text-align: left;
+}
+
+.vessel-status {
+  position: fixed;
+  left: 28px;
+  top: 220px;
+  z-index: 900;
+  width: 230px;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(7, 22, 42, 0.84);
+  border: 1px solid rgba(107,232,255,0.22);
+  box-shadow: 0 0 14px rgba(71,243,255,0.08);
+  text-align: left;
+}
+
+.vessel-status h3 {
+  margin: 0 0 16px;
+  color: #47f3ff;
+}
+
+.vessel-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(107,232,255,0.12);
+}
+
+.vessel-brains {
+  white-space: nowrap;
+}
+
+.locked-text {
+  color: #9aa7bb;
+}
+
+@media (max-width: 1100px) {
+  .map-actions, .vessel-status {
+    position: static;
+    width: auto;
+    margin: 16px auto;
+    max-width: 650px;
+  }
+
+  .map-actions {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 760px) {
+
+  body.map-active {
+    padding: 0;
+  }
+     #mapBox {
+    padding-bottom: 35px;
+  }
+
+  .quest-header {
+    margin: 0 0 18px;
+    padding: 14px;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+
+  .brand-icon {
+    font-size: 32px;
+  }
+
+  .brand-title {
+    font-size: 26px;
+  }
+
+  .brand-tagline {
+    font-size: 11px;
+  }
+
+  .isle-block {
+    border-left: none;
+    padding-left: 0;
+    text-align: left;
+  }
+
+  .isle-title {
+    font-size: 28px;
+  }
+
+  .isle-subtitle {
+    font-size: 15px;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .stat-card {
+    min-width: 0;
+    padding: 10px;
+  }
+
+  .stat-card.progress-stat {
+    grid-column: 1 / -1;
+  }
+
+  .stat-value {
+    font-size: 24px;
+  }
+
+  .map-intro {
+    font-size: 16px;
+    margin: 4px auto -42px;
+  }
+
+  .map-wrap {
+    width: min(100vw, 650px);
+    margin-top: 50px;
+  }
+
+  .map-inner {
+    transform: translateY(35px);
+  }
+
+  .action-card {
+    min-width: 135px;
+    flex: 1;
+  }
+}
+
+#loginBox {
+    max-width: 500px;
+    margin: 80px auto;
+
+    padding: 35px;
+
+    background: rgba(8,18,35,0.92);
+
+    border: 1px solid rgba(0,255,255,0.35);
+    border-radius: 24px;
+
+    box-shadow:
+      0 0 20px rgba(0,255,255,0.15),
+      inset 0 0 20px rgba(0,255,255,0.05);
+
+    backdrop-filter: blur(6px);
+}
+
+#loginBox h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: clamp(36px, 6vw, 52px);
+
+    color: #6be8ff;
+
+    text-shadow:
+      0 0 8px rgba(107,232,255,0.6),
+      0 0 18px rgba(107,232,255,0.35);
+}
+
+#loginSubtitle {
+    color: #b9dfff;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.google-btn {
+    background: linear-gradient(
+      180deg,
+      #1a8cff,
+      #0066ff
+    );
+
+    color: white;
+    border: none;
+
+    padding: 14px 28px;
+    border-radius: 999px;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.google-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(0,150,255,0.5);
+}
+
+#playerInput {
+font-size:22px;
+padding:14px;
+margin:15px;
+}
+</style>
+</head>
+<body>
+<div id="loginBox">
+
+  <h2>Neuro Quest</h2>
+
+  <div id="loginSubtitle">
+    People learn because they are curious,<br>
+    not because they are told to remember.
+  </div>
+
+  <button class="google-btn" onclick="googleLogin()">
+    Sign in with Google
+  </button>
+
+</div>
+
+<div id="mapBox" class="hidden">
+
+<header class="quest-header">
+  <div class="brand-block">
+    <div class="brand-icon">🧠</div>
+    <div>
+      <div class="brand-title">NEURO <span>QUEST</span></div>
+      <div class="brand-tagline">THINK • IDENTIFY • ACT</div>
+    </div>
+  </div>
+
+  <div class="isle-block">
+    <div class="isle-title">Anterior Isle</div>
+    <div class="isle-subtitle"><strong id="completedCount">0 / 5</strong> Vessels Completed</div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Brains Earned</div>
+      <div class="stat-value">🧠 <span id="totalBrains">0</span></div>
+      <div class="stat-note">Total Brains</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Brain Level</div>
+      <div class="stat-value">Level <span id="brainLevel">1</span></div>
+      <div class="stat-note"><span id="brainXp">0</span> / 100 XP</div>
+      <div class="progress-bar"><div id="xpFill" class="progress-fill"></div></div>
+    </div>
+
+    <div class="stat-card progress-stat">
+      <div class="stat-label">Island Mastery</div>
+      <div class="stat-value"><span id="islandProgress">0</span>%</div>
+      <div class="progress-bar"><div id="islandFill" class="progress-fill"></div></div>
+      <div class="stat-note"><span id="masteryBrains">0 / 0</span> Brains</div>
+    </div>
+  </div>
+</header>
+
+
+
+<div class="vessel-status">
+  <h3>Vessel Status</h3>
+  <div class="vessel-row"><span>ICA</span><span id="statusICA" class="vessel-brains">🔓</span></div>
+  <div class="vessel-row"><span>ACA</span><span id="statusACA" class="vessel-brains">🔒</span></div>
+  <div class="vessel-row"><span>MCA</span><span id="statusMCA" class="vessel-brains">🔒</span></div>
+  <div class="vessel-row"><span>ACom</span><span id="statusACom" class="vessel-brains">🔒</span></div>
+  <div class="vessel-row"><span>AChA</span><span id="statusAChA" class="vessel-brains">🔒</span></div>
+  <p class="stat-note">Complete vessels in order to unlock new territories.</p>
+</div>
+
+<div class="map-actions">
+  <a class="action-card" href="leaderboard.html">
+    <span class="action-icon">🏆</span>
+    <span><span class="action-title">Leaderboard</span><br><span class="action-subtitle">See top explorers</span></span>
+  </a>
+  <a class="action-card" href="daily_neuro.html">
+    <span class="action-icon">🎯</span>
+    <span><span class="action-title">Daily Neuro</span><br><span class="action-subtitle">5 questions today</span></span>
+  </a>
+</div>
+
+<div class="map-wrap">
+    <div class="map-inner">
+    
+    <img src="anterior_isle.png"  class="base-map" alt="Vessel Valley map">
+    <img
+src="vessel_valley_wave1.png"
+class="course-overlay csf-wave-1">
+<img
+
+src="red_overlay_ica.png"
+class="course-overlay ica-overlay">
+<img
+src="blue_star_overlay_ica.png"
+class="course-overlay ica-star-overlay hidden">
+<img
+src="red_overlay_aca.png"
+class="course-overlay aca-overlay">
+<img
+src="blue_star_overlay_aca.png"
+class="course-overlay aca-star-overlay hidden">
+<img
+src="red_overlay_mca.png"
+class="course-overlay mca-overlay">
+<img
+src="blue_star_overlay_mca.png"
+class="course-overlay mca-star-overlay hidden">
+<img
+src="red_overlay_acom.png"
+class="course-overlay acom-overlay">
+
+<img
+src="blue_star_overlay_acom.png"
+class="course-overlay acom-star-overlay hidden">
+
+<img
+src="acha_island_ai.png"
+class="course-overlay acha-overlay hidden">
+<img
+src="acha_island_wave1.png"
+class="course-overlay acha-wave-1 hidden">
+<img
+src="red_overlay_acha.png"
+class="course-overlay acha-red-overlay hidden">
+
+<img
+src="blue_star_overlay_acha.png"
+class="course-overlay acha-star-overlay hidden">
+
+<div class="csf-bubbles">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+    <button class="hotspot ica" onclick="handleLevelClick('ICA')"></button>
+<button class="hotspot aca" onclick="handleLevelClick('ACA')"></button>
+<button class="hotspot mca" onclick="handleLevelClick('MCA')"></button>
+<button class="hotspot acom" onclick="handleLevelClick('ACom')"></button>
+<button class="hotspot acha hidden" onclick="handleLevelClick('AChA')"></button>
+
+    
+    
+</div>
+</div>
+</div>
+    
+
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getDatabase,
+  ref,
+  get,
+  set
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQOx2eQRwPFlHC2EmQREtdFYb9Mha7zuQ",
+  authDomain: "neuro-itu-monitor-sim.firebaseapp.com",
+  databaseURL: "https://neuro-itu-monitor-sim-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "neuro-itu-monitor-sim",
+  storageBucket: "neuro-itu-monitor-sim.firebasestorage.app",
+  messagingSenderId: "610257056899",
+  appId: "1:610257056899:web:4763a538136eaf95a8d7b6"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+const APP_ROOT = "neuroQuest";
+
+let currentUser = null;
+let playerProgress = {};
+
+window.googleLogin = async function () {
+  const provider = new GoogleAuthProvider();
+
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    console.error(err);
+    alert("Login failed. Check console.");
+  }
+};
+
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+  currentUser = null;
+
+  document.body.classList.remove("map-active");
+
+  document.getElementById("loginBox").classList.remove("hidden");
+  document.getElementById("mapBox").classList.add("hidden");
+  return;
+}
+
+  currentUser = user;
+
+document.body.classList.add("map-active");
+  await set(ref(db, `${APP_ROOT}/users/${user.uid}`), {
+    displayName: user.displayName,
+    email: user.email,
+    lastLogin: new Date().toISOString()
+  });
+
+  await loadProgress();
+
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("mapBox").classList.remove("hidden");
+
+  updateMapProgress();
+});
+
+async function loadProgress() {
+  const snap = await get(
+    ref(db, `${APP_ROOT}/progress/${currentUser.uid}`)
+  );
+
+  playerProgress = snap.exists() ? snap.val() : {};
+
+  if (!playerProgress.ICA) {
+    playerProgress.ICA = {
+      unlocked: true,
+      completed: false,
+      brains: 0
+    };
+  }
+}
+
+function isCompleted(level) {
+  return playerProgress[level] &&
+         playerProgress[level].completed === true;
+}
+
+function levelUnlocked(level) {
+  if (level === "ICA") return true;
+
+  if (level === "ACA" || level === "MCA") {
+    return isCompleted("ICA");
+  }
+
+  if (level === "ACom") {
+    return isCompleted("ACA") && isCompleted("MCA");
+  }
+
+  if (level === "AChA") {
+    return isCompleted("ACom");
+  }
+
+  return false;
+}
+
+window.handleLevelClick = function(level) {
+  if (!currentUser) {
+    alert("Please sign in first.");
+    return;
+  }
+
+  if (levelUnlocked(level)) {
+    openLevel(level);
+  } else {
+    alert("🔒 Complete the previous level first.");
+  }
+};
+
+function openLevel(category) {
+  window.location.href =
+    "anterior_quiz.html?category=" +
+    encodeURIComponent(category);
+}
+
+function countBrains(level) {
+  return playerProgress[level] && playerProgress[level].brains
+    ? Number(playerProgress[level].brains)
+    : 0;
+}
+
+function brainIcons(level) {
+  const brains = countBrains(level);
+
+  if (!levelUnlocked(level)) {
+    return '<span class="locked-text">🔒 Locked</span>';
+  }
+
+  if (brains === 0) {
+    return '🔓 Start';
+  }
+
+  return '🧠'.repeat(brains) + '🧠'.repeat(3 - brains).replace(/🧠/g, '⚫');
+}
+
+const LEVELS = ["ICA", "ACA", "MCA", "ACom", "AChA"];
+const BRAINS_PER_LEVEL = 3;
+
+function updateDashboard() {
+  const levels = LEVELS;
+
+  const completed = levels.filter(level => isCompleted(level)).length;
+
+  const totalBrains = levels.reduce(
+    (sum, level) => sum + countBrains(level),
+    0
+  );
+
+  const totalPossibleBrains = levels.length * BRAINS_PER_LEVEL;
+
+  const masteryPercent = totalPossibleBrains > 0
+    ? Math.round((totalBrains / totalPossibleBrains) * 100)
+    : 0;
+
+  const xp = (totalBrains * 20) % 100;
+  const brainLevel = Math.max(
+    1,
+    Math.floor((totalBrains * 20) / 100) + 1
+  );
+
+  document.getElementById("completedCount").textContent =
+    `${completed} / ${levels.length}`;
+
+  document.getElementById("totalBrains").textContent = totalBrains;
+
+  document.getElementById("islandProgress").textContent = masteryPercent;
+  document.getElementById("islandFill").style.width = `${masteryPercent}%`;
+
+  document.getElementById("masteryBrains").textContent =
+    `${totalBrains} / ${totalPossibleBrains}`;
+
+  document.getElementById("brainLevel").textContent = brainLevel;
+  document.getElementById("brainXp").textContent = xp;
+  document.getElementById("xpFill").style.width = `${xp}%`;
+
+  document.getElementById("statusICA").innerHTML = brainIcons("ICA");
+  document.getElementById("statusACA").innerHTML = brainIcons("ACA");
+  document.getElementById("statusMCA").innerHTML = brainIcons("MCA");
+  document.getElementById("statusACom").innerHTML = brainIcons("ACom");
+  document.getElementById("statusAChA").innerHTML = brainIcons("AChA");
+}
+
+function updateMapProgress() {
+
+  updateDashboard();
+
+  if (isCompleted("ICA")) {
+    document.querySelector(".ica-overlay").style.display = "none";
+  }
+
+  if (playerProgress.ICA && playerProgress.ICA.brains === 3) {
+    document.querySelector(".ica-star-overlay").classList.remove("hidden");
+  }
+
+  if (isCompleted("ACA")) {
+    document.querySelector(".aca-overlay").style.display = "none";
+  }
+
+  if (playerProgress.ACA && playerProgress.ACA.brains === 3) {
+    document.querySelector(".aca-star-overlay").classList.remove("hidden");
+  }
+
+  if (isCompleted("MCA")) {
+    document.querySelector(".mca-overlay").style.display = "none";
+  }
+
+  if (playerProgress.MCA && playerProgress.MCA.brains === 3) {
+    document.querySelector(".mca-star-overlay").classList.remove("hidden");
+  }
+
+  if (isCompleted("ACom")) {
+    document.querySelector(".acom-overlay").style.display = "none";
+
+    document.querySelector(".acha-overlay").classList.remove("hidden");
+    document.querySelector(".acha-wave-1").classList.remove("hidden");
+    document.querySelector(".acha-red-overlay").classList.remove("hidden");
+    document.querySelector(".acha").classList.remove("hidden");
+  }
+
+  if (playerProgress.ACom && playerProgress.ACom.brains === 3) {
+    document.querySelector(".acom-star-overlay").classList.remove("hidden");
+  }
+
+  if (isCompleted("AChA")) {
+    document.querySelector(".acha-red-overlay").style.display = "none";
+  }
+
+  if (playerProgress.AChA && playerProgress.AChA.brains === 3) {
+    document.querySelector(".acha-star-overlay").classList.remove("hidden");
+  }
+}
+
+</script>
+</body>
+</html>

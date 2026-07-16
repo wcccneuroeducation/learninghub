@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Vessel Valley</title>
+<style>
+    body {
+        margin: 0;
+        padding: 20px;
+        background: #ffffff;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        color: #111;
+    }
+
+    h1 {
+        margin: 10px 0 20px;
+        font-size: clamp(32px, 7vw, 56px);
+    }
+
+    .map-wrap {
+        position: relative;
+  width: min(95vw, 650px);
+  margin: 70px auto 0;
+    }
+.map-inner {
+  position: relative;
+  transform: translateY(70px);
+}
+    .base-map {
+width: 100%;
+height: auto;
+display: block;
+}
+
+    .hotspot {
+position:absolute;
+  border-radius:50%;
+  border: none;
+  background:none;
+  padding:0;
+  margin:0;
+  appearance:none;
+  -webkit-appearance:none;
+  cursor:pointer;
+  z-index:3;
+}
+
+    /* testing target areas - adjust these if needed */
+    .ica  { top: 17%; left: 38%; width: 12%; height: 8%; }
+    .aca  { top: 42%; left: 17%; width: 12%; height: 8%; }
+    .mca  { top: 40%; left: 60%; width: 12%; height: 8%; }
+    .acom { top: 71%; left: 38%; width: 12%; height: 8%; }
+.acha { 
+   top: -1.8%;
+  left: 57%;
+  width: 11%;
+  height: 7%; 
+}
+    .hotspot-label {
+        position: absolute;
+        background:transparent;
+        color: white;
+        padding: 5px 8px;
+        border-radius: 8px;
+        font-size: 14px;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+    }
+/*
+    .ica-label  { top: 15%; left: 50%; }
+    .aca-label  { top: 39%; left: 23%; }
+    .mca-label  { top: 39%; left: 76%; }
+    .acom-label { top: 71%; left: 50%; }
+
+   .locked {
+        filter: grayscale(0.2);
+        opacity: 0.55;
+    }
+       */ 
+
+    .note {
+        max-width: 650px;
+        margin: 18px auto 0;
+        font-size: 16px;
+        color: #444;
+    }
+
+    /* When testing is finished, switch .hotspot to transparent */
+    /*
+    .hotspot {
+        border: none;
+        background: transparent;
+    }
+    .hotspot-label { display: none; }
+    */
+
+    .locked{
+/*filter: grayscale(100%);
+opacity:0.5;
+*/
+pointer-events:none;
+}
+.hidden {
+display:none;
+}
+.course-overlay{
+position:absolute;
+pointer-events:none;
+}
+.csf-wave-1{
+  top:0;
+  left:0;
+  width:100%;
+  height:auto;
+  z-index:1;
+  opacity:0;
+  animation: csfWaveOne 3s infinite ease-in-out;
+  filter:
+    brightness(1.4)
+    contrast(1.15)
+    drop-shadow(0 0 4px white);
+}
+
+@keyframes csfWaveOne {
+  0%   { opacity:0; }
+  25%  { opacity:0.3; }
+  55%  { opacity:0; }
+  100% { opacity:0; }
+}
+
+.acha-wave-1{
+  top:-8%;
+  left:32%;
+  width:60%;
+  height:auto;
+  z-index:3;
+  opacity:0;
+  animation: achaWaveOne 3s infinite ease-in-out;
+  filter:
+    brightness(1.4)
+    contrast(1.15)
+   ;
+}
+
+@keyframes achaWaveOne {
+  0%   { opacity:0; }
+  25%  { opacity:0.3; }
+  55%  { opacity:0; }
+  100% { opacity:0; }
+}
+
+.csf-bubbles{
+  position:absolute;
+  top:88%;
+  left:33%;
+  width:8%;
+  height:8%;
+  z-index:5;
+  pointer-events:none;
+}
+
+.csf-bubbles span{
+  position:absolute;
+  bottom:0;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:rgba(255,255,240,1);
+  box-shadow:0 0 4px white;
+  animation:bubbleRise 1.2s infinite ease-out;
+}
+
+.csf-bubbles span:nth-child(1){
+  left:20%;
+  animation-delay:0s;
+}
+
+.csf-bubbles span:nth-child(2){
+  left:45%;
+  animation-delay:0.6s;
+  width:6px;
+  height:6px;
+}
+
+.csf-bubbles span:nth-child(3){
+  left:65%;
+  animation-delay:1.1s;
+  width:5px;
+  height:5px;
+}
+
+@keyframes bubbleRise{
+  0%{
+    transform:translateY(0) scale(0.6);
+    opacity:0;
+  }
+  30%{
+    opacity:1;
+  }
+  100%{
+    transform:translateY(-12px) scale(1.1);
+    opacity:0;
+  }
+}
+
+@media (max-width: 700px) {
+  .csf-wave-1,
+  .acha-wave-1 {
+    filter: brightness(1.2) contrast(1.05);
+  }
+}
+/* ICA overlay position */
+
+.ica-overlay{
+
+top:18%;
+left:40%;
+
+width:9%;
+height:4.5%;
+z-index:2;
+}
+.ica-star-overlay{
+
+top:18%;
+left:40%;
+
+width:9%;
+height:4.5%;
+
+z-index:2;
+
+}
+/* ACA overlay position */
+.aca-overlay{
+
+top:43%;
+left: 18.7%;
+
+width:8.5%;
+height:4.5%;
+
+z-index:2;
+
+}
+
+.aca-star-overlay{
+
+top:43%;
+left:18.7%;
+
+width:8.5%;
+height:4.5%;
+
+z-index:2;
+}
+/* MCA overlay position */
+
+.mca-overlay{
+
+top:41.5%;
+left:61.7%;
+
+width:8.2%;
+height:4.5%;
+
+z-index:2;
+
+}
+
+.mca-star-overlay{
+
+top:41.5%;
+left:61.8%;
+
+width:8.2%;
+height:4.5%;
+
+z-index:2;
+
+}
+/* ACom overlay position */
+
+.acom-overlay{
+
+top:72.5%;
+left:39.5%;
+
+width:9%;
+height:4.5%;
+
+z-index:2;
+
+}
+
+.acom-star-overlay{
+
+top:72.5%;
+left:39.7%;
+
+width:9%;
+height:4.5%;
+
+z-index:2;
+
+}
+.acha-overlay {
+  top: -8%;
+  left: 32%;
+  width: 60%;
+  height: auto;
+  z-index: 2;
+}
+.acha-red-overlay,
+.acha-star-overlay {
+  top: -1.7%;
+  left: 57%;
+  width: 11.5%;
+  height: auto;
+  z-index: 4;
+}
+
+#loginBox {
+text-align:center;
+margin-top:40px;
+}
+
+#playerInput {
+font-size:22px;
+padding:14px;
+margin:15px;
+}
+</style>
+</head>
+<body>
+<div id="loginBox">
+  <h2>Enter NeuroQuest</h2>
+  <input id="playerInput" placeholder="Enter name">
+  <br>
+  <button onclick="savePlayer()">Enter Vessel Valley</button>
+</div>
+
+<div id="mapBox" class="hidden">
+  <!-- your vessel valley image and hotspot buttons are here -->
+
+<h1>Vessel Valley</h1>
+
+<div class="map-wrap">
+    <div class="map-inner">
+    
+    <img src="vessel_valley.png"  class="base-map" alt="Vessel Valley map">
+    <img
+src="vessel_valley_wave1.png"
+class="course-overlay csf-wave-1">
+<img
+
+src="red_overlay_ica.png"
+class="course-overlay ica-overlay">
+<img
+src="blue_star_overlay_ica.png"
+class="course-overlay ica-star-overlay hidden">
+<img
+src="red_overlay_aca.png"
+class="course-overlay aca-overlay">
+<img
+src="blue_star_overlay_aca.png"
+class="course-overlay aca-star-overlay hidden">
+<img
+src="red_overlay_mca.png"
+class="course-overlay mca-overlay">
+<img
+src="blue_star_overlay_mca.png"
+class="course-overlay mca-star-overlay hidden">
+<img
+src="red_overlay_acom.png"
+class="course-overlay acom-overlay">
+
+<img
+src="blue_star_overlay_acom.png"
+class="course-overlay acom-star-overlay hidden">
+
+<img
+src="acha_island.png"
+class="course-overlay acha-overlay hidden">
+<img
+src="acha_island_wave1.png"
+class="course-overlay acha-wave-1 hidden">
+<img
+src="red_overlay_acha.png"
+class="course-overlay acha-red-overlay hidden">
+
+<img
+src="blue_star_overlay_acha.png"
+class="course-overlay acha-star-overlay hidden">
+
+<div class="csf-bubbles">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+    <button class="hotspot ica" onclick="handleLevelClick('ICA')"></button>
+<button class="hotspot aca" onclick="handleLevelClick('ACA')"></button>
+<button class="hotspot mca" onclick="handleLevelClick('MCA')"></button>
+<button class="hotspot acom" onclick="handleLevelClick('ACom')"></button>
+<button class="hotspot acha hidden" onclick="handleLevelClick('AChA')"></button>
+
+    <div class="hotspot-label ica-label">ICA</div>
+    <div class="hotspot-label aca-label">ACA</div>
+    <div class="hotspot-label mca-label">MCA</div>
+    <div class="hotspot-label acom-label">ACom</div>
+    
+</div>
+</div>
+</div>
+    
+
+
+<script>
+    let playerName =
+localStorage.getItem("currentPlayer") || "";
+
+window.onload = function(){
+
+    if(playerName){
+        document.getElementById("loginBox").classList.add("hidden");
+        document.getElementById("mapBox").classList.remove("hidden");
+        updateMapProgress();
+    }
+
+};
+
+function savePlayer(){
+
+    let enteredName =
+    document.getElementById("playerInput").value.trim();
+    
+
+    if(!enteredName){
+        alert("Please enter your name first");
+        return;
+    }
+
+    localStorage.setItem("currentPlayer", enteredName);
+
+    playerName = enteredName;
+
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("mapBox").classList.remove("hidden");
+updateMapProgress();
+
+}
+
+function openLevel(level){
+
+    window.location.href =
+    "neuro_quiz_csv_awards.html?category="
+    + level;
+
+}
+function openLevel(category) {
+    window.location.href = "neuro_quiz_csv_awards.html?category=" + encodeURIComponent(category);
+}
+/* Test deleted now - this was just to check the locking mechanism works
+if(!isUnlocked(playerName,"ACA")){
+    document.querySelector(".aca")
+      .classList.add("locked");
+}
+      */
+function updateMapProgress(){
+
+let playerName =
+localStorage.getItem("currentPlayer");
+
+let progress =
+JSON.parse(
+localStorage.getItem("neuroProgress") || "{}"
+);
+
+let playerProgress =
+progress[playerName] || {};
+
+if(
+playerProgress["ICA"] &&
+playerProgress["ICA"].completed === true
+){
+
+document.querySelector(".ica-overlay").style.display =
+"none";
+
+}
+
+if(
+playerProgress["ICA"] &&
+playerProgress["ICA"].brains === 3
+){
+
+document.querySelector(".ica-star-overlay").classList.remove("hidden");
+
+}
+if(
+playerProgress["ACA"] &&
+playerProgress["ACA"].completed === true
+){
+
+document.querySelector(
+".aca-overlay"
+).style.display =
+"none";
+
+}
+
+if(
+playerProgress["ACA"] &&
+playerProgress["ACA"].brains === 3
+){
+
+document.querySelector(".aca-star-overlay")
+.classList.remove("hidden");
+
+}
+if(
+playerProgress["MCA"] &&
+playerProgress["MCA"].completed === true
+){
+
+document.querySelector(
+".mca-overlay"
+).style.display =
+"none";
+
+}
+
+
+if(
+playerProgress["MCA"] &&
+playerProgress["MCA"].brains === 3
+){
+
+document.querySelector(
+".mca-star-overlay"
+).classList.remove(
+"hidden"
+);
+
+}
+if(
+playerProgress["ACom"] &&
+playerProgress["ACom"].completed === true
+){
+
+document.querySelector(
+".acom-overlay"
+).style.display =
+"none";
+
+}
+
+if(
+playerProgress["ACom"] &&
+playerProgress["ACom"].brains === 3
+){
+
+document.querySelector(
+".acom-star-overlay"
+).classList.remove(
+"hidden"
+);
+
+}
+if(
+playerProgress["ACom"] &&
+playerProgress["ACom"].completed === true
+){
+  document.querySelector(".acha-overlay").classList.remove("hidden");
+  document.querySelector(".acha").classList.remove("hidden");
+}
+if(
+playerProgress["ACom"] &&
+playerProgress["ACom"].completed === true
+){
+  document.querySelector(".acha-overlay").classList.remove("hidden");
+    document.querySelector(".acha-wave-1").classList.remove("hidden");
+  document.querySelector(".acha-red-overlay").classList.remove("hidden");
+  document.querySelector(".acha").classList.remove("hidden");
+}
+
+if(
+playerProgress["AChA"] &&
+playerProgress["AChA"].completed === true
+){
+  document.querySelector(".acha-red-overlay").style.display = "none";
+}
+
+if(
+playerProgress["AChA"] &&
+playerProgress["AChA"].brains === 3
+){
+  document.querySelector(".acha-star-overlay").classList.remove("hidden");
+}
+}
+function openLevel(category){
+
+localStorage.setItem(
+"currentMap",
+"vessel_valley.html"
+);
+
+window.location.href =
+"neuro_quiz_csv_awards.html?category="
++
+encodeURIComponent(category);
+
+}
+function levelUnlocked(level){
+
+let player =
+localStorage.getItem("currentPlayer");
+
+let progress =
+JSON.parse(
+localStorage.getItem("neuroProgress") || "{}"
+);
+
+let p =
+progress[player] || {};
+
+if(level === "ICA"){
+return true;
+}
+
+if(level === "ACA" || level === "MCA"){
+  return p["ICA"] === true ||
+         (p["ICA"] && p["ICA"].completed === true);
+}
+
+if(level === "ACom"){
+  return (
+    (p["ACA"] === true || (p["ACA"] && p["ACA"].completed === true)) &&
+    (p["MCA"] === true || (p["MCA"] && p["MCA"].completed === true))
+  );
+}
+
+if(level === "AChA"){
+  return p["ACom"] === true ||
+         (p["ACom"] && p["ACom"].completed === true);
+}
+return false;
+
+
+}
+
+function handleLevelClick(level){
+
+if(levelUnlocked(level)){
+
+openLevel(level);
+
+} else {
+
+alert("🔒 Complete the previous level first.");
+
+}
+
+}
+</script>
+
+</body>
+</html>

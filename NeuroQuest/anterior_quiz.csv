@@ -1,0 +1,341 @@
+Category,Difficulty,QuestionGroup,Question,Answer,Explanation
+ACA,Beginner,1,ACA strokes may cause weakness of the leg.,TRUE,ACA supplies brain areas controlling leg movement.
+ACA,Beginner,1,ACA strokes commonly affect the face and arm more than the leg.,FALSE,ACA strokes more commonly affect the leg than the face and arm.
+ACA,Beginner,1,Leg weakness is commonly seen after ACA stroke.,TRUE,Leg weakness is a classic ACA stroke feature.
+ACA,Beginner,1,Weakness of the face and arm is usually more prominent than leg weakness in ACA stroke.,FALSE,Leg symptoms are typically more prominent in ACA stroke.
+ACA,Beginner,2,ACA strokes may cause loss of feeling in the leg.,TRUE,ACA supplies sensory areas responsible for the leg.
+ACA,Beginner,2,ACA strokes commonly affect sensation in the face and arm more than the leg.,FALSE,ACA strokes more commonly affect leg sensation.
+ACA,Beginner,2,ACA strokes may affect sensation in the lower limb.,TRUE,Sensory loss in the leg may occur with ACA stroke.
+ACA,Beginner,2,Sensory symptoms from ACA stroke are usually limited to the face.,FALSE,ACA strokes commonly affect the leg.
+ACA,Beginner,3,ACA strokes may affect behaviour and personality.,TRUE,Frontal lobe involvement may alter behaviour.
+ACA,Beginner,3,Visual disturbances are usually the most prominent feature of ACA stroke.,FALSE,Behavioural changes are more characteristic.
+ACA,Beginner,3,Behavioural changes may occur following ACA stroke.,TRUE,Frontal dysfunction can affect personality and behaviour.
+ACA,Beginner,3,ACA strokes are more commonly associated with visual field loss than behavioural change.,FALSE,Behavioural changes are more typical.
+ACA,Beginner,4,ACA strokes may reduce a person's motivation.,TRUE,ACA territory includes areas involved in motivation.
+ACA,Beginner,4,ACA strokes commonly cause increased motivation and overactivity.,FALSE,Reduced motivation is more typical.
+ACA,Beginner,4,Reduced motivation may occur after ACA stroke.,TRUE,Abulia may occur following ACA stroke.
+ACA,Beginner,4,Motivation is usually unaffected by ACA stroke.,FALSE,Motivation can be significantly affected.
+ACA,Beginner,5,ACA strokes may affect decision making.,TRUE,Executive functions may be impaired.
+ACA,Beginner,5,Decision making is usually preserved following ACA stroke.,FALSE,Decision making may be affected.
+ACA,Beginner,5,Problems with decision making may occur after ACA stroke.,TRUE,Frontal lobe dysfunction may impair judgement.
+ACA,Beginner,5,ACA strokes are more likely to affect vision than decision making.,FALSE,Decision making problems are more characteristic.
+ACA,Beginner,6,ACA strokes may affect bladder control.,TRUE,ACA territory includes areas involved in continence.
+ACA,Beginner,6,Bladder symptoms are more commonly associated with MCA stroke than ACA stroke.,FALSE,Bladder dysfunction is a recognised ACA feature.
+ACA,Beginner,6,Problems controlling the bladder may occur after ACA stroke.,TRUE,Incontinence may occur after ACA stroke.
+ACA,Beginner,6,ACA strokes are more likely to cause visual symptoms than bladder symptoms.,FALSE,Bladder symptoms are more characteristic.
+ACA,Beginner,7,The ACA supplies areas on the inner surface of the brain.,TRUE,ACA supplies medial brain structures.
+ACA,Beginner,7,The ACA mainly supplies the outer surface of the temporal lobe.,FALSE,ACA primarily supplies medial surfaces.
+ACA,Beginner,7,The ACA supplies brain tissue close to the midline.,TRUE,ACA territory lies near the midline.
+ACA,Beginner,7,Most ACA blood supply is directed towards the lateral brain surface.,FALSE,That is more typical of MCA territory.
+ACA,Beginner,8,The ACA supplies parts of the frontal lobe.,TRUE,ACA supplies medial frontal regions.
+ACA,Beginner,8,The ACA mainly supplies the occipital lobe.,FALSE,Occipital supply is mainly PCA.
+ACA,Beginner,8,Frontal lobe tissue receives blood supply from the ACA.,TRUE,ACA contributes to frontal lobe perfusion.
+ACA,Beginner,8,ACA territory is more strongly associated with vision than frontal lobe function.,FALSE,Frontal functions are more characteristic.
+ACA,Beginner,9,The ACA supplies brain areas responsible for leg movement.,TRUE,ACA supplies the leg motor cortex.
+ACA,Beginner,9,The ACA is more strongly associated with facial movement than leg movement.,FALSE,Face movement is more associated with MCA.
+ACA,Beginner,9,The ACA contributes to movement control of the leg.,TRUE,Leg motor pathways are represented in ACA territory.
+ACA,Beginner,9,The ACA mainly supplies speech production areas.,FALSE,Speech production is more commonly MCA territory.
+ACA,Beginner,10,The ACA supplies brain areas responsible for leg sensation.,TRUE,ACA supplies leg sensory cortex.
+ACA,Beginner,10,The ACA is more strongly associated with facial sensation than leg sensation.,FALSE,Facial sensation is more MCA territory.
+ACA,Beginner,10,The ACA contributes to sensory function in the leg.,TRUE,Leg sensory areas receive ACA supply.
+ACA,Beginner,10,ACA territory is primarily associated with visual processing.,FALSE,Visual processing is more PCA territory.
+ACA,Beginner,11,The ACA is part of the anterior circulation.,TRUE,ACA arises from the internal carotid system.
+ACA,Beginner,11,The ACA belongs to the posterior circulation.,FALSE,Posterior circulation arises from vertebrobasilar arteries.
+ACA,Beginner,11,The ACA belongs to the carotid circulation.,TRUE,It is an anterior circulation vessel.
+ACA,Beginner,11,The ACA arises from the vertebrobasilar circulation.,FALSE,It arises from the carotid circulation.
+ACA,Beginner,12,The ACA forms part of the Circle of Willis.,TRUE,ACA contributes to the arterial circle.
+ACA,Beginner,12,The ACA lies outside the Circle of Willis.,FALSE,It forms part of it.
+ACA,Beginner,12,The ACA contributes to the Circle of Willis.,TRUE,It is a component vessel.
+ACA,Beginner,12,The ACA has no connection to the major arterial ring at the base of the brain.,FALSE,It contributes directly.
+ACA,Beginner,13,ACA strokes occur less commonly than MCA strokes.,TRUE,MCA strokes are more frequent.
+ACA,Beginner,13,ACA strokes are encountered more frequently than MCA strokes.,FALSE,ACA strokes are less common.
+ACA,Beginner,13,MCA strokes are generally more common than ACA strokes.,TRUE,MCA territory is the commonest stroke territory.
+ACA,Beginner,13,ACA strokes account for the majority of cerebral infarcts.,FALSE,They represent a minority.
+ACA,Beginner,14,ACA strokes commonly affect the leg more than the arm.,TRUE,Leg symptoms are characteristic.
+ACA,Beginner,14,ACA strokes commonly affect the arm more than the leg.,FALSE,Arm symptoms are more typical of MCA.
+ACA,Beginner,14,Leg symptoms are often more prominent than arm symptoms in ACA stroke.,TRUE,This is a classic feature.
+ACA,Beginner,14,Face and arm symptoms are usually more severe than leg symptoms in ACA stroke.,FALSE,Leg symptoms are usually dominant.
+ACA,Beginner,15,ACA strokes may affect both movement and sensation in the leg.,TRUE,Motor and sensory leg deficits may occur.
+ACA,Beginner,15,ACA strokes are usually limited to cognitive symptoms alone.,FALSE,Motor and sensory symptoms may also occur.
+ACA,Beginner,15,ACA strokes may affect how the leg moves and feels.,TRUE,Movement and sensation can both be affected.
+ACA,Beginner,15,ACA strokes typically affect vision without affecting movement or sensation.,FALSE,Leg deficits are more typical.
+ACA,Beginner,16,Large ACA strokes may affect both legs.,TRUE,Bilateral symptoms may occur in extensive ACA infarction.
+ACA,Beginner,16,ACA strokes are more likely to affect both arms than both legs.,FALSE,Leg involvement is more characteristic.
+ACA,Beginner,16,Bilateral leg weakness may occur in extensive ACA stroke.,TRUE,Large ACA infarcts can affect both sides.
+ACA,Beginner,16,Extensive ACA strokes typically spare the lower limbs.,FALSE,Lower limb involvement is common.
+ACA,Beginner,17,ACA strokes may affect executive function.,TRUE,Frontal lobe dysfunction may impair executive skills.
+ACA,Beginner,17,Executive function is usually unaffected following ACA stroke.,FALSE,Executive dysfunction may occur.
+ACA,Beginner,17,Planning and organisational skills may be affected by ACA stroke.,TRUE,These are executive functions.
+ACA,Beginner,17,ACA strokes are more strongly associated with visual field loss than executive dysfunction.,FALSE,Executive problems are more typical.
+ACA,Beginner,18,ACA strokes may affect concentration.,TRUE,Attention and concentration may be impaired.
+ACA,Beginner,18,Problems with concentration are uncommon after ACA stroke.,FALSE,Concentration may be affected.
+ACA,Beginner,18,Problems with concentration may occur after ACA stroke.,TRUE,Frontal dysfunction may reduce concentration.
+ACA,Beginner,18,ACA strokes are more likely to affect vision than attention.,FALSE,Attention deficits are more characteristic.
+ACA,Beginner,19,The ACA supplies the medial frontal lobe.,TRUE,This is a key ACA territory.
+ACA,Beginner,19,The ACA mainly supplies the temporal lobe.,FALSE,Temporal supply is mainly MCA.
+ACA,Beginner,19,The medial frontal cortex receives blood supply from the ACA.,TRUE,ACA perfuses medial frontal regions.
+ACA,Beginner,19,ACA territory is more strongly associated with temporal lobe supply than frontal lobe supply.,FALSE,Frontal supply is more characteristic.
+ACA,Beginner,20,The ACA supplies a significant portion of the frontal lobe.,TRUE,ACA contributes substantially to frontal lobe perfusion.
+ACA,Beginner,20,The ACA supplies little frontal lobe tissue.,FALSE,It supplies important frontal regions.
+ACA,Beginner,20,The ACA contributes to blood supply of the frontal cortex.,TRUE,Frontal cortex receives ACA supply.
+ACA,Beginner,20,ACA territory is more closely associated with occipital than frontal function.,FALSE,Occipital function is PCA territory.
+ICA,Beginner,1,ICA is a major vessel supplying the front part of the brain.,TRUE,ICA contributes to anterior circulation.
+ICA,Beginner,1,ICA mainly supplies the back of the brain.,FALSE,Posterior circulation supplies most of the back of the brain.
+ICA,Beginner,1,ICA helps supply ACA and MCA territories.,TRUE,ICA branches contribute to both ACA and MCA territories.
+ICA,Beginner,1,ICA contributes more strongly to posterior circulation than anterior circulation.,FALSE,ICA is a major anterior circulation vessel.
+ICA,Beginner,2,ICA divides into ACA and MCA.,TRUE,ICA gives rise to these major vessels.
+ICA,Beginner,2,ICA divides directly into PCA.,FALSE,PCA usually arises from posterior circulation.
+ICA,Beginner,2,ICA splits into ACA and MCA branches.,TRUE,These are major anterior circulation branches.
+ICA,Beginner,2,ACA and MCA combine to form the ICA.,FALSE,ICA branches into ACA and MCA rather than the reverse.
+ICA,Beginner,3,ICA can be thought of as a feeder vessel to anterior circulation.,TRUE,It provides blood before branching.
+ICA,Beginner,3,ICA mainly supplies a single brain territory.,FALSE,ICA contributes blood to multiple territories.
+ICA,Beginner,3,ACA and MCA receive blood from ICA.,TRUE,ICA is upstream from both vessels.
+ICA,Beginner,3,ICA blood flow is usually limited to one major branch.,FALSE,ICA contributes to multiple branches.
+ICA,Beginner,4,Problems with ICA blood flow may affect large brain areas.,TRUE,ICA supplies major territories.
+ICA,Beginner,4,ICA problems are usually limited to a single small brain region.,FALSE,Effects may be widespread.
+ICA,Beginner,4,ICA issues can potentially affect ACA and MCA regions.,TRUE,Downstream effects may occur.
+ICA,Beginner,4,ICA disease typically affects only one isolated brain function.,FALSE,Multiple functions may be affected.
+ICA,Beginner,5,Left ICA problems may cause symptoms on the right side of the body.,TRUE,Effects are often opposite-sided.
+ICA,Beginner,5,ICA strokes usually affect the same side as the damaged vessel.,FALSE,Symptoms often occur on the opposite side.
+ICA,Beginner,5,Brain blood vessel problems often affect the opposite side of movement.,TRUE,Motor pathways cross.
+ICA,Beginner,5,Symptoms from ICA disease are usually confined to the same side of the body.,FALSE,Contralateral symptoms are more typical.
+ICA,Beginner,6,ICA blood flow contributes to movement areas of the brain.,TRUE,ACA and MCA supply motor cortex.
+ICA,Beginner,6,ICA contribution to movement areas is limited.,FALSE,ICA contributes through ACA and MCA.
+ICA,Beginner,6,ICA blood flow may affect movement if disrupted.,TRUE,Motor deficits may occur.
+ICA,Beginner,6,Movement problems are uncommon in ICA disease.,FALSE,Motor symptoms are common.
+ICA,Beginner,7,ICA contributes to blood supply for speech areas.,TRUE,MCA territory includes language areas.
+ICA,Beginner,7,Visual symptoms are more common than speech problems in ICA disease.,FALSE,Speech may be affected depending on side and territory.
+ICA,Beginner,7,ICA disruption may affect speech depending on the side involved.,TRUE,Language may be affected.
+ICA,Beginner,7,Language areas are unaffected by ICA blood flow.,FALSE,ICA contributes to territories supplying language areas.
+ICA,Beginner,8,"ICA problems may affect face, arm or leg function.",TRUE,Downstream territories vary.
+ICA,Beginner,8,ICA problems most commonly affect leg movement alone.,FALSE,Effects depend on branch involvement.
+ICA,Beginner,8,ICA supplies territories affecting different body functions.,TRUE,Multiple regions are supplied.
+ICA,Beginner,8,ICA disease is usually restricted to a single body function.,FALSE,Multiple functions may be affected.
+ICA,Beginner,9,ICA is part of anterior circulation.,TRUE,Anterior circulation includes ICA.
+ICA,Beginner,9,ICA belongs to posterior circulation.,FALSE,Posterior circulation involves vertebral and basilar arteries.
+ICA,Beginner,9,ICA contributes blood to front brain territories.,TRUE,Anterior circulation supply.
+ICA,Beginner,9,ICA forms part of the vertebrobasilar circulation.,FALSE,It belongs to carotid circulation.
+ICA,Beginner,10,ICA blood flow can contribute to eye circulation.,TRUE,Ophthalmic artery arises from ICA.
+ICA,Beginner,10,Visual symptoms are uncommon in ICA disease.,FALSE,Eye involvement can occur.
+ICA,Beginner,10,ICA problems may sometimes affect vision.,TRUE,Visual symptoms may occur.
+ICA,Beginner,10,ICA disease affects movement but rarely vision.,FALSE,Vision may also be affected.
+ICA,Beginner,11,ICA is important because it supplies large areas before branching.,TRUE,ICA is a major source vessel.
+ICA,Beginner,11,ICA supplies a relatively small area of the brain.,FALSE,It supplies major territories.
+ICA,Beginner,11,ICA blood reaches several important brain territories.,TRUE,Multiple areas are supplied.
+ICA,Beginner,11,ICA has little influence on overall cerebral blood flow.,FALSE,It is a major contributor.
+ICA,Beginner,12,ICA blood flow reaches ACA territory.,TRUE,ACA is downstream from ICA.
+ICA,Beginner,12,ICA contributes more strongly to MCA territory than ACA territory.,FALSE,ICA contributes to both territories.
+ICA,Beginner,12,ICA blood flow reaches MCA territory.,TRUE,MCA is downstream from ICA.
+ICA,Beginner,12,ACA receives blood independently of the ICA.,FALSE,ACA branches from ICA.
+ICA,Beginner,13,Reduced ICA blood flow may lead to weakness.,TRUE,Motor areas can be affected.
+ICA,Beginner,13,Hearing symptoms are more common than weakness in ICA disease.,FALSE,Weakness is more typical.
+ICA,Beginner,13,ICA disruption may affect movement or speech.,TRUE,Functions supplied downstream may be affected.
+ICA,Beginner,13,ICA disease rarely causes neurological symptoms.,FALSE,Neurological symptoms are common.
+ICA,Beginner,14,ICA sits earlier in the blood supply pathway than ACA.,TRUE,ACA branches later.
+ICA,Beginner,14,ACA gives rise to ICA.,FALSE,ICA comes before ACA.
+ICA,Beginner,14,ICA is upstream from ACA and MCA.,TRUE,ICA branches into these vessels.
+ICA,Beginner,14,ACA and MCA supply blood to the ICA.,FALSE,Blood flows from ICA to ACA and MCA.
+ICA,Beginner,15,Understanding ICA helps explain ACA and MCA blood supply.,TRUE,ICA is the source vessel.
+ICA,Beginner,15,ICA blood flow is unrelated to ACA and MCA circulation.,FALSE,ICA directly supplies these pathways.
+ICA,Beginner,15,ICA acts as a source vessel for ACA and MCA territories.,TRUE,It supplies both territories before branching.
+ICA,Beginner,15,ACA and MCA function independently of ICA blood supply.,FALSE,Both depend on ICA flow.
+MCA,Beginner,1,MCA strokes may cause weakness of the face and arm.,TRUE,The MCA supplies areas of the brain responsible for face and arm movement.
+MCA,Beginner,1,MCA strokes more commonly affect the legs than the face and arm.,FALSE,MCA strokes more commonly affect the face and arm than the legs.
+MCA,Beginner,1,Face and arm weakness is commonly seen after MCA stroke.,TRUE,Face and arm weakness is a classic MCA stroke feature.
+MCA,Beginner,1,MCA strokes may cause weakness and loss of sensation of the legs.,FALSE,Leg symptoms are more commonly associated with ACA territory.
+MCA,Beginner,2,MCA strokes may cause loss of feeling in the face and arm.,TRUE,The MCA supplies sensory areas responsible for the face and arm.
+MCA,Beginner,2,MCA strokes more commonly affect leg sensation than sensation in the face and arm.,FALSE,MCA strokes more commonly affect face and arm sensation.
+MCA,Beginner,2,MCA strokes may affect sensation in the face and upper limb.,TRUE,Sensory loss in the face and arm may occur with MCA stroke.
+MCA,Beginner,2,MCA strokes commonly affect sensation in the arms but never the face.,FALSE,The MCA supplies sensation to both the face and arm.
+MCA,Beginner,3,MCA strokes may affect a person's ability to speak.,TRUE,Speech areas are commonly supplied by the MCA.
+MCA,Beginner,3,Balance problems are usually the most prominent feature of MCA stroke.,FALSE,Speech and motor symptoms are more typical.
+MCA,Beginner,3,Speech difficulties may occur after MCA stroke.,TRUE,Language production may be affected.
+MCA,Beginner,3,MCA strokes commonly affect hearing but not speech.,FALSE,Speech problems are more characteristic.
+MCA,Beginner,4,MCA strokes may affect a person's ability to understand language.,TRUE,Language comprehension may be affected.
+MCA,Beginner,4,Bladder symptoms are more commonly associated with MCA stroke than language problems.,FALSE,Language problems are more characteristic of MCA stroke.
+MCA,Beginner,4,Difficulty understanding language may occur after MCA stroke.,TRUE,Language comprehension deficits may occur.
+MCA,Beginner,4,MCA strokes commonly affect speech but not language understanding.,FALSE,Both speech production and understanding may be affected.
+MCA,Beginner,5,MCA strokes may cause a person to ignore one side of their surroundings.,TRUE,"Neglect may occur, especially with right MCA strokes."
+MCA,Beginner,5,Memory problems are usually more prominent than awareness problems following MCA stroke.,FALSE,Awareness problems are more characteristic.
+MCA,Beginner,5,Problems with awareness of one side of the environment may occur after MCA stroke.,TRUE,Spatial neglect is a recognised MCA syndrome.
+MCA,Beginner,5,MCA strokes commonly affect hearing but not awareness.,FALSE,Awareness problems are more typical.
+MCA,Beginner,6,MCA strokes may cause visual problems.,TRUE,Visual field deficits may occur.
+MCA,Beginner,6,Visual symptoms are uncommon in MCA stroke compared with PCA stroke.,FALSE,Visual deficits may still occur in MCA stroke.
+MCA,Beginner,6,Visual field problems may occur following MCA stroke.,TRUE,Visual pathways may be affected.
+MCA,Beginner,6,MCA strokes commonly affect taste but not vision.,FALSE,Visual problems are more characteristic.
+MCA,Beginner,7,The MCA supplies brain areas responsible for arm movement.,TRUE,The arm motor cortex lies in MCA territory.
+MCA,Beginner,7,The MCA is more strongly associated with leg movement than arm movement.,FALSE,Leg movement is more associated with ACA territory.
+MCA,Beginner,7,The MCA contributes to movement control of the arm.,TRUE,Arm motor areas receive MCA blood supply.
+MCA,Beginner,7,The MCA mainly supplies balance centres.,FALSE,Balance centres are not a primary MCA territory.
+MCA,Beginner,8,The MCA supplies brain areas responsible for facial movement.,TRUE,Facial motor cortex is supplied by the MCA.
+MCA,Beginner,8,The MCA is more strongly associated with leg function than facial movement.,FALSE,Facial movement is strongly associated with MCA territory.
+MCA,Beginner,8,Facial motor function receives blood supply from MCA territory.,TRUE,The face motor cortex lies within MCA territory.
+MCA,Beginner,8,The MCA mainly supplies bladder control centres.,FALSE,Bladder control is more associated with ACA territory.
+MCA,Beginner,9,The MCA supplies brain areas responsible for feeling in the face and arm.,TRUE,Face and arm sensory cortex are supplied by the MCA.
+MCA,Beginner,9,The MCA is more strongly associated with leg sensation than facial sensation.,FALSE,Leg sensation is more ACA territory.
+MCA,Beginner,9,The MCA contributes to sensory function in the face and arm.,TRUE,Sensory cortex receives MCA supply.
+MCA,Beginner,9,The MCA mainly supplies vision centres.,FALSE,Primary visual cortex is PCA territory.
+MCA,Beginner,10,The MCA supplies large areas on the outer surface of the brain.,TRUE,The MCA supplies much of the lateral hemisphere.
+MCA,Beginner,10,The MCA mainly supplies the brainstem.,FALSE,Brainstem supply is vertebrobasilar territory.
+MCA,Beginner,10,Much of the lateral surface of the brain receives blood from the MCA.,TRUE,Large cortical territories are supplied by the MCA.
+MCA,Beginner,10,The MCA contributes to the blood supply of the spinal cord.,FALSE,The MCA does not supply the spinal cord.
+MCA,Beginner,11,The MCA gives off small branches that travel deep into the brain.,TRUE,Deep perforators arise from the MCA.
+MCA,Beginner,11,Deep brain structures receive very little blood supply from the MCA.,FALSE,MCA perforators are important suppliers of deep structures.
+MCA,Beginner,11,Deep brain structures may receive blood supply from MCA branches.,TRUE,Perforating arteries supply deep structures.
+MCA,Beginner,11,The MCA primarily supplies structures outside the brain.,FALSE,The MCA supplies brain tissue.
+MCA,Beginner,12,Deep MCA strokes may cause severe weakness.,TRUE,Internal capsule involvement may cause dense weakness.
+MCA,Beginner,12,Deep MCA strokes usually cause only minor weakness.,FALSE,Deep MCA strokes can cause profound deficits.
+MCA,Beginner,12,Significant weakness may occur following deep MCA infarction.,TRUE,Motor pathways may be affected.
+MCA,Beginner,12,Deep MCA strokes only affect memory.,FALSE,Motor deficits are common.
+MCA,Beginner,13,The MCA is one of the major arteries supplying the brain.,TRUE,The MCA supplies a large cerebral territory.
+MCA,Beginner,13,The MCA is one of the smallest arteries supplying the brain.,FALSE,The MCA is a major cerebral artery.
+MCA,Beginner,13,The MCA supplies a large proportion of the cerebral hemisphere.,TRUE,Much of the lateral hemisphere is MCA territory.
+MCA,Beginner,13,The MCA only supplies a very small brain territory.,FALSE,The MCA territory is extensive.
+MCA,Beginner,14,The MCA travels through a groove called the Sylvian fissure.,TRUE,The MCA courses through the Sylvian fissure.
+MCA,Beginner,14,The MCA travels through the spinal canal.,FALSE,The MCA is an intracranial artery.
+MCA,Beginner,14,The Sylvian fissure contains the MCA as it travels across the brain.,TRUE,This is a key anatomical landmark.
+MCA,Beginner,14,The MCA travels through the cerebellum.,FALSE,The cerebellum is supplied by posterior circulation vessels.
+MCA,Beginner,15,MCA strokes commonly affect the face and arm more than the leg.,TRUE,Face and arm regions are prominent MCA territory.
+MCA,Beginner,15,MCA strokes mainly affect the leg while sparing the face and arm.,FALSE,Leg-dominant symptoms are more ACA territory.
+MCA,Beginner,15,Face and arm symptoms are often more prominent than leg symptoms in MCA stroke.,TRUE,This is a classic MCA pattern.
+MCA,Beginner,15,Leg symptoms are usually much more prominent than face and arm symptoms in MCA stroke.,FALSE,Face and arm symptoms are usually more marked.
+MCA,Beginner,16,The MCA is one of the most commonly affected arteries in stroke.,TRUE,MCA infarction is a common stroke presentation.
+MCA,Beginner,16,MCA strokes occur less frequently than ACA strokes.,FALSE,MCA strokes are more common than ACA strokes.
+MCA,Beginner,16,MCA territory infarction is among the most common stroke presentations.,TRUE,MCA strokes are frequently encountered.
+MCA,Beginner,16,Strokes almost never occur in the MCA territory.,FALSE,MCA strokes are common.
+MCA,Beginner,17,"MCA strokes may affect movement, sensation, speech and vision.",TRUE,Multiple neurological functions may be involved.
+MCA,Beginner,17,MCA strokes typically affect a single neurological function.,FALSE,Several functions are often affected.
+MCA,Beginner,17,Several neurological functions may be affected by MCA stroke.,TRUE,Deficits may span multiple domains.
+MCA,Beginner,17,Movement problems are usually the only deficit seen after MCA stroke.,FALSE,"Speech, sensation and vision may also be affected."
+MCA,Beginner,18,A left MCA stroke may affect language.,TRUE,Language areas are commonly supplied by the dominant MCA.
+MCA,Beginner,18,Speech function is usually preserved following left MCA stroke.,FALSE,Language deficits are common.
+MCA,Beginner,18,Language difficulties may occur following left MCA stroke.,TRUE,Dysphasia may occur.
+MCA,Beginner,18,Balance problems are more common than language problems after left MCA stroke.,FALSE,Language deficits are more characteristic.
+MCA,Beginner,19,A right MCA stroke may affect awareness of one side of the body or environment.,TRUE,Neglect is a recognised right MCA syndrome.
+MCA,Beginner,19,Right MCA strokes are more commonly associated with language problems than awareness problems.,FALSE,Awareness problems are more characteristic.
+MCA,Beginner,19,Problems with spatial awareness may occur following right MCA stroke.,TRUE,Spatial neglect may occur.
+MCA,Beginner,19,Hearing problems are more commonly associated with right MCA stroke than awareness problems.,FALSE,Awareness deficits are more typical.
+MCA,Beginner,20,The MCA supplies a large area of the brain.,TRUE,The MCA territory is extensive.
+MCA,Beginner,20,The MCA supplies a relatively small area of the brain compared with other cerebral arteries.,FALSE,The MCA supplies one of the largest territories.
+MCA,Beginner,20,A substantial portion of the cerebral hemisphere receives blood from the MCA.,TRUE,Large cortical regions depend on MCA supply.
+MCA,Beginner,20,The MCA territory is smaller than ACA and PCA territories combined.,FALSE,The MCA territory is extensive and clinically important.
+ACom,Beginner,1,ACom aneurysms may affect frontal lobe function.,TRUE,ACom aneurysms can affect nearby frontal structures.
+ACom,Beginner,1,ACom aneurysms are more strongly associated with cerebellar function than frontal lobe function.,FALSE,ACom aneurysms are located in the anterior circulation near frontal structures.
+ACom,Beginner,1,Frontal lobe symptoms may occur with ACom aneurysms.,TRUE,Nearby frontal areas can be involved.
+ACom,Beginner,1,ACom aneurysms mainly affect posterior circulation structures.,FALSE,ACom aneurysms are anterior circulation aneurysms.
+ACom,Beginner,2,ACom aneurysms may cause personality changes.,TRUE,Frontal lobe involvement may alter behaviour and personality.
+ACom,Beginner,2,Personality is usually preserved after ACom aneurysm rupture.,FALSE,Personality and behaviour may be affected.
+ACom,Beginner,2,Changes in behaviour may be seen with ACom aneurysms.,TRUE,Frontal dysfunction may occur.
+ACom,Beginner,2,ACom aneurysms are more commonly associated with hearing changes than behaviour changes.,FALSE,Behavioural changes are more characteristic than hearing changes.
+ACom,Beginner,3,ACom aneurysms may affect memory.,TRUE,Memory pathways are near the ACom region.
+ACom,Beginner,3,ACom aneurysms commonly improve short-term memory.,FALSE,Memory impairment may occur.
+ACom,Beginner,3,Memory problems can occur after ACom aneurysm rupture.,TRUE,Nearby structures involved in memory may be affected.
+ACom,Beginner,3,Memory problems are more commonly associated with cerebellar injury than ACom aneurysms.,FALSE,ACom aneurysms are well associated with memory disturbance.
+ACom,Beginner,4,ACom aneurysms are located in the anterior circulation.,TRUE,The anterior communicating artery is part of the anterior circulation.
+ACom,Beginner,4,ACom aneurysms arise from the basilar artery.,FALSE,Basilar aneurysms are posterior circulation aneurysms.
+ACom,Beginner,4,The anterior communicating artery connects anterior circulation vessels.,TRUE,It links the two anterior cerebral arteries.
+ACom,Beginner,4,ACom aneurysms are more closely related to the vertebrobasilar circulation than the carotid circulation.,FALSE,ACom is part of the anterior circulation.
+ACom,Beginner,5,ACom aneurysms may present with sudden severe headache.,TRUE,Subarachnoid haemorrhage commonly causes thunderclap headache.
+ACom,Beginner,5,ACom rupture usually presents as a mild chronic headache.,FALSE,Presentation is often sudden and severe.
+ACom,Beginner,5,Sudden thunderclap headache may indicate ACom rupture.,TRUE,This is a classic presentation of aneurysmal subarachnoid haemorrhage.
+ACom,Beginner,5,Headache from ACom rupture is usually gradual and settles without concern.,FALSE,ACom rupture can cause sudden severe headache requiring urgent assessment.
+ACom,Beginner,6,ACom aneurysm rupture may cause subarachnoid haemorrhage.,TRUE,Rupture releases blood into the subarachnoid space.
+ACom,Beginner,6,ACom aneurysm rupture is more commonly associated with ischaemic stroke than subarachnoid bleeding.,FALSE,Rupture classically causes haemorrhage.
+ACom,Beginner,6,Bleeding around the brain may occur after ACom rupture.,TRUE,Subarachnoid bleeding is common after rupture.
+ACom,Beginner,6,ACom aneurysms are mainly associated with bleeding into the spinal cord.,FALSE,Rupture causes bleeding around the brain.
+ACom,Beginner,7,ACom aneurysms are associated with the Circle of Willis.,TRUE,ACom forms part of the Circle of Willis.
+ACom,Beginner,7,ACom lies outside the cerebral arterial circulation.,FALSE,It is part of cerebral arterial circulation.
+ACom,Beginner,7,The anterior communicating artery connects the left and right ACA.,TRUE,This connection forms part of the Circle of Willis.
+ACom,Beginner,7,ACom connects the MCA directly to the PCA.,FALSE,ACom connects the left and right anterior cerebral arteries.
+ACom,Beginner,8,Confusion may occur after ACom aneurysm rupture.,TRUE,Frontal and diffuse effects may cause confusion.
+ACom,Beginner,8,ACom rupture is more likely to cause isolated limb weakness than confusion.,FALSE,Confusion and reduced consciousness may occur after rupture.
+ACom,Beginner,8,Patients with ACom rupture may become confused or drowsy.,TRUE,Raised ICP and haemorrhage can affect consciousness.
+ACom,Beginner,8,ACom rupture usually leaves cognition completely unaffected.,FALSE,Cognition and consciousness may be affected.
+ACom,Beginner,9,ACom aneurysms may affect decision making.,TRUE,Frontal lobe involvement may impair executive function.
+ACom,Beginner,9,ACom aneurysms are more likely to affect leg movement than decision making.,FALSE,Cognitive and behavioural effects are common.
+ACom,Beginner,9,Executive function problems may occur with ACom aneurysms.,TRUE,Frontal systems may be disrupted.
+ACom,Beginner,9,Decision making is usually unrelated to ACom aneurysm effects.,FALSE,Decision making may be affected through frontal lobe involvement.
+ACom,Beginner,10,ACom aneurysms are common intracranial aneurysms.,TRUE,ACom aneurysms are among the most common aneurysm locations.
+ACom,Beginner,10,ACom aneurysms are rarely encountered in neurovascular practice.,FALSE,They are frequently encountered.
+ACom,Beginner,10,Anterior communicating artery aneurysms are commonly seen in neuro practice.,TRUE,They are a frequent aneurysm location.
+ACom,Beginner,10,Most intracranial aneurysms arise from cerebellar arteries rather than the ACom region.,FALSE,ACom is one of the common intracranial aneurysm sites.
+ACom,Beginner,11,ACom rupture may lead to hydrocephalus.,TRUE,Blood can obstruct CSF pathways.
+ACom,Beginner,11,CSF circulation is usually unaffected after ACom subarachnoid haemorrhage.,FALSE,Blood products may block CSF circulation.
+ACom,Beginner,11,CSF flow problems may occur after ACom haemorrhage.,TRUE,Blood products may block CSF pathways.
+ACom,Beginner,11,Hydrocephalus is more commonly associated with unruptured aneurysms than ruptured ACom aneurysms.,FALSE,Hydrocephalus is a recognised complication after rupture and haemorrhage.
+ACom,Beginner,12,ACom aneurysm rupture is a neurosurgical emergency.,TRUE,Rapid assessment and treatment are often required.
+ACom,Beginner,12,ACom rupture can safely be ignored if headache settles.,FALSE,Urgent assessment is essential after suspected rupture.
+ACom,Beginner,12,Urgent medical treatment is required after suspected ACom rupture.,TRUE,Early intervention improves outcomes.
+ACom,Beginner,12,ACom rupture is usually managed in the community without hospital assessment.,FALSE,Suspected aneurysmal rupture requires urgent hospital assessment.
+ACom,Beginner,13,The ACom connects the left and right ACA.,TRUE,The anterior communicating artery links the two anterior cerebral arteries.
+ACom,Beginner,13,The ACom connects the MCA and PCA.,FALSE,ACom connects the two ACAs.
+ACom,Beginner,13,Blood may pass between the left and right ACA through the ACom.,TRUE,The ACom can provide a connection between both anterior cerebral arteries.
+ACom,Beginner,13,The ACom connects the basilar artery directly to the ICA.,FALSE,The ACom is part of the anterior circulation between the ACAs.
+ACom,Beginner,14,Short-term memory problems may occur following ACom aneurysm rupture.,TRUE,ACom rupture may affect nearby memory pathways.
+ACom,Beginner,14,ACom aneurysms mainly cause improved recall of recent events.,FALSE,Memory impairment rather than improvement may occur.
+ACom,Beginner,14,Memory difficulties may occur after ACom haemorrhage.,TRUE,Nearby memory-related structures may be affected.
+ACom,Beginner,14,Memory symptoms after ACom rupture are usually less relevant than hearing symptoms.,FALSE,Memory problems are a recognised ACom-related feature.
+ACom,Beginner,15,ACom aneurysms may cause cognitive symptoms even when movement is unaffected.,TRUE,Frontal and memory systems may be affected without a major motor deficit.
+ACom,Beginner,15,ACom aneurysms usually present with isolated leg weakness.,FALSE,Cognitive and behavioural symptoms are important ACom features.
+ACom,Beginner,15,Thinking and behaviour may be affected following ACom rupture.,TRUE,Frontal dysfunction and haemorrhage can affect cognition and behaviour.
+ACom,Beginner,15,ACom aneurysms are more strongly associated with movement problems than cognitive symptoms.,FALSE,Cognitive and behavioural symptoms are characteristic concerns.
+ACom,Beginner,16,Behavioural changes may occur following ACom rupture.,TRUE,Frontal lobe involvement may alter behaviour.
+ACom,Beginner,16,Behaviour is usually unaffected by ACom aneurysms.,FALSE,Behavioural changes can occur.
+ACom,Beginner,16,Personality changes may be seen with ACom aneurysms.,TRUE,Frontal dysfunction may affect personality.
+ACom,Beginner,16,ACom aneurysms are more strongly associated with hearing changes than behavioural changes.,FALSE,Behavioural changes are more typical.
+ACom,Beginner,17,ACom rupture may reduce consciousness.,TRUE,Subarachnoid haemorrhage and raised ICP can reduce consciousness.
+ACom,Beginner,17,Consciousness is usually preserved after aneurysmal subarachnoid haemorrhage.,FALSE,Reduced consciousness may occur.
+ACom,Beginner,17,Patients may become drowsy after ACom rupture.,TRUE,Haemorrhage and raised pressure can affect level of consciousness.
+ACom,Beginner,17,ACom rupture is more commonly associated with isolated hearing loss than reduced consciousness.,FALSE,Reduced consciousness is a recognised concern after rupture.
+ACom,Beginner,18,Hydrocephalus may occur after ACom haemorrhage.,TRUE,Blood can obstruct CSF circulation.
+ACom,Beginner,18,ACom haemorrhage usually improves CSF drainage.,FALSE,Blood products may impair CSF flow.
+ACom,Beginner,18,Blood from an ACom rupture may block CSF pathways.,TRUE,This can contribute to hydrocephalus.
+ACom,Beginner,18,Hydrocephalus is unrelated to subarachnoid blood after ACom rupture.,FALSE,Subarachnoid blood can interfere with CSF flow.
+ACom,Beginner,19,ACom aneurysms may affect a person's ability to plan and organise.,TRUE,Frontal lobe involvement may affect executive function.
+ACom,Beginner,19,ACom aneurysms are more commonly associated with visual field loss than planning difficulties.,FALSE,Planning and executive function problems are more characteristic of frontal involvement.
+ACom,Beginner,19,Problems with executive function may occur following ACom rupture.,TRUE,Executive function can be affected by frontal system disruption.
+ACom,Beginner,19,Planning and decision making are usually unaffected by ACom aneurysms.,FALSE,ACom aneurysms may affect frontal executive functions.
+ACom,Beginner,20,ACom aneurysms are among the most common intracranial aneurysms.,TRUE,The ACom is a frequent aneurysm location.
+ACom,Beginner,20,ACom aneurysms are rarely seen in neurovascular practice.,FALSE,ACom aneurysms are commonly encountered.
+ACom,Beginner,20,The anterior communicating artery is a frequent aneurysm location.,TRUE,ACom aneurysms are common in neuro practice.
+ACom,Beginner,20,ACom aneurysms are less relevant than cerebellar artery aneurysms in anterior circulation teaching.,FALSE,ACom is an important anterior circulation aneurysm site.
+AChA,Beginner,1,"AChA strokes may cause weakness affecting the face, arm, and leg.",True,"The AChA supplies structures including the internal capsule, where motor fibres are concentrated."
+AChA,Beginner,1,AChA strokes typically affect only the leg.,False,"Weakness can affect the face, arm, and leg together."
+AChA,Beginner,1,Dense weakness may occur following an AChA stroke.,True,Small lesions can affect many motor fibres in the internal capsule.
+AChA,Beginner,1,Motor symptoms are uncommon after AChA stroke.,False,Weakness is a common feature of AChA stroke.
+AChA,Beginner,2,AChA strokes may cause sensory loss on one side of the body.,True,Sensory pathways travel through regions supplied by the AChA.
+AChA,Beginner,2,Sensory symptoms are rarely seen in AChA stroke.,False,Sensory loss is a recognised feature of AChA injury.
+AChA,Beginner,2,An AChA stroke may affect both movement and sensation.,True,Motor and sensory fibres run close together in the internal capsule.
+AChA,Beginner,2,AChA strokes affect sensation without affecting movement.,False,Both motor and sensory deficits may occur.
+AChA,Beginner,3,AChA strokes may cause loss of vision on one side of the visual field.,True,Visual pathways supplied by the AChA may be affected.
+AChA,Beginner,3,Visual symptoms never occur following AChA stroke.,False,Visual field defects are a recognised feature.
+AChA,Beginner,3,An AChA stroke may affect a person's vision on one side.,True,Damage to optic pathways can produce this pattern.
+AChA,Beginner,3,AChA strokes commonly cause double vision as their main symptom.,False,Visual field loss is more characteristic than diplopia.
+AChA,Beginner,4,AChA is a relatively small artery.,True,"Despite its size, it supplies important deep brain structures."
+AChA,Beginner,4,AChA is one of the largest arteries in the brain.,False,It is a small but clinically important vessel.
+AChA,Beginner,4,A small AChA stroke may produce significant symptoms.,True,Important motor and sensory fibres pass through its territory.
+AChA,Beginner,4,Small AChA strokes are always symptom-free.,False,Even small lesions can cause major deficits.
+AChA,Beginner,5,The internal capsule is commonly affected by AChA stroke.,True,The internal capsule is one of the key structures supplied by the AChA.
+AChA,Beginner,5,AChA strokes mainly affect the cerebellum.,False,The cerebellum is supplied by posterior circulation vessels.
+AChA,Beginner,5,Damage to the internal capsule may affect multiple body regions at once.,True,"Motor fibres for the face, arm, and leg are closely packed."
+AChA,Beginner,5,Internal capsule injury usually affects only a single finger.,False,Deficits are often much broader than this.
+AChA,Beginner,6,"AChA strokes may affect the face, arm, and leg on the same side of the body.",False,Symptoms typically occur on the opposite side of the body.
+AChA,Beginner,6,AChA strokes often produce symptoms on the opposite side of the body.,True,Motor and sensory pathways cross before reaching the limbs.
+AChA,Beginner,6,Weakness from an AChA stroke is usually contralateral to the lesion.,True,Internal capsule involvement causes opposite-sided weakness.
+AChA,Beginner,6,AChA strokes always cause symptoms on the same side as the lesion.,False,Symptoms are usually contralateral.
+AChA,Beginner,7,"AChA stroke may produce a combination of weakness, sensory loss, and visual problems.",True,All three pathways can be affected.
+AChA,Beginner,7,AChA strokes affect only a single neurological function.,False,Multiple pathways may be involved.
+AChA,Beginner,7,"Motor, sensory, and visual deficits can occur together in AChA stroke.",True,This is a classic AChA stroke pattern.
+AChA,Beginner,7,Visual symptoms exclude the diagnosis of AChA stroke.,False,Visual deficits may be part of the syndrome.
+AChA,Beginner,8,AChA arises from the internal carotid artery.,True,The AChA is a branch of the ICA.
+AChA,Beginner,8,AChA usually arises from the basilar artery.,False,It originates from the ICA.
+AChA,Beginner,8,AChA is part of the anterior circulation.,True,It branches from the internal carotid artery.
+AChA,Beginner,8,AChA is part of the vertebral artery system.,False,It belongs to the anterior circulation.
+AChA,Beginner,9,AChA aneurysms may affect nearby visual pathways.,True,The artery lies near important optic structures.
+AChA,Beginner,9,AChA aneurysms are commonly associated with cerebellar symptoms only.,False,Visual and motor pathways are more relevant.
+AChA,Beginner,9,Preserving AChA flow during aneurysm treatment is important.,True,Occlusion can cause significant neurological deficits.
+AChA,Beginner,9,Loss of AChA flow is usually clinically insignificant.,False,It can produce major disability.
+AChA,Beginner,10,AChA strokes may produce dense neurological deficits despite a small lesion.,True,Many important fibres pass through a small area.
+AChA,Beginner,10,Large areas of cortex must be damaged before symptoms occur in AChA stroke.,False,Deep fibre tracts can produce severe symptoms even with small lesions.
+AChA,Beginner,10,Closely packed fibre tracts help explain the severity of some AChA strokes.,True,Many pathways travel together in the internal capsule.
+AChA,Beginner,10,The effects of AChA stroke are always mild.,False,Deficits may be severe and disabling.

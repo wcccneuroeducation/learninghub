@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anterior Isle Quiz</title>
+<style>
+    body {
+
+font-family: Arial, sans-serif;
+
+background:
+linear-gradient(
+180deg,
+#050816,
+#0b1026);
+
+color:white;
+
+margin:0;
+
+padding:30px;
+
+text-align:center;
+
+}
+    .card {
+
+background:
+rgba(
+10,
+15,
+30,
+0.92);
+
+max-width:860px;
+
+margin:0 auto;
+
+padding:28px;
+
+border-radius:14px;
+
+border:
+1px solid
+#00ffff;
+
+box-shadow:
+
+0 0 20px
+rgba(
+0,
+255,
+255,
+0.25);
+
+}
+    h1 { margin-top: 0; }
+    select, input {
+padding: 14px;
+font-size: 18px;
+margin: 10px;
+}
+
+button {
+padding: 20px 32px;
+margin: 20px;
+font-size: 22px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+}
+    .true-btn { background: #d7f5dc; }
+    .false-btn { background: #f9d7d7; }
+    .start-btn { background: #e2e8f0; }
+    #question {
+
+background:white;
+color:black;
+
+font-size:
+clamp(30px,6vw,44px);
+
+margin:22px 0;
+
+line-height:1.4;
+
+padding:28px;
+
+border-radius:12px;
+
+font-weight:
+600;
+
+}
+    #feedback {
+
+font-size:
+28px;
+
+margin:25px;
+
+min-height:
+100px;
+
+line-height:
+1.5;
+
+}
+    #progress {
+
+margin-top:
+15px;
+
+font-size:
+24px;
+
+color:
+#cccccc;
+
+}
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th{
+
+color:
+#ff4fd8;
+
+}
+
+td{
+
+color:
+#00ffff;
+
+}
+    .small {
+
+color:white;
+
+font-size:
+20px;
+
+line-height:
+1.5;
+
+}
+    .hidden { display: none; }
+    .award { font-size: 32px; margin: 15px; font-weight: bold; }
+    .brain3 {
+background:#9b59b6;
+color:white;
+}
+
+.brain2 {
+background:#3498db;
+color:white;
+}
+
+.brain1 {
+background:#6ab04c;
+color:white;
+}
+    .noaward { background: #f3f4f6; padding: 12px; border-radius: 10px; }
+  /*PC only*/
+  @media (min-width:769px){
+
+#introVideo{
+
+width:100%;
+
+max-height:95vh;
+
+object-fit:contain;
+
+}
+
+}
+    /* MOBILE ONLY */
+@media (max-width: 768px) {
+.award-name {
+display:none;
+}
+
+.award-cell {
+font-size:24px;
+white-space:normal;
+}
+    table {
+
+font-size:
+16px;
+
+width:
+100%;
+
+table-layout:
+fixed;
+
+}
+
+th, td {
+
+padding:
+4px;
+
+text-align:
+center;
+
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+
+width:
+8%;
+
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+
+width:
+28%;
+
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+
+width:
+18%;
+
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+
+width:
+14%;
+
+}
+
+th:nth-child(5),
+td:nth-child(5) {
+
+width:
+14%;
+
+}
+
+th:nth-child(6),
+td:nth-child(6) {
+
+width:
+32%;
+
+}
+
+/* hide date on mobile */
+
+th:nth-child(7),
+td:nth-child(7) {
+
+display:
+none;
+
+}
+
+.award {
+font-size: 24px;
+}
+button {
+
+padding:26px 40px;
+font-size:26px;
+margin:20px;
+width:220px;
+height:90px;
+
+}
+
+.true-btn,
+.false-btn {
+
+display:block;
+margin:22px auto;
+width:240px;
+height:90px;
+
+}
+
+/* Mobile CSS Active Badge */
+/*
+body::after {
+
+content:
+"📱 Mobile CSS Active";
+
+position:
+fixed;
+
+bottom:
+50px;
+
+right:
+10px;
+
+background:
+green;
+
+padding:
+10px;
+
+border-radius:
+8px;
+
+color:
+white;
+
+font-size:
+14px;
+
+z-index:
+9999;
+
+}
+*/
+}
+
+#welcomeBox {
+  margin: 20px auto 10px;
+  text-align: center;
+}
+
+#welcomeText {
+  color: #00ffff;
+  font-size: 26px;
+  font-weight: bold;
+  text-shadow:
+    0 0 8px #00ffff,
+    0 0 16px #ff00ff;
+  margin: 10px 0;
+}
+
+#loginBtn {
+  background: #e2e8f0;
+}
+
+#signOutBtn {
+  background: transparent;
+  color: #00ffff;
+  border: 1px solid #00ffff;
+  font-size: 16px;
+  padding: 10px 18px;
+  margin: 8px;
+  box-shadow: 0 0 10px rgba(0,255,255,0.3);
+}
+
+</style>
+</head>
+<body>
+<div class="card">
+
+<img src="Quiz banner.png"
+style="
+width:100%;
+max-height:250px;
+object-fit:cover;
+border-radius:12px;
+margin-bottom:20px;
+">
+
+<h1 style="
+color:#ff00ff;
+font-size:48px;
+text-shadow:
+0 0 10px #ff00ff,
+0 0 20px #00ffff;
+">
+NEURO QUEST
+</h1>
+<div id="videoContainer"
+class="hidden">
+
+<video
+id="introVideo"
+width="100%"
+controls
+>
+
+<source
+id="videoSource"
+src=""
+type="video/mp4">
+
+</video>
+
+</div>
+    <div id="setup">
+        <p></p>
+        <p class="small"></p>
+
+        <label for="categorySelect">Choose category:</label>
+        <select id="categorySelect"></select>
+
+        <br>
+
+        <div id="welcomeBox" class="hidden">
+          <h3 id="welcomeText"></h3>
+          <button id="signOutBtn" onclick="logout()">Sign Out</button>
+        </div>
+
+        <button id="loginBtn" class="start-btn" onclick="googleLogin()">
+          Sign in with Google
+        </button>
+
+        <br>
+
+        <button class="start-btn"
+onclick="startIntro()">
+
+ENTER TERRITORY
+
+</button>
+        <button onclick="clearLeaderboards()">
+Leaderboard admin disabled
+</button>
+        <p id="loadStatus" class="small"></p>
+        <div id="setupLeaderboard"></div>
+    </div>
+
+    <div id="quiz" class="hidden">
+        <div id="progress"></div>
+        <div id="question"></div>
+
+        <button class="true-btn" onclick="answerQuestion(true)">TRUE</button>
+        <button class="false-btn" onclick="answerQuestion(false)">FALSE</button>
+
+        <div id="feedback"></div>
+    </div>
+
+    <div id="finish" class="hidden"></div>
+    
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getDatabase,
+  ref,
+  get,
+  set,
+  push
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQOx2eQRwPFlHC2EmQREtdFYb9Mha7zuQ",
+  authDomain: "neuro-itu-monitor-sim.firebaseapp.com",
+  databaseURL: "https://neuro-itu-monitor-sim-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "neuro-itu-monitor-sim",
+  storageBucket: "neuro-itu-monitor-sim.firebasestorage.app",
+  messagingSenderId: "610257056899",
+  appId: "1:610257056899:web:4763a538136eaf95a8d7b6"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+const APP_ROOT = "neuroQuest";
+
+let allQuestions = [];
+let quizQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let selectedCategory = "";
+let playerName = "";
+let currentUser = null;
+let playerProgress = {};
+let leaderboardCache = {};
+let quizStartedAt = null;
+let quizStartedAtMs = null;
+
+window.googleLogin = async function () {
+  const provider = new GoogleAuthProvider();
+
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    console.error(err);
+    alert("Login failed. Check console.");
+  }
+};
+
+onAuthStateChanged(auth, async user => {
+  currentUser = user;
+
+  const loginBtn = document.getElementById("loginBtn");
+  const welcomeBox = document.getElementById("welcomeBox");
+  const welcomeText = document.getElementById("welcomeText");
+
+  if (!user) {
+    playerName = "";
+
+    if (loginBtn) loginBtn.classList.remove("hidden");
+    if (welcomeBox) welcomeBox.classList.add("hidden");
+
+    document.getElementById("loadStatus").innerHTML =
+      "Please sign in with Google to start Anterior Isle.";
+
+    return;
+  }
+
+  playerName = user.displayName || "NeuroQuest Player";
+
+  if (loginBtn) loginBtn.classList.add("hidden");
+
+  if (welcomeBox) welcomeBox.classList.remove("hidden");
+
+  if (welcomeText) {
+    welcomeText.textContent =
+      "Welcome back, " + playerName;
+  }
+
+  await set(ref(db, `${APP_ROOT}/users/${user.uid}`), {
+    displayName: playerName,
+    email: user.email || "",
+    lastLogin: new Date().toISOString()
+  });
+
+  await loadProgress();
+
+  document.getElementById("loadStatus").innerHTML =
+    "✅ Signed in. Choose a territory to begin.";
+
+  if (allQuestions.length > 0) {
+    populateCategories();
+  }
+});
+
+window.logout = async function () {
+  try {
+    await signOut(auth);
+    leaderboardCache = {};
+    playerProgress = {};
+  } catch (err) {
+    console.error(err);
+    alert("Sign out failed. Check console.");
+  }
+};
+
+function addLoginButton() {
+  const loginBtn = document.getElementById("loginBtn");
+  const welcomeBox = document.getElementById("welcomeBox");
+
+  if (!currentUser) {
+    if (loginBtn) loginBtn.classList.remove("hidden");
+    if (welcomeBox) welcomeBox.classList.add("hidden");
+  }
+}
+
+async function loadProgress() {
+  if (!currentUser) return;
+
+  const snap = await get(
+    ref(db, `${APP_ROOT}/progress/${currentUser.uid}`)
+  );
+
+  playerProgress = snap.exists() ? snap.val() : {};
+}
+
+fetch("questions.csv")
+  .then(response => {
+    if (!response.ok) throw new Error("Could not load questions.csv");
+    return response.text();
+  })
+  .then(csvText => {
+    allQuestions = parseCSV(csvText);
+
+    document.getElementById("loadStatus").innerHTML =
+      "✅ Loaded " + allQuestions.length + " questions from CSV.";
+
+    if (currentUser) {
+      populateCategories();
+    } else {
+      addLoginButton();
+    }
+  })
+  .catch(error => {
+    document.getElementById("loadStatus").innerHTML =
+      "❌ Could not load questions.csv. If testing locally, run through Live Server rather than double-clicking the HTML file.";
+    console.error(error);
+  });
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let current = "";
+  let insideQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const nextChar = text[i + 1];
+
+    if (char === '"' && insideQuotes && nextChar === '"') {
+      current += '"';
+      i++;
+    } else if (char === '"') {
+      insideQuotes = !insideQuotes;
+    } else if (char === "," && !insideQuotes) {
+      row.push(current);
+      current = "";
+    } else if ((char === "\n" || char === "\r") && !insideQuotes) {
+      if (current !== "" || row.length > 0) {
+        row.push(current);
+        rows.push(row);
+        row = [];
+        current = "";
+      }
+      if (char === "\r" && nextChar === "\n") i++;
+    } else {
+      current += char;
+    }
+  }
+
+  if (current !== "" || row.length > 0) {
+    row.push(current);
+    rows.push(row);
+  }
+
+  const headers = rows.shift().map(h => h.trim());
+
+  return rows
+    .filter(r => r.length > 1)
+    .map(r => {
+      let obj = {};
+      headers.forEach((h, i) => obj[h] = (r[i] || "").trim());
+      return obj;
+    })
+    .filter(q => q.Category && q.QuestionGroup && q.Question && q.Answer);
+}
+
+window.startIntro = function () {
+  if (!currentUser) {
+    alert("Please sign in with Google first.");
+    return;
+  }
+
+  selectedCategory = document.getElementById("categorySelect").value;
+
+  if (!selectedCategory) {
+    alert("No category selected.");
+    return;
+  }
+
+  let video = document.getElementById("introVideo");
+  let videoFile = selectedCategory + "_intro.mp4";
+
+  video.pause();
+  video.removeAttribute("src");
+  video.load();
+
+  document.getElementById("videoContainer").classList.add("hidden");
+
+  fetch(videoFile, { method: "HEAD" })
+    .then(function (response) {
+      if (!response.ok) {
+        startQuiz();
+        return;
+      }
+
+      document.getElementById("setup").classList.add("hidden");
+      document.getElementById("videoContainer").classList.remove("hidden");
+
+      video.src = videoFile;
+      video.load();
+
+      setTimeout(function () {
+        document.getElementById("videoContainer").scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }, 300);
+
+      video.onended = function () {
+        document.getElementById("videoContainer").classList.add("hidden");
+        startQuiz();
+      };
+
+      video.play();
+    })
+    .catch(function () {
+      document.getElementById("videoContainer").classList.add("hidden");
+      startQuiz();
+    });
+};
+
+async function populateCategories() {
+  const select = document.getElementById("categorySelect");
+
+  if (!currentUser) return;
+
+  const previousChoice = select.value;
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const requestedCategory = urlParams.get("category");
+
+  const categories = [...new Set(allQuestions.map(q => q.Category.trim()))].sort();
+
+  select.innerHTML = "";
+
+  categories.forEach(cat => {
+    let option = document.createElement("option");
+    option.value = cat;
+
+    if (isUnlocked(cat)) {
+      option.textContent = cat;
+      option.disabled = false;
+    } else {
+      option.textContent = "🔒 " + cat;
+      option.disabled = true;
+    }
+
+    select.appendChild(option);
+  });
+
+  if (requestedCategory && isUnlocked(requestedCategory)) {
+    select.value = requestedCategory;
+  } else if (previousChoice && isUnlocked(previousChoice)) {
+    select.value = previousChoice;
+  } else if (isUnlocked("ICA")) {
+    select.value = "ICA";
+  }
+
+  select.onchange = updateSetupLeaderboard;
+
+  await updateSetupLeaderboard();
+}
+
+function isCompleted(level) {
+  return playerProgress[level] &&
+         playerProgress[level].completed === true;
+}
+
+function isUnlocked(category) {
+  if (category === "ICA") return true;
+
+  if (category === "ACA" || category === "MCA") {
+    return isCompleted("ICA");
+  }
+
+  if (category === "ACom") {
+    return isCompleted("ACA") && isCompleted("MCA");
+  }
+
+  if (category === "AChA") {
+    return isCompleted("ACom");
+  }
+
+  return false;
+}
+
+function startQuiz() {
+  quizStartedAtMs = Date.now();
+  quizStartedAt = new Date().toISOString();
+
+  selectedCategory = document.getElementById("categorySelect").value;
+  playerName = currentUser?.displayName || "NeuroQuest Player";
+
+  let categoryQuestions = allQuestions.filter(q =>
+    q.Category.trim().toUpperCase() === selectedCategory.trim().toUpperCase()
+  );
+
+  let grouped = {};
+
+  categoryQuestions.forEach(q => {
+    let groupKey = q.QuestionGroup.trim();
+    if (!grouped[groupKey]) grouped[groupKey] = [];
+    grouped[groupKey].push(q);
+  });
+
+  let oneFromEachGroup = Object.values(grouped).map(group => {
+    return group[Math.floor(Math.random() * group.length)];
+  });
+
+  quizQuestions = shuffle(oneFromEachGroup).slice(0, 20);
+
+  if (quizQuestions.length === 0) {
+    alert("No questions found for this category.");
+    return;
+  }
+
+  currentIndex = 0;
+  score = 0;
+
+  document.getElementById("setup").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  document.getElementById("finish").classList.add("hidden");
+
+  showQuestion();
+}
+
+function showQuestion() {
+  if (currentIndex >= quizQuestions.length) {
+    finishQuiz();
+    return;
+  }
+
+  let q = quizQuestions[currentIndex];
+
+  document.getElementById("progress").innerHTML =
+    "Question " + (currentIndex + 1) + " of " + quizQuestions.length +
+    " | Score: " + score;
+
+  document.getElementById("question").innerHTML = q.Question;
+  document.getElementById("feedback").innerHTML = "";
+}
+
+window.answerQuestion = function (choice) {
+  let q = quizQuestions[currentIndex];
+  let correctAnswer = q.Answer.trim().toUpperCase() === "TRUE";
+
+  if (choice === correctAnswer) {
+    score++;
+    document.getElementById("feedback").innerHTML =
+      "✅ Correct<br><span class='small'>" + q.Explanation + "</span>";
+  } else {
+    document.getElementById("feedback").innerHTML =
+      "❌ Incorrect<br><span class='small'>" + q.Explanation + "</span>";
+  }
+
+  currentIndex++;
+  setTimeout(showQuestion, 1700);
+};
+
+async function finishQuiz() {
+  document.getElementById("quiz").classList.add("hidden");
+
+  let percent = Math.round((score / quizQuestions.length) * 100);
+  let award = getAward(percent);
+
+  const quizFinishedAt = new Date().toISOString();
+  const rawDurationSeconds = quizStartedAtMs
+    ? Math.round((Date.now() - quizStartedAtMs) / 1000)
+    : 0;
+
+  const durationSeconds = Math.min(
+    Math.max(rawDurationSeconds, 30),
+    1800
+  );
+
+  const durationMinutes = Math.round((durationSeconds / 60) * 10) / 10;
+
+  await saveLevelProgress(selectedCategory, award, score, quizQuestions.length, percent);
+  await saveScoreToLeaderboard(
+    selectedCategory,
+    score,
+    quizQuestions.length,
+    percent,
+    award,
+    quizStartedAt,
+    quizFinishedAt,
+    durationSeconds,
+    durationMinutes
+  );
+
+  let finishHTML =
+    "<h2>Finished</h2>" +
+    "<h3>" + playerName + ": " + score + "/" + quizQuestions.length + " (" + percent + "%)</h3>" +
+    "<div class='award " + award.className + "'>" + award.emoji + " " + award.name + "</div>" +
+    "<button class='start-btn' onclick=\"returnToMap()\">Continue</button>" +
+    await renderLeaderboard(selectedCategory);
+
+  document.getElementById("finish").innerHTML = finishHTML;
+  document.getElementById("finish").classList.remove("hidden");
+}
+
+function getAward(percent) {
+  if (percent >= 100) return { name: "3 Brains", emoji: "🧠🧠🧠", code: "B3", className: "brain3", brains: 3 };
+  if (percent >= 80) return { name: "2 Brains", emoji: "🧠🧠", code: "B2", className: "brain2", brains: 2 };
+  if (percent >= 70) return { name: "1 Brain", emoji: "🧠", code: "B1", className: "brain1", brains: 1 };
+  return { name: "No brains yet", emoji: "🩺", code: "N", className: "noaward", brains: 0 };
+}
+
+async function saveLevelProgress(level, award, scoreValue, total, percent) {
+  if (!currentUser) return;
+
+  const existing = playerProgress[level] || {};
+  const bestBrains = Math.max(existing.brains || 0, award.brains || 0);
+  const bestPercent = Math.max(existing.bestPercent || 0, percent || 0);
+  const bestScore = Math.max(existing.bestScore || 0, scoreValue || 0);
+
+  const newProgress = {
+    completed: bestBrains >= 2,
+    brains: bestBrains,
+    bestScore: bestScore,
+    bestPercent: bestPercent,
+    lastScore: scoreValue,
+    lastPercent: percent,
+    lastTotal: total,
+    lastAward: award.name,
+    updatedAt: new Date().toISOString()
+  };
+
+  playerProgress[level] = newProgress;
+
+  await set(
+    ref(db, `${APP_ROOT}/progress/${currentUser.uid}/${level}`),
+    newProgress
+  );
+}
+
+async function saveScoreToLeaderboard(
+  category,
+  scoreValue,
+  total,
+  percent,
+  award,
+  startedAt,
+  finishedAt,
+  durationSeconds,
+  durationMinutes
+) {
+  if (!currentUser) return;
+
+  const scoreData = {
+    uid: currentUser.uid,
+    name: playerName,
+    category: category,
+    score: scoreValue,
+    total: total,
+    percent: percent,
+    awardName: award.name,
+    awardEmoji: award.emoji,
+    brains: award.brains,
+    date: new Date().toLocaleString(),
+    startedAt: startedAt,
+    finishedAt: finishedAt,
+    durationSeconds: durationSeconds,
+    durationMinutes: durationMinutes,
+    updatedAt: new Date().toISOString()
+  };
+
+  const bestRef = ref(db, `${APP_ROOT}/leaderboards/${category}/${currentUser.uid}`);
+  const oldSnap = await get(bestRef);
+
+  const oldScore = oldSnap.exists() ? oldSnap.val() : null;
+
+  if (
+    !oldScore ||
+    percent > (oldScore.percent || 0) ||
+    (
+      percent === (oldScore.percent || 0) &&
+      scoreValue > (oldScore.score || 0)
+    ) ||
+    (
+      percent === (oldScore.percent || 0) &&
+      scoreValue === (oldScore.score || 0) &&
+      durationSeconds < (oldScore.durationSeconds || 999999)
+    )
+  ) {
+    await set(bestRef, scoreData);
+    leaderboardCache[category] = null;
+  }
+
+  await push(
+    ref(db, `${APP_ROOT}/attempts/${currentUser.uid}`),
+    scoreData
+  );
+}
+
+async function getScoresForCategory(category) {
+  if (leaderboardCache[category]) {
+    return leaderboardCache[category];
+  }
+
+  const snap = await get(
+    ref(db, `${APP_ROOT}/leaderboards/${category}`)
+  );
+
+  if (!snap.exists()) {
+    leaderboardCache[category] = [];
+    return [];
+  }
+
+  const scores = Object.values(snap.val())
+    .sort((a, b) => {
+      return (b.percent || 0) - (a.percent || 0) ||
+             (b.score || 0) - (a.score || 0) ||
+             (a.durationSeconds || 999999) - (b.durationSeconds || 999999);
+    })
+    .slice(0, 20);
+
+  leaderboardCache[category] = scores;
+  return scores;
+}
+
+function formatDuration(seconds) {
+  seconds = Number(seconds || 0);
+
+  if (!seconds) return "-";
+
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+
+  if (mins <= 0) {
+    return secs + "s";
+  }
+
+  return mins + "m " + String(secs).padStart(2, "0") + "s";
+}
+
+async function renderLeaderboard(category) {
+  let scores = await getScoresForCategory(category);
+
+  if (scores.length === 0) {
+    return "<h2>" + category + " Leaderboard</h2><p>No scores yet.</p>";
+  }
+
+  let html =
+    "<h2>" + category + " Leaderboard</h2>" +
+    "<table>" +
+    "<tr><th>Rank</th><th>Name</th><th>Score</th><th>%</th><th>Time</th><th>Award</th><th>Date</th></tr>";
+
+  scores.forEach((s, index) => {
+    html += "<tr>" +
+      "<td>" + (index + 1) + "</td>" +
+      "<td>" + escapeHTML(s.name || "Player") + "</td>" +
+      "<td>" + (s.score || 0) + "/" + (s.total || 0) + "</td>" +
+      "<td>" + (s.percent || 0) + "%</td>" +
+      "<td>" + formatDuration(s.durationSeconds) + "</td>" +
+      "<td class='award-cell'>" + (s.awardEmoji || "") + "<br><span class='award-name'>" + escapeHTML(s.awardName || "") + "</span></td>" +
+      "<td>" + escapeHTML(s.date || "") + "</td>" +
+      "</tr>";
+  });
+
+  html += "</table>";
+  return html;
+}
+
+async function updateSetupLeaderboard() {
+  let category = document.getElementById("categorySelect").value;
+  if (!category) return;
+
+  document.getElementById("setupLeaderboard").innerHTML =
+    await renderLeaderboard(category);
+}
+
+function shuffle(array) {
+  let copy = [...array];
+
+  for (let i = copy.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+
+  return copy;
+}
+
+window.clearLeaderboards = function () {
+  alert("Firebase leaderboard clearing is disabled in this test version.");
+};
+
+window.goHome = function () {
+  document.getElementById("finish").classList.add("hidden");
+  document.getElementById("setup").classList.remove("hidden");
+
+  populateCategories();
+  updateSetupLeaderboard();
+};
+
+window.returnToMap = function () {
+  window.location.href = "anterior_isle.html";
+};
+
+function escapeHTML(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+</script>
+</body>
+</html>
