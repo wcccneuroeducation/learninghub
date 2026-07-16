@@ -265,11 +265,24 @@ function updateDashboard({
   document.getElementById("foundationsPercent").textContent = percent;
   document.getElementById("foundationsFill").style.width = `${percent}%`;
 
-  document.getElementById("dailyUnlockText").textContent = dailyUnlocked ? "Open" : `${percent}% / 50%`;
-  document.getElementById("dailyUnlockFill").style.width = `${Math.min(100, percent * 2)}%`;
+  // Daily Neuro not built yet
+  document.getElementById("dailyUnlockText").textContent = "Coming Soon";
+  document.getElementById("dailyUnlockFill").style.width = "0%";
 
-  document.getElementById("questUnlockText").textContent = questUnlocked ? "Open" : `${percent}% / 100%`;
-  document.getElementById("questUnlockFill").style.width = `${percent}%`;
+  // Neuro Quest completion based on completed vessels
+  const completedVessels = questLevels.filter(
+    level => Number(questProgress?.[level]?.brains || 0) >= 2
+  ).length;
+
+  const questPercent = Math.round(
+    (completedVessels / questLevels.length) * 100
+  );
+
+  document.getElementById("questUnlockText").textContent =
+    `${questPercent}% Complete`;
+
+  document.getElementById("questUnlockFill").style.width =
+    `${questPercent}%`;
 
   setCardAccess(
     "dailyCard",
