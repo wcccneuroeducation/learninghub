@@ -75,6 +75,53 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 .feedback{min-height:48px;margin-top:16px;color:var(--muted);line-height:1.5}
 .reward{font-size:28px;font-weight:900;color:var(--cyan);margin:18px 0}
 .small{color:var(--muted);font-size:13px}
+
+.topic-panel{
+  margin:0 0 18px;
+  padding:14px;
+  border-radius:18px;
+  background:rgba(3,10,22,.72);
+  border:1px solid var(--line);
+}
+.topic-panel h2{
+  margin:0 0 10px;
+  font-size:18px;
+}
+.topic-list{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+.topic-link{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  min-height:54px;
+  padding:12px 14px;
+  border-radius:13px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  text-decoration:none;
+  font-weight:900;
+}
+.topic-link:hover{background:rgba(71,243,255,.10)}
+.topic-link.current{
+  border-color:var(--cyan);
+  box-shadow:0 0 18px rgba(71,243,255,.16);
+}
+.topic-link.locked{
+  opacity:.45;
+  cursor:not-allowed;
+  pointer-events:none;
+}
+.topic-status{
+  color:var(--cyan);
+  font-size:12px;
+  white-space:nowrap;
+}
+.next-module-btn.hidden{display:none!important}
 @media(max-width:650px){
   header{padding:11px 12px}
   .brand-icon{font-size:28px}
@@ -101,6 +148,7 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   .back{padding:22px}
 
   .option-grid{grid-template-columns:1fr}
+  .topic-list{grid-template-columns:1fr}
 
   /* Keep controls below the card instead of floating over the teaching text */
   .controls{
@@ -141,6 +189,11 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 </header>
 
 <main>
+  <section class="topic-panel">
+    <h2>Choose a Foundations topic</h2>
+    <div id="topicList" class="topic-list"></div>
+  </section>
+
   <section class="hero">
     <h1 id="moduleTitle">Brain Anatomy</h1>
     <p id="moduleSubtitle">Loading module…</p>
@@ -200,7 +253,8 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
       <p class="small">Completion is saved once per account. Repeating the module will not duplicate the reward.</p>
       <div class="controls">
         <a class="btn secondary" href="index.html" style="text-decoration:none">Return to Hub</a>
-        <button id="restartBtn" class="btn">Review again</button>
+        <button id="restartBtn" class="btn secondary">Review again</button>
+        <a id="nextModuleBtn" class="btn next-module-btn hidden" href="#" style="text-decoration:none">Next module</a>
       </div>
     </article>
   </section>
@@ -226,13 +280,111 @@ const db=getDatabase(app);
 const APP_ROOT="neuroQuest";
 const TOTAL_FOUNDATION_MODULES=8;
 
+const FOUNDATION_MODULES=[
+  {id:"brain_anatomy",title:"Brain Anatomy"},
+  {id:"brain_lobes",title:"Brain Lobes"}
+];
+
 let user=null,moduleData=null,cardIndex=0,questionIndex=0,score=0,answered=false;
+let completedModules={};
+let selectedModuleId="brain_anatomy";
+
+function getRequestedModuleId(){
+  const params=new URLSearchParams(window.location.search);
+  const requested=params.get("module");
+
+  if(requested&&FOUNDATION_MODULES.some(module=>module.id===requested)){
+    return requested;
+  }
+
+  const firstIncomplete=FOUNDATION_MODULES.find(module=>completedModules[module.id]!==true);
+  return firstIncomplete?.id||FOUNDATION_MODULES[0].id;
+}
+
+function isModuleUnlocked(moduleIndex){
+  if(moduleIndex===0)return true;
+  const previousId=FOUNDATION_MODULES[moduleIndex-1].id;
+  return completedModules[previousId]===true;
+}
+
+function renderTopicList(){
+  const topicList=document.getElementById("topicList");
+  topicList.innerHTML="";
+
+  FOUNDATION_MODULES.forEach((module,index)=>{
+    const complete=completedModules[module.id]===true;
+    const unlocked=isModuleUnlocked(index);
+    const current=module.id===selectedModuleId;
+
+    const link=document.createElement("a");
+    link.className="topic-link";
+    link.innerHTML=`
+      <span>${complete?"✅":current?"▶":"🧠"} ${module.title}</span>
+      <span class="topic-status">${
+        complete?"Review":current?"Current":unlocked?"Start":"Locked"
+      }</span>
+    `;
+
+    if(current)link.classList.add("current");
+
+    if(unlocked||complete){
+      link.href=`neuro_foundations.html?module=${module.id}`;
+    }else{
+      link.href="#";
+      link.classList.add("locked");
+      link.setAttribute("aria-disabled","true");
+    }
+
+    topicList.appendChild(link);
+  });
+}
+
+function getNextModule(){
+  const currentIndex=FOUNDATION_MODULES.findIndex(
+    module=>module.id===selectedModuleId
+  );
+
+  if(currentIndex<0||currentIndex===FOUNDATION_MODULES.length-1){
+    return null;
+  }
+
+  return FOUNDATION_MODULES[currentIndex+1];
+}
+
+function updateNextModuleButton(show){
+  const button=document.getElementById("nextModuleBtn");
+  const nextModule=getNextModule();
+
+  if(!show||!nextModule){
+    button.classList.add("hidden");
+    return;
+  }
+
+  button.textContent=`Next: ${nextModule.title}`;
+  button.href=`neuro_foundations.html?module=${nextModule.id}`;
+  button.classList.remove("hidden");
+}
 
 async function loadModule(){
-  const response=await fetch("foundations/brain_anatomy.json");
-  if(!response.ok) throw new Error("Could not load Brain Anatomy content.");
+  selectedModuleId=getRequestedModuleId();
+
+  const selectedIndex=FOUNDATION_MODULES.findIndex(
+    module=>module.id===selectedModuleId
+  );
+
+  if(!isModuleUnlocked(selectedIndex)&&completedModules[selectedModuleId]!==true){
+    selectedModuleId=getRequestedModuleId();
+  }
+
+  renderTopicList();
+
+  const response=await fetch(`foundations/${selectedModuleId}.json`);
+  if(!response.ok){
+    throw new Error(`Could not load ${selectedModuleId} content.`);
+  }
 
   moduleData=await response.json();
+  document.title=`Neuro Foundations — ${moduleData.title}`;
 
   document.getElementById("moduleTitle").textContent=moduleData.title;
   document.getElementById("moduleSubtitle").textContent="Loading teaching images...";
@@ -352,22 +504,50 @@ document.getElementById("quizNextBtn").onclick=()=>{
 async function finishModule(){
   document.getElementById("quizSection").classList.add("hidden");
   document.getElementById("resultSection").classList.remove("hidden");
+
   const passed=score>=4;
-  document.getElementById("resultHeading").textContent=passed?"Brain Anatomy complete":"Good first attempt";
-  document.getElementById("resultText").textContent=passed
-    ?`You scored ${score} out of ${moduleData.questions.length}. Your reward has been added to your Learning Hub.`
-    :`You scored ${score} out of ${moduleData.questions.length}. Review the cards and try again to earn the module reward.`;
-  document.querySelector(".reward").classList.toggle("hidden",!passed);
-  if(passed&&user) await saveCompletion();
+  const wasAlreadyComplete=completedModules[moduleData.id]===true;
+
+  document.getElementById("resultHeading").textContent=
+    passed?`${moduleData.title} complete`:"Good first attempt";
+
+  if(passed&&wasAlreadyComplete){
+    document.getElementById("resultText").textContent=
+      `You scored ${score} out of ${moduleData.questions.length}. Review complete — your original reward remains saved.`;
+  }else if(passed){
+    document.getElementById("resultText").textContent=
+      `You scored ${score} out of ${moduleData.questions.length}. Your reward has been added to your Learning Hub.`;
+  }else{
+    document.getElementById("resultText").textContent=
+      `You scored ${score} out of ${moduleData.questions.length}. Review the cards and try again to earn the module reward.`;
+  }
+
+  document.querySelector(".reward").classList.toggle(
+    "hidden",
+    !passed||wasAlreadyComplete
+  );
+
+  if(passed&&user){
+    await saveCompletion();
+    completedModules[moduleData.id]=true;
+    renderTopicList();
+    updateNextModuleButton(true);
+  }else{
+    updateNextModuleButton(false);
+  }
 }
 async function saveCompletion(){
   const progressRef=ref(db,`${APP_ROOT}/foundationsProgress/${user.uid}`);
   const snap=await get(progressRef);
   const current=snap.exists()?snap.val():{};
   const completed=current.completedModules||{};
-  if(completed[moduleData.id]===true)return;
+  if(completed[moduleData.id]===true){
+    completedModules=completed;
+    return;
+  }
 
   completed[moduleData.id]=true;
+  completedModules=completed;
   const completedCount=Object.values(completed).filter(Boolean).length;
   const brains=Number(current.brains||0)+Number(moduleData.reward.brains||0);
   const xp=Number(current.xp||0)+Number(moduleData.reward.xp||0);
@@ -387,13 +567,34 @@ async function saveCompletion(){
 document.getElementById("restartBtn").onclick=()=>{
   document.getElementById("resultSection").classList.add("hidden");
   document.getElementById("lessonSection").classList.remove("hidden");
-  cardIndex=0;showCard();window.scrollTo({top:0,behavior:"smooth"});
+  cardIndex=0;
+  updateNextModuleButton(false);
+  showCard();
+  window.scrollTo({top:0,behavior:"smooth"});
 };
 
 onAuthStateChanged(auth,async currentUser=>{
-  if(!currentUser){window.location.replace("index.html");return}
+  if(!currentUser){
+    window.location.replace("index.html");
+    return;
+  }
+
   user=currentUser;
-  try{await loadModule()}catch(error){console.error(error);alert(error.message)}
+
+  try{
+    const progressSnap=await get(
+      ref(db,`${APP_ROOT}/foundationsProgress/${user.uid}`)
+    );
+
+    completedModules=progressSnap.exists()
+      ?progressSnap.val().completedModules||{}
+      :{};
+
+    await loadModule();
+  }catch(error){
+    console.error(error);
+    alert(error.message);
+  }
 });
 </script>
 </body>
