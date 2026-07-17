@@ -221,6 +221,19 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   .anatomy-image{height:250px}
   .controls .btn{font-size:14px}
 }
+
+.flip-card.flipped .pupil-torch-controls{
+  display:none !important;
+}
+.face{
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+}
+.flip-inner{
+  -webkit-transform-style:preserve-3d;
+  transform-style:preserve-3d;
+}
+
 </style>
 </head>
 <body>
