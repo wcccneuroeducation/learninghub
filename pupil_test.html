@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pupil Test</title>
+
+<style>
+body{
+    background:#000;
+    color:white;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    padding:20px;
+}
+
+.eye-container{
+    position:relative;
+    display:inline-block;
+    max-width:800px;
+}
+
+.eye-image{
+    width:100%;
+    height:auto;
+    display:block;
+}
+
+.pupil{
+    position:absolute;
+    background:black;
+    border-radius:50%;
+    transition:
+        width 0.35s ease,
+        height 0.35s ease,
+        margin-left 0.35s ease,
+        margin-top 0.35s ease;
+
+    box-shadow:0 0 15px rgba(0,0,0,.9);
+}
+
+/* Your calibrated pupil centres */
+
+#leftPupil{
+    left:21.6%;
+    top:53%;
+}
+
+#rightPupil{
+    left:79.25%;
+    top:53%;
+}
+
+.controls{
+    margin-top:25px;
+    max-width:800px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.eye-controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+    margin-top:20px;
+}
+
+.eye-panel{
+    padding:18px;
+    border:1px solid #155d75;
+    border-radius:14px;
+    background:rgba(0,216,255,.05);
+}
+
+.eye-panel h2{
+    margin-top:0;
+    color:#00d8ff;
+}
+
+.control-group{
+    margin:15px 0;
+}
+
+label{
+    display:block;
+    margin-bottom:7px;
+}
+
+input[type="range"]{
+    width:180px;
+}
+
+select{
+    padding:5px 8px;
+    font-size:15px;
+}
+
+.button-row{
+    margin-top:25px;
+}
+
+button{
+    padding:12px 22px;
+    margin:7px;
+    font-size:16px;
+    cursor:pointer;
+    border:none;
+    border-radius:8px;
+}
+
+button:disabled{
+    cursor:not-allowed;
+    opacity:.55;
+}
+
+.torch{
+    background:#00d8ff;
+    color:#001218;
+}
+
+.both{
+    background:#8f5cff;
+    color:white;
+}
+
+.reset{
+    background:#666;
+    color:white;
+}
+
+.readout{
+    margin-top:20px;
+    font-size:18px;
+    line-height:1.6;
+}
+
+@media(max-width:650px){
+
+    body{
+        padding:10px;
+    }
+
+    .eye-controls{
+        grid-template-columns:1fr;
+        gap:14px;
+    }
+
+    input[type="range"]{
+        width:min(75vw,260px);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Pupil Testing</h1>
+
+<div class="eye-container">
+
+    <img
+        src="eyes.png"
+        class="eye-image"
+        alt="Neon eyes for pupil testing"
+    >
+
+    <div id="leftPupil" class="pupil"></div>
+    <div id="rightPupil" class="pupil"></div>
+
+</div>
+
+<div class="controls">
+
+    <div class="eye-controls">
+
+        <div class="eye-panel">
+
+            <h2>Left Eye</h2>
+
+            <div class="control-group">
+
+                <label>
+                    Left Pupil Size
+                    (<span id="leftValue">4</span> mm)
+                </label>
+
+                <input
+                    type="range"
+                    id="leftSlider"
+                    min="1"
+                    max="8"
+                    value="4"
+                >
+
+            </div>
+
+            <div class="control-group">
+
+                <label for="leftReaction">
+                    Left Pupil Response
+                </label>
+
+                <select id="leftReaction">
+                    <option value="reactive">Reactive</option>
+                    <option value="sluggish">Sluggish</option>
+                    <option value="fixed">Fixed</option>
+                </select>
+
+            </div>
+
+            <button
+                id="leftTorchButton"
+                class="torch"
+                type="button"
+            >
+                🔦 Shine Left
+            </button>
+
+        </div>
+
+        <div class="eye-panel">
+
+            <h2>Right Eye</h2>
+
+            <div class="control-group">
+
+                <label>
+                    Right Pupil Size
+                    (<span id="rightValue">4</span> mm)
+                </label>
+
+                <input
+                    type="range"
+                    id="rightSlider"
+                    min="1"
+                    max="8"
+                    value="4"
+                >
+
+            </div>
+
+            <div class="control-group">
+
+                <label for="rightReaction">
+                    Right Pupil Response
+                </label>
+
+                <select id="rightReaction">
+                    <option value="reactive">Reactive</option>
+                    <option value="sluggish">Sluggish</option>
+                    <option value="fixed">Fixed</option>
+                </select>
+
+            </div>
+
+            <button
+                id="rightTorchButton"
+                class="torch"
+                type="button"
+            >
+                🔦 Shine Right
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="button-row">
+
+        <button
+            id="bothTorchButton"
+            class="both"
+            type="button"
+        >
+            🔦 Shine Both
+        </button>
+
+        <button
+            id="resetButton"
+            class="reset"
+            type="button"
+        >
+            Reset
+        </button>
+
+    </div>
+
+</div>
+
+<div class="readout">
+
+    <div>
+        Left:
+        <span id="leftReadout">4</span> mm,
+        <span id="leftResponseReadout">reactive</span>
+    </div>
+
+    <div>
+        Right:
+        <span id="rightReadout">4</span> mm,
+        <span id="rightResponseReadout">reactive</span>
+    </div>
+
+</div>
+
+<script>
+
+const PIXELS_PER_MM = 10;
+
+const leftPupil =
+    document.getElementById("leftPupil");
+
+const rightPupil =
+    document.getElementById("rightPupil");
+
+const leftSlider =
+    document.getElementById("leftSlider");
+
+const rightSlider =
+    document.getElementById("rightSlider");
+
+const leftReaction =
+    document.getElementById("leftReaction");
+
+const rightReaction =
+    document.getElementById("rightReaction");
+
+const leftValue =
+    document.getElementById("leftValue");
+
+const rightValue =
+    document.getElementById("rightValue");
+
+const leftReadout =
+    document.getElementById("leftReadout");
+
+const rightReadout =
+    document.getElementById("rightReadout");
+
+const leftResponseReadout =
+    document.getElementById("leftResponseReadout");
+
+const rightResponseReadout =
+    document.getElementById("rightResponseReadout");
+
+const leftTorchButton =
+    document.getElementById("leftTorchButton");
+
+const rightTorchButton =
+    document.getElementById("rightTorchButton");
+
+const bothTorchButton =
+    document.getElementById("bothTorchButton");
+
+const resetButton =
+    document.getElementById("resetButton");
+
+
+let leftAnimationTimeout = null;
+let rightAnimationTimeout = null;
+
+
+/*
+Sets the visible pupil diameter.
+The negative margins keep the pupil centred
+as it changes size.
+*/
+
+function setPupilSize(element, mm){
+
+    const size = mm * PIXELS_PER_MM;
+
+    element.style.width = size + "px";
+    element.style.height = size + "px";
+
+    element.style.marginLeft =
+        -(size / 2) + "px";
+
+    element.style.marginTop =
+        -(size / 2) + "px";
+}
+
+
+/*
+Controls how quickly a pupil changes size.
+*/
+
+function setTransition(element, duration){
+
+    element.style.transition = `
+        width ${duration}ms ease,
+        height ${duration}ms ease,
+        margin-left ${duration}ms ease,
+        margin-top ${duration}ms ease
+    `;
+}
+
+
+/*
+Cancels a previous pupil animation.
+This prevents repeated torch presses
+from causing overlapping timers.
+*/
+
+function clearPupilAnimation(side){
+
+    if(side === "left"){
+
+        clearTimeout(leftAnimationTimeout);
+        leftAnimationTimeout = null;
+
+    }else{
+
+        clearTimeout(rightAnimationTimeout);
+        rightAnimationTimeout = null;
+
+    }
+}
+
+
+/*
+Updates the pupils using the sliders.
+*/
+
+function updatePupils(){
+
+    clearPupilAnimation("left");
+    clearPupilAnimation("right");
+
+    const leftSize =
+        Number(leftSlider.value);
+
+    const rightSize =
+        Number(rightSlider.value);
+
+    setTransition(leftPupil, 250);
+    setTransition(rightPupil, 250);
+
+    setPupilSize(leftPupil, leftSize);
+    setPupilSize(rightPupil, rightSize);
+
+    leftValue.textContent = leftSize;
+    rightValue.textContent = rightSize;
+
+    leftReadout.textContent = leftSize;
+    rightReadout.textContent = rightSize;
+
+    updateResponseReadout();
+}
+
+
+/*
+Updates the written reaction description.
+*/
+
+function updateResponseReadout(){
+
+    leftResponseReadout.textContent =
+        leftReaction.value;
+
+    rightResponseReadout.textContent =
+        rightReaction.value;
+}
+
+
+/*
+Calculates and animates one pupil response.
+*/
+
+function shinePupil(side){
+
+    const isLeft = side === "left";
+
+    const pupil =
+        isLeft ? leftPupil : rightPupil;
+
+    const slider =
+        isLeft ? leftSlider : rightSlider;
+
+    const reactionSelect =
+        isLeft ? leftReaction : rightReaction;
+
+    const originalSize =
+        Number(slider.value);
+
+    const reaction =
+        reactionSelect.value;
+
+    clearPupilAnimation(side);
+
+
+    /*
+    Fixed pupil:
+    no size change.
+    */
+
+    if(reaction === "fixed"){
+
+        setTransition(pupil, 250);
+        setPupilSize(pupil, originalSize);
+
+        return;
+    }
+
+
+    let targetSize;
+    let constrictionDuration;
+    let returnDelay;
+    let returnDuration;
+
+
+    /*
+    Reactive:
+    fast and clear constriction.
+    */
+
+    if(reaction === "reactive"){
+
+        targetSize =
+            Math.max(1, originalSize - 2);
+
+        constrictionDuration = 300;
+        returnDelay = 900;
+        returnDuration = 650;
+
+    }
+
+
+    /*
+    Sluggish:
+    slower and smaller constriction.
+    */
+
+    if(reaction === "sluggish"){
+
+        targetSize =
+            Math.max(1, originalSize - 1);
+
+        constrictionDuration = 1500;
+        returnDelay = 1900;
+        returnDuration = 1200;
+
+    }
+
+
+    setTransition(
+        pupil,
+        constrictionDuration
+    );
+
+    setPupilSize(
+        pupil,
+        targetSize
+    );
+
+
+    const restorePupil = () => {
+
+        setTransition(
+            pupil,
+            returnDuration
+        );
+
+        setPupilSize(
+            pupil,
+            originalSize
+        );
+
+    };
+
+
+    if(isLeft){
+
+        leftAnimationTimeout =
+            setTimeout(
+                restorePupil,
+                returnDelay
+            );
+
+    }else{
+
+        rightAnimationTimeout =
+            setTimeout(
+                restorePupil,
+                returnDelay
+            );
+
+    }
+}
+
+
+/*
+Returns both pupils to their selected sizes.
+*/
+
+function resetPupils(){
+
+    clearPupilAnimation("left");
+    clearPupilAnimation("right");
+
+    setTransition(leftPupil, 300);
+    setTransition(rightPupil, 300);
+
+    setPupilSize(
+        leftPupil,
+        Number(leftSlider.value)
+    );
+
+    setPupilSize(
+        rightPupil,
+        Number(rightSlider.value)
+    );
+}
+
+
+/*
+Button events
+*/
+
+leftTorchButton.addEventListener(
+    "click",
+    () => shinePupil("left")
+);
+
+rightTorchButton.addEventListener(
+    "click",
+    () => shinePupil("right")
+);
+
+bothTorchButton.addEventListener(
+    "click",
+    () => {
+
+        shinePupil("left");
+        shinePupil("right");
+
+    }
+);
+
+resetButton.addEventListener(
+    "click",
+    resetPupils
+);
+
+
+/*
+Control events
+*/
+
+leftSlider.addEventListener(
+    "input",
+    updatePupils
+);
+
+rightSlider.addEventListener(
+    "input",
+    updatePupils
+);
+
+leftReaction.addEventListener(
+    "change",
+    updateResponseReadout
+);
+
+rightReaction.addEventListener(
+    "change",
+    updateResponseReadout
+);
+
+
+/*
+Initial display
+*/
+
+updatePupils();
+
+</script>
+
+</body>
+</html>

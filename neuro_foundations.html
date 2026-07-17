@@ -32,8 +32,47 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:24px;overflow:hidden;background:var(--panel);border:1px solid var(--line);box-shadow:0 0 24px rgba(71,243,255,.11)}
 .back{transform:rotateY(180deg);padding:28px;display:flex;flex-direction:column;justify-content:center}
 .anatomy-image{position:relative;width:100%;height:390px;overflow:hidden;background:#000}
-.card-image,.card-overlay{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.card-image,.card-overlay,.pupil-eye-image{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
 .card-image{opacity:.28;filter:saturate(.75) brightness(.72)}
+.pupil-stage{position:absolute;inset:0;background:#000}
+.pupil-eye-image{z-index:1;opacity:1;filter:none}
+.dynamic-pupil{
+  position:absolute;
+  z-index:3;
+  background:#000;
+  border-radius:50%;
+  box-shadow:0 0 15px rgba(0,0,0,.92);
+  transform:translate(-50%,-50%);
+}
+#leftPupil{left:21.6%;top:53%}
+#rightPupil{left:79.25%;top:53%}
+.pupil-torch-controls{
+  position:absolute;
+  z-index:5;
+  left:50%;
+  bottom:10px;
+  transform:translateX(-50%);
+  display:flex;
+  gap:7px;
+  padding:7px;
+  border-radius:12px;
+  background:rgba(3,10,22,.78);
+  border:1px solid var(--line);
+  backdrop-filter:blur(5px);
+}
+.pupil-torch-btn{
+  border:0;
+  border-radius:9px;
+  padding:8px 10px;
+  background:#00d8ff;
+  color:#001218;
+  font-size:13px;
+  font-weight:900;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.pupil-torch-btn.both{background:#8f5cff;color:#fff}
+.pupil-torch-btn:disabled{opacity:.55;cursor:not-allowed}
 .card-overlay{
   opacity:1;
   pointer-events:none;
@@ -138,6 +177,8 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   /* Keep the mobile card compact while still allowing wrapped question text */
   .flip-card,.flip-inner{min-height:485px}
   .anatomy-image{height:260px}
+  .pupil-torch-controls{bottom:6px;gap:4px;padding:5px}
+  .pupil-torch-btn{padding:7px 8px;font-size:11px}
 
   .front-copy{padding:14px 16px 16px}
   .front-copy h2,.back h2{
@@ -209,6 +250,17 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
           <div class="anatomy-image">
             <img id="cardImage" class="card-image" alt="">
             <img id="cardOverlay" class="card-overlay" alt="" aria-hidden="true">
+
+            <div id="pupilStage" class="pupil-stage hidden">
+              <img id="pupilEyeImage" class="pupil-eye-image" src="foundations/images/eyes.png" alt="Eyes for pupil assessment">
+              <div id="leftPupil" class="dynamic-pupil" aria-hidden="true"></div>
+              <div id="rightPupil" class="dynamic-pupil" aria-hidden="true"></div>
+              <div class="pupil-torch-controls">
+                <button id="leftTorchBtn" class="pupil-torch-btn" type="button">🔦 Left</button>
+                <button id="bothTorchBtn" class="pupil-torch-btn both" type="button">🔦 Both</button>
+                <button id="rightTorchBtn" class="pupil-torch-btn" type="button">🔦 Right</button>
+              </div>
+            </div>
           </div>
           <div class="front-copy">
             <div class="eyebrow" id="cardTitle"></div>
@@ -282,12 +334,23 @@ const TOTAL_FOUNDATION_MODULES=8;
 
 const FOUNDATION_MODULES=[
   {id:"brain_anatomy",title:"Brain Anatomy"},
-  {id:"brain_lobes",title:"Brain Lobes"}
+  {id:"brain_lobes",title:"Brain Lobes"},
+  {id:"pupils",title:"Pupil Assessment"}
 ];
 
 let user=null,moduleData=null,cardIndex=0,questionIndex=0,score=0,answered=false;
 let completedModules={};
 let selectedModuleId="brain_anatomy";
+
+const pupilStage=document.getElementById("pupilStage");
+const leftPupil=document.getElementById("leftPupil");
+const rightPupil=document.getElementById("rightPupil");
+const leftTorchBtn=document.getElementById("leftTorchBtn");
+const rightTorchBtn=document.getElementById("rightTorchBtn");
+const bothTorchBtn=document.getElementById("bothTorchBtn");
+let leftPupilTimer=null;
+let rightPupilTimer=null;
+let activePupilCard=null;
 
 function getRequestedModuleId(){
   const params=new URLSearchParams(window.location.search);
@@ -399,7 +462,13 @@ async function preloadModuleImages(){
   const imagePaths=[
     ...new Set(
       moduleData.cards.flatMap(card=>
-        [card.image,card.overlay].filter(Boolean)
+        [
+          card.image,
+          card.overlay,
+          (selectedModuleId==="pupils"||card.type==="pupil")
+            ?"foundations/images/eyes.png"
+            :null
+        ].filter(Boolean)
       )
     )
   ];
@@ -421,35 +490,133 @@ async function preloadModuleImages(){
   );
 }
 
-function showCard(){
-  const c=moduleData.cards[cardIndex];
-  document.getElementById("flipCard").classList.remove("flipped");
-  document.getElementById("cardCounter").textContent=`Card ${cardIndex+1} of ${moduleData.cards.length}`;
-  document.getElementById("lessonFill").style.width=`${((cardIndex+1)/moduleData.cards.length)*100}%`;
+function clearPupilTimers(){
+  clearTimeout(leftPupilTimer);
+  clearTimeout(rightPupilTimer);
+  leftPupilTimer=null;
+  rightPupilTimer=null;
+}
+
+function pupilPixelsPerMm(){
+  const width=document.querySelector(".anatomy-image").clientWidth||800;
+  return 10*(width/800);
+}
+
+function setPupilSize(element,mm,duration=250){
+  const size=Number(mm||4)*pupilPixelsPerMm();
+  element.style.transition=`width ${duration}ms ease,height ${duration}ms ease`;
+  element.style.width=`${size}px`;
+  element.style.height=`${size}px`;
+}
+
+function resetPupilDisplay(){
+  if(!activePupilCard)return;
+  clearPupilTimers();
+  setPupilSize(leftPupil,activePupilCard.left?.size??4,220);
+  setPupilSize(rightPupil,activePupilCard.right?.size??4,220);
+}
+
+function animatePupil(side){
+  if(!activePupilCard)return;
+
+  const config=activePupilCard[side]||{size:4,response:"reactive"};
+  const pupil=side==="left"?leftPupil:rightPupil;
+  const original=Number(config.size??4);
+  const response=config.response||"reactive";
+
+  if(side==="left")clearTimeout(leftPupilTimer);
+  else clearTimeout(rightPupilTimer);
+
+  if(response==="fixed"){
+    setPupilSize(pupil,original,200);
+    return;
+  }
+
+  const target=response==="sluggish"
+    ?Math.max(1,original-1)
+    :Math.max(1,original-2);
+  const constrictTime=response==="sluggish"?1500:300;
+  const returnDelay=response==="sluggish"?1900:900;
+  const returnTime=response==="sluggish"?1200:650;
+
+  setPupilSize(pupil,target,constrictTime);
+
+  const timer=setTimeout(()=>{
+    setPupilSize(pupil,original,returnTime);
+  },returnDelay);
+
+  if(side==="left")leftPupilTimer=timer;
+  else rightPupilTimer=timer;
+}
+
+function showPupilCard(card){
+  activePupilCard=card;
+  pupilStage.classList.remove("hidden");
+  document.getElementById("cardImage").classList.add("hidden");
+  document.getElementById("cardOverlay").classList.add("hidden");
+  resetPupilDisplay();
+}
+
+function showStandardCard(card){
+  activePupilCard=null;
+  clearPupilTimers();
+  pupilStage.classList.add("hidden");
+
   const cardImage=document.getElementById("cardImage");
   const cardOverlay=document.getElementById("cardOverlay");
 
-  cardImage.src=c.image;
-  cardImage.alt=c.title;
+  cardImage.classList.remove("hidden");
+  cardImage.src=card.image||(
+    selectedModuleId==="pupils"
+      ?"foundations/images/eyes.png"
+      :""
+  );
+  cardImage.alt=card.title||moduleData.title;
+  cardImage.style.opacity=selectedModuleId==="pupils"?"1":"";
+  cardImage.style.filter=selectedModuleId==="pupils"?"none":"";
 
-  if(c.overlay){
-    cardOverlay.src=c.overlay;
+  if(card.overlay){
+    cardOverlay.src=card.overlay;
     cardOverlay.classList.remove("hidden");
   }else{
     cardOverlay.removeAttribute("src");
     cardOverlay.classList.add("hidden");
   }
+}
+
+function showCard(){
+  const c=moduleData.cards[cardIndex];
+  document.getElementById("flipCard").classList.remove("flipped");
+  document.getElementById("cardCounter").textContent=`Card ${cardIndex+1} of ${moduleData.cards.length}`;
+  document.getElementById("lessonFill").style.width=`${((cardIndex+1)/moduleData.cards.length)*100}%`;
+
+  if(c.type==="pupil")showPupilCard(c);
+  else showStandardCard(c);
 
   document.getElementById("cardTitle").textContent="";
   document.getElementById("frontPrompt").textContent=c.frontPrompt;
   document.getElementById("backHeading").textContent=c.backHeading;
-  document.getElementById("backPoints").innerHTML=c.backPoints.map(p=>`<li>${p}</li>`).join("");
-  document.getElementById("memoryLine").textContent=c.memoryLine;
+  document.getElementById("backPoints").innerHTML=(c.backPoints||[]).map(p=>`<li>${p}</li>`).join("");
+  document.getElementById("memoryLine").textContent=c.memoryLine||"";
   document.getElementById("previousBtn").disabled=cardIndex===0;
   const isLastCard=cardIndex===moduleData.cards.length-1;
   document.getElementById("nextBtn").textContent=isLastCard?"Start knowledge check":"Next card";
   document.querySelector("#lessonSection > .controls").classList.toggle("quiz-start",isLastCard);
 }
+
+[leftTorchBtn,rightTorchBtn,bothTorchBtn].forEach(button=>{
+  button.addEventListener("click",event=>event.stopPropagation());
+});
+leftTorchBtn.addEventListener("click",()=>animatePupil("left"));
+rightTorchBtn.addEventListener("click",()=>animatePupil("right"));
+bothTorchBtn.addEventListener("click",()=>{
+  animatePupil("left");
+  animatePupil("right");
+});
+
+window.addEventListener("resize",()=>{
+  if(activePupilCard)resetPupilDisplay();
+});
 
 function flipCard(){document.getElementById("flipCard").classList.toggle("flipped")}
 document.getElementById("flipCard").onclick=flipCard;
@@ -468,10 +635,11 @@ function startQuiz(){
 }
 function showQuestion(){
   answered=false;
-  const q=moduleData.questions[questionIndex];
-  document.getElementById("questionCounter").textContent=`Question ${questionIndex+1} of ${moduleData.questions.length}`;
+  const questions=moduleData.questions||moduleData.quiz||[];
+  const q=questions[questionIndex];
+  document.getElementById("questionCounter").textContent=`Question ${questionIndex+1} of ${questions.length}`;
   document.getElementById("scoreText").textContent=`Score: ${score}`;
-  document.getElementById("quizFill").style.width=`${((questionIndex+1)/moduleData.questions.length)*100}%`;
+  document.getElementById("quizFill").style.width=`${((questionIndex+1)/questions.length)*100}%`;
   document.getElementById("questionText").textContent=q.question;
   document.getElementById("feedback").textContent="";
   document.getElementById("quizNextBtn").classList.add("hidden");
@@ -485,19 +653,22 @@ function showQuestion(){
 }
 function answerQuestion(index,button){
   if(answered)return;answered=true;
-  const q=moduleData.questions[questionIndex];
+  const questions=moduleData.questions||moduleData.quiz||[];
+  const q=questions[questionIndex];
   [...document.querySelectorAll(".option")].forEach((b,i)=>{
     b.disabled=true;
     if(i===q.answer)b.classList.add("correct");
   });
-  if(index===q.answer){score++;document.getElementById("feedback").textContent=`Correct. ${q.feedback}`}
-  else{button.classList.add("wrong");document.getElementById("feedback").textContent=`Not quite. ${q.feedback}`}
+  const explanation=q.feedback||"";
+  if(index===q.answer){score++;document.getElementById("feedback").textContent=`Correct.${explanation?` ${explanation}`:""}`}
+  else{button.classList.add("wrong");document.getElementById("feedback").textContent=`Not quite.${explanation?` ${explanation}`:""}`}
   document.getElementById("scoreText").textContent=`Score: ${score}`;
-  document.getElementById("quizNextBtn").textContent=questionIndex===moduleData.questions.length-1?"See result":"Next question";
+  document.getElementById("quizNextBtn").textContent=questionIndex===questions.length-1?"See result":"Next question";
   document.getElementById("quizNextBtn").classList.remove("hidden");
 }
 document.getElementById("quizNextBtn").onclick=()=>{
-  if(questionIndex<moduleData.questions.length-1){questionIndex++;showQuestion()}
+  const questions=moduleData.questions||moduleData.quiz||[];
+  if(questionIndex<questions.length-1){questionIndex++;showQuestion()}
   else finishModule();
 };
 
@@ -513,13 +684,13 @@ async function finishModule(){
 
   if(passed&&wasAlreadyComplete){
     document.getElementById("resultText").textContent=
-      `You scored ${score} out of ${moduleData.questions.length}. Review complete — your original reward remains saved.`;
+      `You scored ${score} out of ${(moduleData.questions||moduleData.quiz||[]).length}. Review complete — your original reward remains saved.`;
   }else if(passed){
     document.getElementById("resultText").textContent=
-      `You scored ${score} out of ${moduleData.questions.length}. Your reward has been added to your Learning Hub.`;
+      `You scored ${score} out of ${(moduleData.questions||moduleData.quiz||[]).length}. Your reward has been added to your Learning Hub.`;
   }else{
     document.getElementById("resultText").textContent=
-      `You scored ${score} out of ${moduleData.questions.length}. Review the cards and try again to earn the module reward.`;
+      `You scored ${score} out of ${(moduleData.questions||moduleData.quiz||[]).length}. Review the cards and try again to earn the module reward.`;
   }
 
   document.querySelector(".reward").classList.toggle(

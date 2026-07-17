@@ -1,0 +1,228 @@
+{
+  "id": "pupils",
+  "title": "Pupil Assessment",
+  "subtitle": "Recognise normal and abnormal pupil responses.",
+
+  "cards": [
+
+    {
+      "type": "info",
+      "frontPrompt": "What is the job of the pupil?",
+      "backHeading": "What Does The Pupil Do?",
+      "backPoints": [
+        "The pupil controls how much light enters the eye.",
+        "Bright light makes the pupil smaller.",
+        "Darkness makes the pupil larger.",
+        "This helps the eye adapt to changing light conditions."
+      ],
+      "memoryLine": "Pupils control light entry."
+    },
+
+    {
+      "type": "pupil",
+      "left": {
+        "size": 4,
+        "response": "reactive"
+      },
+      "right": {
+        "size": 4,
+        "response": "reactive"
+      },
+      "frontPrompt": "Press the torch and watch what happens.",
+      "backHeading": "The Light Reflex",
+      "backPoints": [
+        "Light enters the eye.",
+        "A signal travels to the brain.",
+        "The brain sends a signal back.",
+        "The pupil constricts."
+      ],
+      "memoryLine": "Light in, pupil smaller."
+    },
+
+    {
+      "type": "info",
+      "frontPrompt": "Which cranial nerves are involved in the pupil light reflex?",
+      "backHeading": "CN II and CN III",
+      "backPoints": [
+        "CN II (optic nerve) detects the light.",
+        "CN III (oculomotor nerve) carries the response back to the pupil.",
+        "Both nerves are needed for a normal light reflex."
+      ],
+      "memoryLine": "CN II in, CN III out."
+    },
+
+    {
+      "type": "pupil",
+      "left": {
+        "size": 3,
+        "response": "reactive"
+      },
+      "right": {
+        "size": 3,
+        "response": "reactive"
+      },
+      "frontPrompt": "How would you describe these pupils?",
+      "backHeading": "Normal Pupils",
+      "backPoints": [
+        "Normal pupils are usually equal.",
+        "Normal pupils are round.",
+        "Normal pupils react to light.",
+        "Always compare both eyes."
+      ],
+      "memoryLine": "Equal, round and reactive."
+    },
+
+    {
+      "type": "pupil",
+      "left": {
+        "size": 2,
+        "response": "reactive"
+      },
+      "right": {
+        "size": 5,
+        "response": "reactive"
+      },
+      "frontPrompt": "What do you notice about these pupils?",
+      "backHeading": "Unequal Pupils",
+      "backPoints": [
+        "Unequal pupils are called anisocoria.",
+        "Some people naturally have unequal pupils.",
+        "A new change may indicate neurological deterioration.",
+        "Always compare with previous assessments."
+      ],
+      "memoryLine": "New anisocoria needs assessment."
+    },
+
+    {
+      "type": "pupil",
+      "left": {
+        "size": 6,
+        "response": "fixed"
+      },
+      "right": {
+        "size": 3,
+        "response": "reactive"
+      },
+      "frontPrompt": "Shine the light. What do you notice?",
+      "backHeading": "Fixed Pupil",
+      "backPoints": [
+        "A fixed pupil does not react to light.",
+        "The left pupil remains unchanged.",
+        "The right pupil constricts normally.",
+        "A new fixed dilated pupil requires urgent escalation."
+      ],
+      "memoryLine": "No reaction means fixed."
+    },
+
+    {
+      "type": "pupil",
+      "left": {
+        "size": 4,
+        "response": "sluggish"
+      },
+      "right": {
+        "size": 4,
+        "response": "reactive"
+      },
+      "frontPrompt": "Shine the light. How would you describe the response?",
+      "backHeading": "Sluggish Response",
+      "backPoints": [
+        "A sluggish pupil constricts slowly.",
+        "It may also constrict less than expected.",
+        "Compare both eyes.",
+        "Compare with previous assessments."
+      ],
+      "memoryLine": "Slower than expected means sluggish."
+    },
+
+    {
+      "type": "info",
+      "frontPrompt": "Why are pupils checked during neurological assessment?",
+      "backHeading": "Why Pupils Matter",
+      "backPoints": [
+        "Pupil changes may be an early sign of neurological deterioration.",
+        "They can indicate raised intracranial pressure.",
+        "They can indicate brain injury.",
+        "They can indicate nerve compression.",
+        "Drug effects can also affect pupil size and response."
+      ],
+      "memoryLine": "Changes matter more than one isolated reading."
+    }
+
+  ],
+
+  "quiz": [
+
+    {
+      "question": "What is the main function of the pupil?",
+      "options": [
+        "Control light entering the eye",
+        "Move the eyeball",
+        "Produce tears",
+        "Detect colour"
+      ],
+      "answer": 0
+    },
+
+    {
+      "question": "Which cranial nerve detects light entering the eye?",
+      "options": [
+        "CN II",
+        "CN III",
+        "CN V",
+        "CN VII"
+      ],
+      "answer": 0
+    },
+
+    {
+      "question": "Which cranial nerve constricts the pupil?",
+      "options": [
+        "CN II",
+        "CN III",
+        "CN VI",
+        "CN VIII"
+      ],
+      "answer": 1
+    },
+
+    {
+      "question": "What is the term for unequal pupils?",
+      "options": [
+        "Diplopia",
+        "Anisocoria",
+        "Aphasia",
+        "Ataxia"
+      ],
+      "answer": 1
+    },
+
+    {
+      "question": "How would you describe a pupil that does not react to light?",
+      "options": [
+        "Reactive",
+        "Sluggish",
+        "Fixed",
+        "Normal"
+      ],
+      "answer": 2
+    },
+
+    {
+      "question": "A new fixed dilated pupil should be:",
+      "options": [
+        "Ignored",
+        "Rechecked next week",
+        "Escalated urgently",
+        "Documented only"
+      ],
+      "answer": 2
+    }
+
+  ],
+
+  "reward": {
+    "xp": 50,
+    "brains": 1
+  }
+}
