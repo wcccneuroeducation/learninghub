@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -176,16 +177,11 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 
   /* Keep the mobile card compact while still allowing wrapped question text */
   .flip-card,.flip-inner{min-height:485px}
-  .anatomy-image{height:260px}
+  .anatomy-image{height:240px}
 
-  /* Mobile only: raise the pupil display without affecting desktop */
-  .pupil-eye-image{
-    transform:translateY(-22px);
-  }
-
-  #leftPupil,
-  #rightPupil{
-    top:calc(53% - 22px);
+  /* Move the whole pupil stage upwards on mobile */
+  .pupil-stage{
+    transform:translateY(-18px);
   }
 
   .pupil-torch-controls{bottom:6px;gap:4px;padding:5px}
