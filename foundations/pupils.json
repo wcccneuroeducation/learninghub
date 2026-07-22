@@ -261,6 +261,18 @@
         "Both 5 mm"
       ],
       "answer": 0
+    },
+    {
+      "type": "pupil-bilateral-select",
+      "left": {
+        "size": 2
+      },
+      "right": {
+        "size": 4
+      },
+      "toleranceMm": 1,
+      "question": "Select the size of each pupil.",
+      "feedback": "Record each eye separately and compare the two sides."
     }
   ],
   "reward": {

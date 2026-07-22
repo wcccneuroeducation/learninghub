@@ -142,6 +142,40 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 #quizLeftPupil{left:21.6%}
 #quizRightPupil{left:79.25%}
 
+
+.pupil-select-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:18px;
+}
+.pupil-select-field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(255,255,255,.03);
+}
+.pupil-select-field label{
+  font-weight:800;
+}
+.pupil-select-field select{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:#101923;
+  color:var(--text);
+  font:inherit;
+}
+.pupil-select-check{
+  grid-column:1 / -1;
+  justify-self:center;
+  min-width:180px;
+}
+
 .feedback{min-height:48px;margin-top:16px;color:var(--muted);line-height:1.5}
 .reward{font-size:28px;font-weight:900;color:var(--cyan);margin:18px 0}
 .small{color:var(--muted);font-size:13px}
@@ -232,6 +266,9 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   #quizRightPupil{
     top:calc(53% - 4px);
   }
+
+  .pupil-select-grid{grid-template-columns:1fr}
+  .pupil-select-check{grid-column:1}
 
   .option-grid{grid-template-columns:1fr}
   .topic-list{grid-template-columns:1fr}
@@ -354,6 +391,33 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
         <div id="quizRightPupil" class="quiz-dynamic-pupil"></div>
       </div>
       <div id="options" class="option-grid"></div>
+      <div id="pupilSelectAnswer" class="pupil-select-grid hidden">
+        <div class="pupil-select-field">
+          <label for="leftPupilSelect">Left pupil</label>
+          <select id="leftPupilSelect">
+            <option value="">Choose size</option>
+            <option value="1">1 mm</option>
+            <option value="2">2 mm</option>
+            <option value="3">3 mm</option>
+            <option value="4">4 mm</option>
+            <option value="5">5 mm</option>
+            <option value="6">6 mm</option>
+          </select>
+        </div>
+        <div class="pupil-select-field">
+          <label for="rightPupilSelect">Right pupil</label>
+          <select id="rightPupilSelect">
+            <option value="">Choose size</option>
+            <option value="1">1 mm</option>
+            <option value="2">2 mm</option>
+            <option value="3">3 mm</option>
+            <option value="4">4 mm</option>
+            <option value="5">5 mm</option>
+            <option value="6">6 mm</option>
+          </select>
+        </div>
+        <button id="checkPupilSelectBtn" class="btn pupil-select-check">Check answer</button>
+      </div>
       <div id="feedback" class="feedback"></div>
       <button id="quizNextBtn" class="btn hidden">Next question</button>
     </article>
@@ -414,6 +478,10 @@ const bothTorchBtn=document.getElementById("bothTorchBtn");
 const quizPupilStage=document.getElementById("quizPupilStage");
 const quizLeftPupil=document.getElementById("quizLeftPupil");
 const quizRightPupil=document.getElementById("quizRightPupil");
+const pupilSelectAnswer=document.getElementById("pupilSelectAnswer");
+const leftPupilSelect=document.getElementById("leftPupilSelect");
+const rightPupilSelect=document.getElementById("rightPupilSelect");
+const checkPupilSelectBtn=document.getElementById("checkPupilSelectBtn");
 let leftPupilTimer=null;
 let rightPupilTimer=null;
 let ambientPupilTimer=null;
@@ -773,7 +841,7 @@ function setQuizPupilSize(element,mm){
   element.style.height=`${size}px`;
 }
 function showQuizPupils(question){
-  if(question.type!=="pupil-size"){
+  if(!["pupil-size","pupil-bilateral-select"].includes(question.type)){
     quizPupilStage.classList.add("hidden");
     return;
   }
@@ -786,21 +854,81 @@ function showQuestion(){
   answered=false;
   const questions=moduleData.questions||moduleData.quiz||[];
   const q=questions[questionIndex];
+
   document.getElementById("questionCounter").textContent=`Question ${questionIndex+1} of ${questions.length}`;
   document.getElementById("scoreText").textContent=`Score: ${score}`;
   document.getElementById("quizFill").style.width=`${((questionIndex+1)/questions.length)*100}%`;
   document.getElementById("questionText").textContent=q.question;
   showQuizPupils(q);
+
   document.getElementById("feedback").textContent="";
   document.getElementById("quizNextBtn").classList.add("hidden");
-  const box=document.getElementById("options");box.innerHTML="";
-  q.options.forEach((option,index)=>{
+
+  const box=document.getElementById("options");
+  box.innerHTML="";
+  pupilSelectAnswer.classList.add("hidden");
+
+  if(q.type==="pupil-bilateral-select"){
+    leftPupilSelect.value="";
+    rightPupilSelect.value="";
+    leftPupilSelect.disabled=false;
+    rightPupilSelect.disabled=false;
+    checkPupilSelectBtn.disabled=false;
+    pupilSelectAnswer.classList.remove("hidden");
+    return;
+  }
+
+  (q.options||[]).forEach((option,index)=>{
     const b=document.createElement("button");
-    b.className="option";b.textContent=option;
+    b.className="option";
+    b.textContent=option;
     b.onclick=()=>answerQuestion(index,b);
     box.appendChild(b);
   });
 }
+
+function answerPupilSelectQuestion(){
+  if(answered)return;
+
+  const leftChoice=Number(leftPupilSelect.value);
+  const rightChoice=Number(rightPupilSelect.value);
+
+  if(!leftChoice||!rightChoice){
+    document.getElementById("feedback").textContent="Select a size for both eyes first.";
+    return;
+  }
+
+  answered=true;
+
+  const questions=moduleData.questions||moduleData.quiz||[];
+  const q=questions[questionIndex];
+  const tolerance=Number(q.toleranceMm??1);
+
+  const leftCorrect=Math.abs(leftChoice-Number(q.left.size))<=tolerance;
+  const rightCorrect=Math.abs(rightChoice-Number(q.right.size))<=tolerance;
+  const isCorrect=leftCorrect&&rightCorrect;
+
+  leftPupilSelect.disabled=true;
+  rightPupilSelect.disabled=true;
+  checkPupilSelectBtn.disabled=true;
+
+  if(isCorrect){
+    score++;
+    document.getElementById("feedback").textContent=
+      `Correct. The pupils are approximately left ${q.left.size} mm and right ${q.right.size} mm. A measurement within ${tolerance} mm is accepted.`;
+  }else{
+    document.getElementById("feedback").textContent=
+      `Not quite. The pupils are approximately left ${q.left.size} mm and right ${q.right.size} mm.`;
+  }
+
+  document.getElementById("scoreText").textContent=`Score: ${score}`;
+  document.getElementById("quizNextBtn").textContent=
+    questionIndex===questions.length-1?"See result":"Next question";
+  document.getElementById("quizNextBtn").classList.remove("hidden");
+}
+
+checkPupilSelectBtn.onclick=answerPupilSelectQuestion;
+
 function answerQuestion(index,button){
   if(answered)return;
   answered=true;
