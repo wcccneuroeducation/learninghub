@@ -110,7 +110,7 @@
       "options": [
         "Midbrain, pons and medulla",
         "Frontal, parietal and temporal lobes",
-        "Cerebrum, cerebellum and ventricles",
+        "midbrain, cerebellum and medulla",
         "Thalamus, hypothalamus and basal ganglia"
       ],
       "answer": 0
@@ -121,7 +121,7 @@
         "Medulla",
         "Pons",
         "Midbrain",
-        "Cerebellum"
+        "Spinal cord"
       ],
       "answer": 2
     },
@@ -141,7 +141,7 @@
         "Midbrain",
         "Pons",
         "Medulla",
-        "Cerebellum"
+        "Spinal cord"
       ],
       "answer": 2
     },
@@ -151,7 +151,7 @@
         "Midbrain",
         "Pons",
         "Medulla",
-        "Occipital lobe"
+        "Frontal lobe"
       ],
       "answer": 0
     },
@@ -168,19 +168,19 @@
     {
       "question": "Which functions are strongly associated with the medulla?",
       "options": [
-        "Speech and language",
+        "Heart rate and blood pressure only",
         "Vision and hearing only",
         "Breathing, heart rate and blood pressure",
-        "Memory and judgement"
+        "Breathing, vision and hearing"
       ],
       "answer": 2
     },
     {
       "question": "Which combination may indicate brainstem dysfunction?",
       "options": [
-        "Improved appetite and thirst",
+        "Reduced blood pressure and heart rate",
         "Reduced consciousness, abnormal pupils and altered breathing",
-        "Isolated ankle pain",
+        "Altered sensation and movement in the arms and legs",
         "Normal pupils with stable observations"
       ],
       "answer": 1
