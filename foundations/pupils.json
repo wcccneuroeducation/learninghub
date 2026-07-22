@@ -2,9 +2,7 @@
   "id": "pupils",
   "title": "Pupil Assessment",
   "subtitle": "Recognise normal and abnormal pupil responses.",
-
   "cards": [
-
     {
       "type": "info",
       "frontPrompt": "What is the job of the pupil?",
@@ -17,7 +15,6 @@
       ],
       "memoryLine": "Pupils control light entry."
     },
-
     {
       "type": "pupil",
       "left": {
@@ -38,7 +35,6 @@
       ],
       "memoryLine": "Light in, pupil smaller."
     },
-
     {
       "type": "info",
       "frontPrompt": "Which cranial nerves are involved in the pupil light reflex?",
@@ -50,7 +46,6 @@
       ],
       "memoryLine": "CN II in, CN III out."
     },
-
     {
       "type": "pupil",
       "left": {
@@ -71,7 +66,6 @@
       ],
       "memoryLine": "Equal, round and reactive."
     },
-
     {
       "type": "pupil",
       "left": {
@@ -92,7 +86,6 @@
       ],
       "memoryLine": "New anisocoria needs assessment."
     },
-
     {
       "type": "pupil",
       "left": {
@@ -113,7 +106,6 @@
       ],
       "memoryLine": "No reaction means fixed."
     },
-
     {
       "type": "pupil",
       "left": {
@@ -134,7 +126,6 @@
       ],
       "memoryLine": "Slower than expected means sluggish."
     },
-
     {
       "type": "info",
       "frontPrompt": "Why are pupils checked during neurological assessment?",
@@ -148,11 +139,8 @@
       ],
       "memoryLine": "Changes matter more than one isolated reading."
     }
-
   ],
-
   "quiz": [
-
     {
       "question": "What is the main function of the pupil?",
       "options": [
@@ -163,7 +151,6 @@
       ],
       "answer": 0
     },
-
     {
       "question": "Which cranial nerve detects light entering the eye?",
       "options": [
@@ -174,7 +161,6 @@
       ],
       "answer": 0
     },
-
     {
       "question": "Which cranial nerve constricts the pupil?",
       "options": [
@@ -185,7 +171,6 @@
       ],
       "answer": 1
     },
-
     {
       "question": "What is the term for unequal pupils?",
       "options": [
@@ -196,7 +181,6 @@
       ],
       "answer": 1
     },
-
     {
       "question": "How would you describe a pupil that does not react to light?",
       "options": [
@@ -207,7 +191,6 @@
       ],
       "answer": 2
     },
-
     {
       "question": "A new fixed dilated pupil should be:",
       "options": [
@@ -217,10 +200,59 @@
         "Documented only"
       ],
       "answer": 2
+    },
+    {
+      "type": "pupil-size",
+      "left": {
+        "size": 2
+      },
+      "right": {
+        "size": 2
+      },
+      "question": "Approximately what size are these pupils?",
+      "options": [
+        "2 mm",
+        "3 mm",
+        "4 mm",
+        "5 mm"
+      ],
+      "answer": 0
+    },
+    {
+      "type": "pupil-size",
+      "left": {
+        "size": 5
+      },
+      "right": {
+        "size": 5
+      },
+      "question": "Approximately what size are these pupils?",
+      "options": [
+        "2 mm",
+        "3 mm",
+        "4 mm",
+        "5 mm"
+      ],
+      "answer": 3
+    },
+    {
+      "type": "pupil-size",
+      "left": {
+        "size": 3
+      },
+      "right": {
+        "size": 5
+      },
+      "question": "How would you record these pupils?",
+      "options": [
+        "Left 3 mm, right 5 mm",
+        "Left 5 mm, right 3 mm",
+        "Both 3 mm",
+        "Both 5 mm"
+      ],
+      "answer": 0
     }
-
   ],
-
   "reward": {
     "xp": 50,
     "brains": 1

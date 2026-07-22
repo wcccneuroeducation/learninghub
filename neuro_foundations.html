@@ -112,6 +112,36 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 .option{padding:15px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:#fff;text-align:left;font-weight:800;cursor:pointer}
 .option.correct{border-color:var(--good);background:rgba(97,245,169,.12)}
 .option.wrong{border-color:var(--bad);background:rgba(255,117,151,.12)}
+.quiz-pupil-stage{
+  position:relative;
+  width:100%;
+  height:300px;
+  margin:14px 0 18px;
+  overflow:hidden;
+  border-radius:16px;
+  background:#000;
+  border:1px solid var(--line);
+}
+.quiz-pupil-stage img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+.quiz-dynamic-pupil{
+  position:absolute;
+  z-index:2;
+  top:53%;
+  background:#000;
+  border-radius:50%;
+  box-shadow:0 0 15px rgba(0,0,0,.92);
+  transform:translate(-50%,-50%);
+  transition:width .45s ease,height .45s ease;
+}
+#quizLeftPupil{left:21.6%}
+#quizRightPupil{left:79.25%}
+
 .feedback{min-height:48px;margin-top:16px;color:var(--muted);line-height:1.5}
 .reward{font-size:28px;font-weight:900;color:var(--cyan);margin:18px 0}
 .small{color:var(--muted);font-size:13px}
@@ -179,13 +209,14 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   .flip-card,.flip-inner{min-height:485px}
   .anatomy-image{height:260px}
 
-  /* Mobile only: raise the dynamic pupils without moving the eyes or torch controls */
+  /* Mobile only: fine-tune the dynamic pupil position */
   #leftPupil,
   #rightPupil{
     top:calc(53% - 4px);
   }
 
-  .pupil-torch-controls{bottom:6px;gap:4px;padding:5px}
+  /* Give the torch buttons a little more separation */
+  .pupil-torch-controls{bottom:6px;gap:8px;padding:6px}
   .pupil-torch-btn{padding:7px 8px;font-size:11px}
 
   .front-copy{padding:14px 16px 16px}
@@ -195,6 +226,12 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   }
   .front-copy p{font-size:15px;line-height:1.35}
   .back{padding:22px}
+
+  .quiz-pupil-stage{height:220px}
+  #quizLeftPupil,
+  #quizRightPupil{
+    top:calc(53% - 4px);
+  }
 
   .option-grid{grid-template-columns:1fr}
   .topic-list{grid-template-columns:1fr}
@@ -311,6 +348,11 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
     <article class="quiz-card">
       <div class="eyebrow">Knowledge check</div>
       <h2 id="questionText"></h2>
+      <div id="quizPupilStage" class="quiz-pupil-stage hidden">
+        <img src="foundations/images/eyes.png" alt="Eyes for estimating pupil size">
+        <div id="quizLeftPupil" class="quiz-dynamic-pupil"></div>
+        <div id="quizRightPupil" class="quiz-dynamic-pupil"></div>
+      </div>
       <div id="options" class="option-grid"></div>
       <div id="feedback" class="feedback"></div>
       <button id="quizNextBtn" class="btn hidden">Next question</button>
@@ -369,6 +411,9 @@ const rightPupil=document.getElementById("rightPupil");
 const leftTorchBtn=document.getElementById("leftTorchBtn");
 const rightTorchBtn=document.getElementById("rightTorchBtn");
 const bothTorchBtn=document.getElementById("bothTorchBtn");
+const quizPupilStage=document.getElementById("quizPupilStage");
+const quizLeftPupil=document.getElementById("quizLeftPupil");
+const quizRightPupil=document.getElementById("quizRightPupil");
 let leftPupilTimer=null;
 let rightPupilTimer=null;
 let activePupilCard=null;
@@ -654,6 +699,26 @@ function startQuiz(){
   document.getElementById("quizSection").classList.remove("hidden");
   questionIndex=0;score=0;showQuestion();
 }
+
+function quizPupilPixelsPerMm(){
+  const width=quizPupilStage.clientWidth||800;
+  return 10*(width/800);
+}
+function setQuizPupilSize(element,mm){
+  const size=Number(mm||4)*quizPupilPixelsPerMm();
+  element.style.width=`${size}px`;
+  element.style.height=`${size}px`;
+}
+function showQuizPupils(question){
+  if(question.type!=="pupil-size"){
+    quizPupilStage.classList.add("hidden");
+    return;
+  }
+  quizPupilStage.classList.remove("hidden");
+  setQuizPupilSize(quizLeftPupil,question.left?.size??4);
+  setQuizPupilSize(quizRightPupil,question.right?.size??4);
+}
+
 function showQuestion(){
   answered=false;
   const questions=moduleData.questions||moduleData.quiz||[];
@@ -662,6 +727,7 @@ function showQuestion(){
   document.getElementById("scoreText").textContent=`Score: ${score}`;
   document.getElementById("quizFill").style.width=`${((questionIndex+1)/questions.length)*100}%`;
   document.getElementById("questionText").textContent=q.question;
+  showQuizPupils(q);
   document.getElementById("feedback").textContent="";
   document.getElementById("quizNextBtn").classList.add("hidden");
   const box=document.getElementById("options");box.innerHTML="";
