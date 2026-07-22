@@ -455,7 +455,21 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   -webkit-transform-style:preserve-3d;
   transform-style:preserve-3d;
 }
+/* Hide the front image and glowing overlays while the card is flipped */
+.flip-card.flipped .front{
+  visibility:hidden;
+  opacity:0;
+  pointer-events:none;
+}
 
+.flip-card.flipped .card-overlay,
+.flip-card.flipped .card-focus-overlay,
+.flip-card.flipped .card-image,
+.flip-card.flipped .pupil-stage{
+  visibility:hidden !important;
+  opacity:0 !important;
+  animation:none !important;
+}
 </style>
 </head>
 <body>
