@@ -1,0 +1,153 @@
+{
+  "id": "ventricles",
+  "title": "Ventricles & CSF Spaces",
+  "subtitle": "Recognise the main CSF-filled spaces as they appear on axial CT images.",
+  "cards": [
+    {
+      "type": "info",
+      "image": "foundations/images/lateral_ventricles.png",
+      "overlay": "foundations/images/lateral_overlay.png",
+      "overlayAnimation": "illuminate",
+      "frontPrompt": "Can you identify the lateral ventricles on this CT slice?",
+      "backHeading": "Lateral Ventricles",
+      "backPoints": [
+        "The lateral ventricles are paired CSF-filled spaces, with one in each cerebral hemisphere.",
+        "They are the largest ventricles within the brain.",
+        "On an axial CT scan, CSF appears darker than the surrounding brain tissue.",
+        "Their size and symmetry should be compared with previous imaging and the wider clinical picture."
+      ],
+      "memoryLine": "Lateral ventricles: paired CSF spaces within the cerebral hemispheres."
+    },
+    {
+      "type": "info",
+      "image": "foundations/images/3rd_ventricle.png",
+      "overlay": "foundations/images/3rd_overlay.png",
+      "overlayAnimation": "illuminate",
+      "frontPrompt": "Which narrow CSF space lies in the midline?",
+      "backHeading": "Third Ventricle",
+      "backPoints": [
+        "The third ventricle is a narrow CSF-filled space in the midline of the brain.",
+        "It lies between the right and left sides of the diencephalon.",
+        "On CT it is seen centrally, below the level of the lateral ventricles.",
+        "A change in its size can be relevant when assessing for ventricular enlargement or obstruction."
+      ],
+      "memoryLine": "Third ventricle: the narrow midline CSF space."
+    },
+    {
+      "type": "info",
+      "image": "foundations/images/4th_ventricle.png",
+      "overlay": "foundations/images/4th_overlay.png",
+      "overlayAnimation": "illuminate",
+      "frontPrompt": "Can you find the fourth ventricle on this lower CT slice?",
+      "backHeading": "Fourth Ventricle",
+      "backPoints": [
+        "The fourth ventricle is a CSF-filled space in the posterior fossa.",
+        "It lies between the brainstem in front and the cerebellum behind.",
+        "It appears on a lower axial CT slice than the lateral and third ventricles.",
+        "Its position helps orientate you to the brainstem and cerebellum."
+      ],
+      "memoryLine": "Fourth ventricle: between the brainstem and cerebellum."
+    },
+    {
+      "type": "info",
+      "image": "foundations/images/4th_ventricle.png",
+      "overlay": "foundations/images/basal_overlay.png",
+      "overlayAnimation": "illuminate",
+      "frontPrompt": "Where can CSF be seen surrounding the brainstem?",
+      "backHeading": "CSF Around the Brainstem",
+      "backPoints": [
+        "CSF is not confined to the ventricles; it also surrounds the brain and spinal cord.",
+        "At the base of the brain, CSF-filled spaces surround the brainstem.",
+        "These spaces are collectively known as the basal cisterns.",
+        "Recognising them on CT becomes important when looking for blood around the base of the brain, such as in subarachnoid haemorrhage."
+      ],
+      "memoryLine": "CSF also surrounds the brainstem within the basal cisterns."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which ventricles are paired, with one in each cerebral hemisphere?",
+      "options": [
+        "Lateral ventricles",
+        "Third ventricle",
+        "Fourth ventricle",
+        "Cerebral aqueduct"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Which ventricle is a narrow CSF-filled space in the midline of the brain?",
+      "options": [
+        "Right lateral ventricle",
+        "Third ventricle",
+        "Fourth ventricle",
+        "Basal cistern"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "Where is the fourth ventricle located?",
+      "options": [
+        "Between the two cerebral hemispheres",
+        "Between the brainstem and cerebellum",
+        "Within the frontal lobe",
+        "Around the outside of the skull"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "How does normal CSF usually appear on a non-contrast CT scan?",
+      "options": [
+        "Same density as the skull",
+        "Brighter than the skull",
+        "Darker than brain tissue",
+        "Bright white like acute blood"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "Which structure is normally seen on the lowest of these CT levels?",
+      "options": [
+        "Lateral ventricles",
+        "Third ventricle",
+        "Fourth ventricle",
+        "Frontal horns of the lateral ventricles"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "CSF-filled spaces surrounding the base of the brain and brainstem are called:",
+      "options": [
+        "Cerebral sulci",
+        "Dural sinuses",
+        "Basal ganglia",
+        "Basal cistern"
+      ],
+      "answer": 3
+    },
+    {
+      "question": "Which statement about CSF is correct?",
+      "options": [
+        "It is found only inside the lateral ventricles",
+        "It fills the ventricles and also surrounds the brain and spinal cord",
+        "It is normally visible as bright white material on CT",
+        "It is contained only within brain tissue"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "Why is recognising the CSF spaces around the brainstem clinically useful?",
+      "options": [
+        "They are a common place to look for subarachnoid blood",
+        "They show the thickness of the skull",
+        "They identify the motor cortex",
+        "They directly measure intracranial pressure"
+      ],
+      "answer": 0
+    }
+  ],
+  "reward": {
+    "xp": 50,
+    "brains": 1
+  }
+}

@@ -104,6 +104,34 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
     transform:scale(1.03);
   }
 }
+
+/* Ventricular overlays illuminate gently without enlarging. */
+.card-overlay.illuminate{
+  animation:ventricleIlluminate 1.65s ease-out both;
+}
+
+@keyframes ventricleIlluminate{
+  0%{
+    opacity:0;
+    filter:
+      brightness(.72)
+      drop-shadow(0 0 0 rgba(71,243,255,0));
+  }
+  72%{
+    opacity:1;
+    filter:
+      brightness(1.18)
+      drop-shadow(0 0 12px rgba(71,243,255,.95))
+      drop-shadow(0 0 26px rgba(71,243,255,.68));
+  }
+  100%{
+    opacity:1;
+    filter:
+      brightness(1)
+      drop-shadow(0 0 8px rgba(71,243,255,.9))
+      drop-shadow(0 0 18px rgba(71,243,255,.55));
+  }
+}
 .front-copy{padding:22px;text-align:center}
 .eyebrow{font-size:13px;color:var(--cyan);font-weight:900;text-transform:uppercase;letter-spacing:.8px}
 .front-copy h2,.back h2{margin:8px 0 10px;font-size:clamp(26px,5vw,38px)}
@@ -473,7 +501,8 @@ const FOUNDATION_MODULES=[
   {id:"brain_anatomy",title:"Brain Anatomy"},
   {id:"brain_lobes",title:"Brain Lobes"},
   {id:"pupils",title:"Pupil Assessment"},
-  {id:"brainstem",title:"Brainstem"}
+  {id:"brainstem",title:"Brainstem"},
+  {id:"ventricles",title:"Ventricles & CSF Spaces"}
 ];
 
 let user=null,moduleData=null,cardIndex=0,questionIndex=0,score=0,answered=false;
@@ -769,9 +798,17 @@ function showStandardCard(card){
   cardImage.style.opacity=selectedModuleId==="pupils"?"1":"";
   cardImage.style.filter=selectedModuleId==="pupils"?"none":"";
 
+  cardOverlay.classList.remove("illuminate");
+
   if(card.overlay){
     cardOverlay.src=card.overlay;
     cardOverlay.classList.remove("hidden");
+
+    if(card.overlayAnimation==="illuminate"){
+      // Force a reflow so the fade-in restarts whenever the card is revisited.
+      void cardOverlay.offsetWidth;
+      cardOverlay.classList.add("illuminate");
+    }
   }else{
     cardOverlay.removeAttribute("src");
     cardOverlay.classList.add("hidden");
