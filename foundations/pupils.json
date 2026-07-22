@@ -216,7 +216,12 @@
         "4 mm",
         "5 mm"
       ],
-      "answer": 0
+      "answer": 0,
+      "acceptedAnswers": [
+        0,
+        1
+      ],
+      "feedback": "The pupils are approximately 2 mm. A visual estimate within 1 mm is accepted."
     },
     {
       "type": "pupil-size",
@@ -233,7 +238,12 @@
         "4 mm",
         "5 mm"
       ],
-      "answer": 3
+      "answer": 3,
+      "acceptedAnswers": [
+        2,
+        3
+      ],
+      "feedback": "The pupils are approximately 5 mm. A visual estimate within 1 mm is accepted."
     },
     {
       "type": "pupil-size",

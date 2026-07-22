@@ -416,7 +416,9 @@ const quizLeftPupil=document.getElementById("quizLeftPupil");
 const quizRightPupil=document.getElementById("quizRightPupil");
 let leftPupilTimer=null;
 let rightPupilTimer=null;
+let ambientPupilTimer=null;
 let activePupilCard=null;
+let ambientPupilCard=false;
 
 function getRequestedModuleId(){
   const params=new URLSearchParams(window.location.search);
@@ -559,8 +561,10 @@ async function preloadModuleImages(){
 function clearPupilTimers(){
   clearTimeout(leftPupilTimer);
   clearTimeout(rightPupilTimer);
+  clearTimeout(ambientPupilTimer);
   leftPupilTimer=null;
   rightPupilTimer=null;
+  ambientPupilTimer=null;
 }
 
 function pupilPixelsPerMm(){
@@ -615,8 +619,48 @@ function animatePupil(side){
   else rightPupilTimer=timer;
 }
 
+
+function scheduleAmbientPupilBreath(){
+  if(!ambientPupilCard)return;
+
+  const wait=4000+Math.random()*4000;
+
+  ambientPupilTimer=setTimeout(()=>{
+    if(!ambientPupilCard)return;
+
+    setPupilSize(leftPupil,5,1300);
+    setPupilSize(rightPupil,5,1300);
+
+    ambientPupilTimer=setTimeout(()=>{
+      if(!ambientPupilCard)return;
+
+      setPupilSize(leftPupil,3,1100);
+      setPupilSize(rightPupil,3,1100);
+      scheduleAmbientPupilBreath();
+    },1500);
+  },wait);
+}
+
+function showAmbientPupilCard(){
+  clearPupilTimers();
+  activePupilCard=null;
+  ambientPupilCard=true;
+
+  pupilStage.classList.remove("hidden");
+  document.getElementById("cardImage").classList.add("hidden");
+  document.getElementById("cardOverlay").classList.add("hidden");
+  document.querySelector(".pupil-torch-controls").classList.add("hidden");
+
+  setPupilSize(leftPupil,3,0);
+  setPupilSize(rightPupil,3,0);
+  scheduleAmbientPupilBreath();
+}
+
 function showPupilCard(card){
+  clearPupilTimers();
+  ambientPupilCard=false;
   activePupilCard=card;
+  document.querySelector(".pupil-torch-controls").classList.remove("hidden");
   pupilStage.classList.remove("hidden");
   document.getElementById("cardImage").classList.add("hidden");
   document.getElementById("cardOverlay").classList.add("hidden");
@@ -624,8 +668,10 @@ function showPupilCard(card){
 }
 
 function showStandardCard(card){
+  ambientPupilCard=false;
   activePupilCard=null;
   clearPupilTimers();
+  document.querySelector(".pupil-torch-controls").classList.remove("hidden");
   pupilStage.classList.add("hidden");
 
   const cardImage=document.getElementById("cardImage");
@@ -656,8 +702,13 @@ function showCard(){
   document.getElementById("cardCounter").textContent=`Card ${cardIndex+1} of ${moduleData.cards.length}`;
   document.getElementById("lessonFill").style.width=`${((cardIndex+1)/moduleData.cards.length)*100}%`;
 
-  if(c.type==="pupil")showPupilCard(c);
-  else showStandardCard(c);
+  if(c.type==="pupil"){
+    showPupilCard(c);
+  }else if(selectedModuleId==="pupils"&&c.type==="info"){
+    showAmbientPupilCard();
+  }else{
+    showStandardCard(c);
+  }
 
   document.getElementById("cardTitle").textContent="";
   document.getElementById("frontPrompt").textContent=c.frontPrompt;
@@ -682,6 +733,18 @@ bothTorchBtn.addEventListener("click",()=>{
 
 window.addEventListener("resize",()=>{
   if(activePupilCard)resetPupilDisplay();
+
+  if(ambientPupilCard){
+    setPupilSize(leftPupil,3,0);
+    setPupilSize(rightPupil,3,0);
+  }
+
+  const questions=moduleData?.questions||moduleData?.quiz||[];
+  const currentQuestion=questions[questionIndex];
+
+  if(currentQuestion?.type==="pupil-size"){
+    showQuizPupils(currentQuestion);
+  }
 });
 
 function flipCard(){document.getElementById("flipCard").classList.toggle("flipped")}
@@ -739,18 +802,41 @@ function showQuestion(){
   });
 }
 function answerQuestion(index,button){
-  if(answered)return;answered=true;
+  if(answered)return;
+  answered=true;
+
   const questions=moduleData.questions||moduleData.quiz||[];
   const q=questions[questionIndex];
+  const acceptedAnswers=Array.isArray(q.acceptedAnswers)
+    ?q.acceptedAnswers
+    :[q.answer];
+  const isCorrect=acceptedAnswers.includes(index);
+
   [...document.querySelectorAll(".option")].forEach((b,i)=>{
     b.disabled=true;
-    if(i===q.answer)b.classList.add("correct");
+    if(acceptedAnswers.includes(i))b.classList.add("correct");
   });
+
   const explanation=q.feedback||"";
-  if(index===q.answer){score++;document.getElementById("feedback").textContent=`Correct.${explanation?` ${explanation}`:""}`}
-  else{button.classList.add("wrong");document.getElementById("feedback").textContent=`Not quite.${explanation?` ${explanation}`:""}`}
+
+  if(isCorrect){
+    score++;
+    const toleranceText=
+      q.type==="pupil-size"&&acceptedAnswers.length>1
+        ?" A measurement within 1 mm is accepted."
+        :"";
+
+    document.getElementById("feedback").textContent=
+      `Correct.${toleranceText}${explanation?` ${explanation}`:""}`;
+  }else{
+    button.classList.add("wrong");
+    document.getElementById("feedback").textContent=
+      `Not quite.${explanation?` ${explanation}`:""}`;
+  }
+
   document.getElementById("scoreText").textContent=`Score: ${score}`;
-  document.getElementById("quizNextBtn").textContent=questionIndex===questions.length-1?"See result":"Next question";
+  document.getElementById("quizNextBtn").textContent=
+    questionIndex===questions.length-1?"See result":"Next question";
   document.getElementById("quizNextBtn").classList.remove("hidden");
 }
 document.getElementById("quizNextBtn").onclick=()=>{
