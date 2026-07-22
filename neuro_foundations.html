@@ -79,8 +79,10 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   opacity:1;
   pointer-events:none;
   transform-origin:center;
+  will-change:transform,opacity,filter;
 }
 .card-overlay{
+  z-index:2;
   filter:
     drop-shadow(0 0 8px rgba(71,243,255,.9))
     drop-shadow(0 0 18px rgba(71,243,255,.55));
@@ -90,47 +92,83 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   filter:
     drop-shadow(0 0 9px rgba(255,255,255,.9))
     drop-shadow(0 0 20px rgba(255,255,255,.55));
-  animation:anatomyPulse 2.2s ease-in-out infinite;
 }
-
-@keyframes anatomyPulse{
+.effect-grow-glow{
+  animation:overlayGrowGlow 2.2s ease-in-out infinite;
+}
+@keyframes overlayGrowGlow{
   0%,100%{
-    opacity:.8;
+    opacity:.82;
     transform:scale(1);
+    filter:
+      brightness(1)
+      drop-shadow(0 0 8px rgba(71,243,255,.82))
+      drop-shadow(0 0 18px rgba(71,243,255,.48));
   }
-
   50%{
     opacity:1;
-    transform:scale(1.03);
+    transform:scale(1.035);
+    filter:
+      brightness(1.16)
+      drop-shadow(0 0 13px rgba(71,243,255,1))
+      drop-shadow(0 0 28px rgba(71,243,255,.72));
   }
 }
-
-/* Ventricular overlays illuminate gently without enlarging. */
-.card-overlay.illuminate{
-  animation:ventricleIlluminate 1.65s ease-out both;
+.effect-glow{
+  animation:overlayGlow 2.2s ease-in-out infinite;
 }
-
-@keyframes ventricleIlluminate{
+@keyframes overlayGlow{
+  0%,100%{
+    opacity:.84;
+    transform:scale(1);
+    filter:
+      brightness(.98)
+      drop-shadow(0 0 8px rgba(71,243,255,.78))
+      drop-shadow(0 0 17px rgba(71,243,255,.42));
+  }
+  50%{
+    opacity:1;
+    transform:scale(1);
+    filter:
+      brightness(1.18)
+      drop-shadow(0 0 14px rgba(71,243,255,1))
+      drop-shadow(0 0 30px rgba(71,243,255,.72));
+  }
+}
+.effect-fill-fade{
+  animation:overlayFillFade 1.65s ease-out both;
+}
+@keyframes overlayFillFade{
   0%{
     opacity:0;
+    transform:scale(1);
     filter:
-      brightness(.72)
+      brightness(.68)
+      saturate(.82)
       drop-shadow(0 0 0 rgba(71,243,255,0));
   }
   72%{
     opacity:1;
+    transform:scale(1);
     filter:
-      brightness(1.18)
+      brightness(1.2)
+      saturate(1.12)
       drop-shadow(0 0 12px rgba(71,243,255,.95))
-      drop-shadow(0 0 26px rgba(71,243,255,.68));
+      drop-shadow(0 0 27px rgba(71,243,255,.7));
   }
   100%{
     opacity:1;
+    transform:scale(1);
     filter:
       brightness(1)
+      saturate(1)
       drop-shadow(0 0 8px rgba(71,243,255,.9))
       drop-shadow(0 0 18px rgba(71,243,255,.55));
   }
+}
+.card-overlay.illuminate,
+.card-focus-overlay.illuminate{
+  animation:overlayFillFade 1.65s ease-out both;
 }
 .front-copy{padding:22px;text-align:center}
 .eyebrow{font-size:13px;color:var(--cyan);font-weight:900;text-transform:uppercase;letter-spacing:.8px}
@@ -217,16 +255,74 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 .reward{font-size:28px;font-weight:900;color:var(--cyan);margin:18px 0}
 .small{color:var(--muted);font-size:13px}
 
+.resume-panel{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin:0 0 14px;
+  padding:14px 16px;
+  border-radius:18px;
+  background:rgba(71,243,255,.07);
+  border:1px solid var(--line);
+}
+.resume-copy{min-width:0}
+.resume-label{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+.resume-title{
+  margin-top:3px;
+  font-size:18px;
+  font-weight:900;
+}
+.resume-detail{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:13px;
+}
+.resume-panel .btn{flex:0 0 auto}
+
 .topic-panel{
   margin:0 0 18px;
-  padding:14px;
+  padding:0;
   border-radius:18px;
+  overflow:hidden;
   background:rgba(3,10,22,.72);
   border:1px solid var(--line);
 }
-.topic-panel h2{
-  margin:0 0 10px;
-  font-size:18px;
+.topic-toggle{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 16px;
+  border:0;
+  background:transparent;
+  color:#fff;
+  text-align:left;
+  font-weight:900;
+  cursor:pointer;
+}
+.topic-toggle:hover{background:rgba(71,243,255,.07)}
+.topic-toggle-icon{
+  color:var(--cyan);
+  transition:transform .22s ease;
+}
+.topic-panel.open .topic-toggle-icon{transform:rotate(180deg)}
+.topic-menu-content{
+  max-height:0;
+  overflow:hidden;
+  padding:0 14px;
+  transition:max-height .28s ease,padding .28s ease;
+}
+.topic-panel.open .topic-menu-content{
+  max-height:700px;
+  padding:0 14px 14px;
 }
 .topic-list{
   display:grid;
@@ -309,6 +405,13 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 
   .option-grid{grid-template-columns:1fr}
   .topic-list{grid-template-columns:1fr}
+  .resume-panel{
+    align-items:stretch;
+    flex-direction:column;
+    padding:13px;
+  }
+  .resume-panel .btn{width:100%}
+  .topic-toggle{padding:13px 14px}
 
   /* Keep controls below the card instead of floating over the teaching text */
   .controls{
@@ -362,9 +465,23 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 </header>
 
 <main>
-  <section class="topic-panel">
-    <h2>Choose a Foundations topic</h2>
-    <div id="topicList" class="topic-list"></div>
+  <section id="resumePanel" class="resume-panel hidden">
+    <div class="resume-copy">
+      <div id="resumeLabel" class="resume-label">Continue learning</div>
+      <div id="resumeTitle" class="resume-title"></div>
+      <div id="resumeDetail" class="resume-detail"></div>
+    </div>
+    <button id="resumeBtn" class="btn" type="button">Continue</button>
+  </section>
+
+  <section id="topicPanel" class="topic-panel">
+    <button id="topicToggle" class="topic-toggle" type="button" aria-expanded="false" aria-controls="topicMenuContent">
+      <span>Choose a Foundations topic</span>
+      <span class="topic-toggle-icon" aria-hidden="true">▼</span>
+    </button>
+    <div id="topicMenuContent" class="topic-menu-content">
+      <div id="topicList" class="topic-list"></div>
+    </div>
   </section>
 
   <section class="hero">
@@ -507,7 +624,22 @@ const FOUNDATION_MODULES=[
 
 let user=null,moduleData=null,cardIndex=0,questionIndex=0,score=0,answered=false;
 let completedModules={};
+let progressData={};
 let selectedModuleId="brain_anatomy";
+let explicitModuleSelection=false;
+let resumeSaveTimer=null;
+const RESUME_STORAGE_KEY="neuroFoundationsResume";
+
+/* CPD active-time tracking */
+const CPD_IDLE_LIMIT_MS=2*60*1000;
+const CPD_SAVE_INTERVAL_MS=30*1000;
+const CPD_MAX_SESSION_SECONDS=2*60*60;
+let cpdSessionSeconds=0;
+let cpdUnsavedSeconds=0;
+let cpdLastTickAt=Date.now();
+let cpdLastActivityAt=Date.now();
+let cpdTimer=null;
+let cpdSaveInProgress=false;
 
 const pupilStage=document.getElementById("pupilStage");
 const leftPupil=document.getElementById("leftPupil");
@@ -528,16 +660,305 @@ let ambientPupilTimer=null;
 let activePupilCard=null;
 let ambientPupilCard=false;
 
+
+function isCpdActivityActive(){
+  return (
+    document.visibilityState==="visible" &&
+    Date.now()-cpdLastActivityAt<CPD_IDLE_LIMIT_MS &&
+    cpdSessionSeconds<CPD_MAX_SESSION_SECONDS
+  );
+}
+
+function registerCpdActivity(){
+  cpdLastActivityAt=Date.now();
+  cpdLastTickAt=Date.now();
+}
+
+function startCpdTimer(){
+  if(cpdTimer)return;
+
+  cpdLastTickAt=Date.now();
+  cpdLastActivityAt=Date.now();
+
+  cpdTimer=setInterval(()=>{
+    const now=Date.now();
+    const elapsedSeconds=Math.max(
+      0,
+      Math.min(5,Math.floor((now-cpdLastTickAt)/1000))
+    );
+    cpdLastTickAt=now;
+
+    if(!isCpdActivityActive()||elapsedSeconds===0)return;
+
+    const remainingSessionAllowance=
+      CPD_MAX_SESSION_SECONDS-cpdSessionSeconds;
+    const creditedSeconds=Math.min(
+      elapsedSeconds,
+      remainingSessionAllowance
+    );
+
+    cpdSessionSeconds+=creditedSeconds;
+    cpdUnsavedSeconds+=creditedSeconds;
+
+    if(cpdUnsavedSeconds>=CPD_SAVE_INTERVAL_MS/1000){
+      flushCpdTime();
+    }
+  },1000);
+}
+
+async function flushCpdTime(){
+  if(
+    !user||
+    !moduleData||
+    cpdUnsavedSeconds<=0||
+    cpdSaveInProgress
+  )return;
+
+  cpdSaveInProgress=true;
+  const secondsToSave=Math.floor(cpdUnsavedSeconds);
+  cpdUnsavedSeconds-=secondsToSave;
+
+  try{
+    const progressRef=ref(
+      db,
+      `${APP_ROOT}/foundationsProgress/${user.uid}`
+    );
+    const snap=await get(progressRef);
+    const current=snap.exists()?snap.val():{};
+    const cpd=current.cpd||{};
+    const modules=cpd.modules||{};
+    const currentModule=modules[selectedModuleId]||{};
+
+    const updatedModuleSeconds=
+      Number(currentModule.seconds||0)+secondsToSave;
+    const updatedTotalSeconds=
+      Number(cpd.totalSeconds||0)+secondsToSave;
+
+    await update(progressRef,{
+      "cpd/totalSeconds":updatedTotalSeconds,
+      [`cpd/modules/${selectedModuleId}/seconds`]:
+        updatedModuleSeconds,
+      [`cpd/modules/${selectedModuleId}/visits`]:
+        Number(currentModule.visits||0),
+      [`cpd/modules/${selectedModuleId}/lastActiveAt`]:
+        new Date().toISOString()
+    });
+
+    progressData.cpd={
+      ...cpd,
+      totalSeconds:updatedTotalSeconds,
+      modules:{
+        ...modules,
+        [selectedModuleId]:{
+          ...currentModule,
+          seconds:updatedModuleSeconds,
+          lastActiveAt:new Date().toISOString()
+        }
+      }
+    };
+  }catch(error){
+    cpdUnsavedSeconds+=secondsToSave;
+    console.warn("Could not save CPD time.",error);
+  }finally{
+    cpdSaveInProgress=false;
+  }
+}
+
+async function recordModuleVisit(){
+  if(!user||!moduleData)return;
+
+  try{
+    const progressRef=ref(
+      db,
+      `${APP_ROOT}/foundationsProgress/${user.uid}`
+    );
+    const snap=await get(progressRef);
+    const current=snap.exists()?snap.val():{};
+    const moduleCpd=current.cpd?.modules?.[selectedModuleId]||{};
+
+    await update(progressRef,{
+      [`cpd/modules/${selectedModuleId}/visits`]:
+        Number(moduleCpd.visits||0)+1,
+      [`cpd/modules/${selectedModuleId}/lastOpenedAt`]:
+        new Date().toISOString()
+    });
+  }catch(error){
+    console.warn("Could not record module visit.",error);
+  }
+}
+
+["pointerdown","keydown","touchstart","scroll"].forEach(eventName=>{
+  window.addEventListener(
+    eventName,
+    registerCpdActivity,
+    {passive:true}
+  );
+});
+
+document.addEventListener("visibilitychange",()=>{
+  cpdLastTickAt=Date.now();
+
+  if(document.visibilityState==="hidden"){
+    flushCpdTime();
+  }else{
+    registerCpdActivity();
+  }
+});
+
+window.addEventListener("pagehide",()=>{
+  flushCpdTime();
+});
+
+function getLocalResume(){
+  try{
+    return JSON.parse(localStorage.getItem(RESUME_STORAGE_KEY)||"{}");
+  }catch{
+    return {};
+  }
+}
+
+function getResumeState(){
+  const localResume=getLocalResume();
+  return {
+    lastModuleId:progressData.lastModuleId||localResume.lastModuleId||null,
+    lastCardIndex:Number.isFinite(Number(progressData.lastCardIndex))
+      ?Number(progressData.lastCardIndex)
+      :Number(localResume.lastCardIndex||0),
+    lastPhase:progressData.lastPhase||localResume.lastPhase||"lesson"
+  };
+}
+
+function getNextIncompleteModule(){
+  return FOUNDATION_MODULES.find(module=>completedModules[module.id]!==true)
+    ||FOUNDATION_MODULES[0];
+}
+
 function getRequestedModuleId(){
   const params=new URLSearchParams(window.location.search);
   const requested=params.get("module");
+  explicitModuleSelection=Boolean(
+    requested&&FOUNDATION_MODULES.some(module=>module.id===requested)
+  );
 
-  if(requested&&FOUNDATION_MODULES.some(module=>module.id===requested)){
+  if(explicitModuleSelection){
     return requested;
   }
 
-  const firstIncomplete=FOUNDATION_MODULES.find(module=>completedModules[module.id]!==true);
-  return firstIncomplete?.id||FOUNDATION_MODULES[0].id;
+  const resume=getResumeState();
+  const resumeIndex=FOUNDATION_MODULES.findIndex(
+    module=>module.id===resume.lastModuleId
+  );
+
+  if(
+    resumeIndex>=0&&
+    isModuleUnlocked(resumeIndex)&&
+    completedModules[resume.lastModuleId]!==true
+  ){
+    return resume.lastModuleId;
+  }
+
+  return getNextIncompleteModule().id;
+}
+
+function toggleTopicMenu(forceOpen){
+  const panel=document.getElementById("topicPanel");
+  const toggle=document.getElementById("topicToggle");
+  const shouldOpen=typeof forceOpen==="boolean"
+    ?forceOpen
+    :!panel.classList.contains("open");
+
+  panel.classList.toggle("open",shouldOpen);
+  toggle.setAttribute("aria-expanded",String(shouldOpen));
+}
+
+document.getElementById("topicToggle").addEventListener("click",()=>{
+  toggleTopicMenu();
+});
+
+function updateResumePanel(){
+  const panel=document.getElementById("resumePanel");
+  const label=document.getElementById("resumeLabel");
+  const title=document.getElementById("resumeTitle");
+  const detail=document.getElementById("resumeDetail");
+  const button=document.getElementById("resumeBtn");
+
+  const resume=getResumeState();
+  const resumeModule=FOUNDATION_MODULES.find(
+    module=>module.id===resume.lastModuleId
+  );
+  const nextIncomplete=getNextIncompleteModule();
+
+  let target=resumeModule;
+  let targetCard=Math.max(0,resume.lastCardIndex||0);
+  let isResume=Boolean(
+    target&&
+    completedModules[target.id]!==true&&
+    isModuleUnlocked(FOUNDATION_MODULES.findIndex(module=>module.id===target.id))
+  );
+
+  if(!isResume){
+    target=nextIncomplete;
+    targetCard=0;
+  }
+
+  if(!target){
+    panel.classList.add("hidden");
+    return;
+  }
+
+  label.textContent=isResume?"Continue learning":"Next recommended topic";
+  title.textContent=target.title;
+  detail.textContent=isResume
+    ?`Resume from card ${targetCard+1}`
+    :completedModules[target.id]===true
+      ?"All available topics are complete — choose one to review."
+      :"This is the next topic to complete.";
+  button.textContent=isResume?"Continue":"Start topic";
+  button.onclick=()=>{
+    if(target.id===selectedModuleId&&moduleData){
+      cardIndex=Math.min(targetCard,moduleData.cards.length-1);
+      document.getElementById("quizSection").classList.add("hidden");
+      document.getElementById("resultSection").classList.add("hidden");
+      document.getElementById("lessonSection").classList.remove("hidden");
+      showCard();
+      document.getElementById("lessonSection").scrollIntoView({behavior:"smooth"});
+    }else{
+      window.location.href=`neuro_foundations.html?module=${target.id}`;
+    }
+  };
+
+  panel.classList.remove("hidden");
+}
+
+function saveResumeProgress(phase="lesson"){
+  if(!moduleData)return;
+
+  const resume={
+    lastModuleId:selectedModuleId,
+    lastCardIndex:cardIndex,
+    lastPhase:phase,
+    lastVisitedAt:new Date().toISOString()
+  };
+
+  progressData={...progressData,...resume};
+
+  try{
+    localStorage.setItem(RESUME_STORAGE_KEY,JSON.stringify(resume));
+  }catch(error){
+    console.warn("Could not save local resume state.",error);
+  }
+
+  updateResumePanel();
+
+  if(!user)return;
+
+  clearTimeout(resumeSaveTimer);
+  resumeSaveTimer=setTimeout(()=>{
+    update(
+      ref(db,`${APP_ROOT}/foundationsProgress/${user.uid}`),
+      resume
+    ).catch(error=>console.warn("Could not save resume state.",error));
+  },350);
 }
 
 function isModuleUnlocked(moduleIndex){
@@ -568,6 +989,7 @@ function renderTopicList(){
 
     if(unlocked||complete){
       link.href=`neuro_foundations.html?module=${module.id}`;
+      link.addEventListener("click",()=>toggleTopicMenu(false));
     }else{
       link.href="#";
       link.classList.add("locked");
@@ -623,6 +1045,17 @@ async function loadModule(){
   }
 
   moduleData=await response.json();
+
+  const resume=getResumeState();
+  if(!explicitModuleSelection&&resume.lastModuleId===selectedModuleId){
+    cardIndex=Math.min(
+      Math.max(0,Number(resume.lastCardIndex)||0),
+      Math.max(0,moduleData.cards.length-1)
+    );
+  }else{
+    cardIndex=0;
+  }
+
   document.title=`Neuro Foundations — ${moduleData.title}`;
 
   document.getElementById("moduleTitle").textContent=moduleData.title;
@@ -632,6 +1065,9 @@ async function loadModule(){
 
   document.getElementById("moduleSubtitle").textContent=moduleData.subtitle;
   showCard();
+  updateResumePanel();
+  startCpdTimer();
+  recordModuleVisit();
 }
 
 async function preloadModuleImages(){
@@ -777,6 +1213,74 @@ function showPupilCard(card){
   resetPupilDisplay();
 }
 
+const OVERLAY_EFFECT_CLASSES=[
+  "effect-grow-glow",
+  "effect-glow",
+  "effect-fill-fade",
+  "illuminate"
+];
+
+function clearOverlayEffects(element){
+  element.classList.remove(...OVERLAY_EFFECT_CLASSES);
+  element.style.animation="none";
+  void element.offsetWidth;
+  element.style.animation="";
+}
+
+function normaliseOverlayEffect(value){
+  const effect=String(value||"").trim().toLowerCase();
+
+  if(["grow","grow-glow","grow_and_glow","pulse","anatomypulse"].includes(effect)){
+    return "effect-grow-glow";
+  }
+
+  if(["glow","glow-only","glow_only"].includes(effect)){
+    return "effect-glow";
+  }
+
+  if(["fade","fill-fade","fill_and_fade","illuminate","illumination"].includes(effect)){
+    return "effect-fill-fade";
+  }
+
+  return "";
+}
+
+function inferOverlayEffect(card,target){
+  const explicitValue=target==="focus"
+    ?card.focusOverlayEffect
+    :card.overlayEffect||card.overlayAnimation;
+
+  const explicitEffect=normaliseOverlayEffect(explicitValue);
+  if(explicitEffect)return explicitEffect;
+
+  if(selectedModuleId==="ventricles"){
+    return "effect-fill-fade";
+  }
+
+  if(target==="focus"&&card.focusOverlay){
+    return "effect-grow-glow";
+  }
+
+  if(
+    target==="overlay"&&
+    card.overlay&&
+    ["brain_anatomy","brain_lobes"].includes(selectedModuleId)
+  ){
+    return "effect-grow-glow";
+  }
+
+  if(target==="overlay"&&selectedModuleId==="brainstem"){
+    return "effect-glow";
+  }
+
+  return "";
+}
+
+function applyOverlayEffect(element,effectClass){
+  clearOverlayEffects(element);
+  if(effectClass)element.classList.add(effectClass);
+}
+
 function showStandardCard(card){
   ambientPupilCard=false;
   activePupilCard=null;
@@ -798,17 +1302,13 @@ function showStandardCard(card){
   cardImage.style.opacity=selectedModuleId==="pupils"?"1":"";
   cardImage.style.filter=selectedModuleId==="pupils"?"none":"";
 
-  cardOverlay.classList.remove("illuminate");
+  clearOverlayEffects(cardOverlay);
+  clearOverlayEffects(cardFocusOverlay);
 
   if(card.overlay){
     cardOverlay.src=card.overlay;
     cardOverlay.classList.remove("hidden");
-
-    if(card.overlayAnimation==="illuminate"){
-      // Force a reflow so the fade-in restarts whenever the card is revisited.
-      void cardOverlay.offsetWidth;
-      cardOverlay.classList.add("illuminate");
-    }
+    applyOverlayEffect(cardOverlay,inferOverlayEffect(card,"overlay"));
   }else{
     cardOverlay.removeAttribute("src");
     cardOverlay.classList.add("hidden");
@@ -817,6 +1317,7 @@ function showStandardCard(card){
   if(card.focusOverlay){
     cardFocusOverlay.src=card.focusOverlay;
     cardFocusOverlay.classList.remove("hidden");
+    applyOverlayEffect(cardFocusOverlay,inferOverlayEffect(card,"focus"));
   }else{
     cardFocusOverlay.removeAttribute("src");
     cardFocusOverlay.classList.add("hidden");
@@ -846,6 +1347,7 @@ function showCard(){
   const isLastCard=cardIndex===moduleData.cards.length-1;
   document.getElementById("nextBtn").textContent=isLastCard?"Start knowledge check":"Next card";
   document.querySelector("#lessonSection > .controls").classList.toggle("quiz-start",isLastCard);
+  saveResumeProgress("lesson");
 }
 
 [leftTorchBtn,rightTorchBtn,bothTorchBtn].forEach(button=>{
@@ -885,6 +1387,7 @@ document.getElementById("nextBtn").onclick=()=>{
 };
 
 function startQuiz(){
+  saveResumeProgress("quiz");
   document.getElementById("lessonSection").classList.add("hidden");
   document.getElementById("quizSection").classList.remove("hidden");
   questionIndex=0;score=0;showQuestion();
@@ -1033,6 +1536,7 @@ document.getElementById("quizNextBtn").onclick=()=>{
 };
 
 async function finishModule(){
+  await flushCpdTime();
   document.getElementById("quizSection").classList.add("hidden");
   document.getElementById("resultSection").classList.remove("hidden");
 
@@ -1061,7 +1565,9 @@ async function finishModule(){
   if(passed&&user){
     await saveCompletion();
     completedModules[moduleData.id]=true;
+    progressData.completedModules=completedModules;
     renderTopicList();
+    updateResumePanel();
     updateNextModuleButton(true);
   }else{
     updateNextModuleButton(false);
@@ -1092,7 +1598,10 @@ async function saveCompletion(){
     brains,
     xp,
     lastCompletedModule:moduleData.id,
-    lastCompletedAt:new Date().toISOString()
+    lastCompletedAt:new Date().toISOString(),
+    [`cpd/modules/${moduleData.id}/completed`]:true,
+    [`cpd/modules/${moduleData.id}/completedAt`]:
+      new Date().toISOString()
   });
 }
 document.getElementById("restartBtn").onclick=()=>{
@@ -1117,9 +1626,11 @@ onAuthStateChanged(auth,async currentUser=>{
       ref(db,`${APP_ROOT}/foundationsProgress/${user.uid}`)
     );
 
-    completedModules=progressSnap.exists()
-      ?progressSnap.val().completedModules||{}
+    progressData=progressSnap.exists()
+      ?progressSnap.val()||{}
       :{};
+
+    completedModules=progressData.completedModules||{};
 
     await loadModule();
   }catch(error){

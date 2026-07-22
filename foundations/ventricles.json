@@ -2,12 +2,16 @@
   "id": "ventricles",
   "title": "Ventricles & CSF Spaces",
   "subtitle": "Recognise the main CSF-filled spaces as they appear on axial CT images.",
+  "reward": {
+    "xp": 50,
+    "brains": 1
+  },
   "cards": [
     {
       "type": "info",
       "image": "foundations/images/lateral_ventricles.png",
       "overlay": "foundations/images/lateral_overlay.png",
-      "overlayAnimation": "illuminate",
+      "overlayEffect": "fill-fade",
       "frontPrompt": "Can you identify the lateral ventricles on this CT slice?",
       "backHeading": "Lateral Ventricles",
       "backPoints": [
@@ -22,7 +26,7 @@
       "type": "info",
       "image": "foundations/images/3rd_ventricle.png",
       "overlay": "foundations/images/3rd_overlay.png",
-      "overlayAnimation": "illuminate",
+      "overlayEffect": "fill-fade",
       "frontPrompt": "Which narrow CSF space lies in the midline?",
       "backHeading": "Third Ventricle",
       "backPoints": [
@@ -37,7 +41,7 @@
       "type": "info",
       "image": "foundations/images/4th_ventricle.png",
       "overlay": "foundations/images/4th_overlay.png",
-      "overlayAnimation": "illuminate",
+      "overlayEffect": "fill-fade",
       "frontPrompt": "Can you find the fourth ventricle on this lower CT slice?",
       "backHeading": "Fourth Ventricle",
       "backPoints": [
@@ -52,7 +56,7 @@
       "type": "info",
       "image": "foundations/images/4th_ventricle.png",
       "overlay": "foundations/images/basal_overlay.png",
-      "overlayAnimation": "illuminate",
+      "overlayEffect": "fill-fade",
       "frontPrompt": "Where can CSF be seen surrounding the brainstem?",
       "backHeading": "CSF Around the Brainstem",
       "backPoints": [
@@ -121,7 +125,7 @@
         "Cerebral sulci",
         "Dural sinuses",
         "Basal ganglia",
-        "Basal cistern"
+        "Basal cisterns"
       ],
       "answer": 3
     },
@@ -145,9 +149,5 @@
       ],
       "answer": 0
     }
-  ],
-  "reward": {
-    "xp": 50,
-    "brains": 1
-  }
+  ]
 }

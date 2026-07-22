@@ -11,6 +11,7 @@
       "title": "",
       "image": "foundations/images/brain_lobes.png",
       "overlay": "foundations/images/frontal_overlay.png",
+      "overlayEffect": "grow-glow",
       "frontPrompt": "Which highlighted lobe helps with planning, personality and voluntary movement?",
       "backHeading": "Frontal Lobe",
       "backPoints": [
@@ -25,6 +26,7 @@
       "title": "",
       "image": "foundations/images/brain_lobes.png",
       "overlay": "foundations/images/parietal_overlay.png",
+      "overlayEffect": "grow-glow",
       "frontPrompt": "Which highlighted lobe processes touch and helps you understand where your body is?",
       "backHeading": "Parietal Lobe",
       "backPoints": [
@@ -39,6 +41,7 @@
       "title": "",
       "image": "foundations/images/brain_lobes.png",
       "overlay": "foundations/images/temporal_overlay.png",
+      "overlayEffect": "grow-glow",
       "frontPrompt": "Which highlighted lobe is important for hearing, memory and understanding language?",
       "backHeading": "Temporal Lobe",
       "backPoints": [
@@ -53,6 +56,7 @@
       "title": "",
       "image": "foundations/images/brain_lobes.png",
       "overlay": "foundations/images/occipital_overlay.png",
+      "overlayEffect": "grow-glow",
       "frontPrompt": "Which highlighted lobe processes visual information?",
       "backHeading": "Occipital Lobe",
       "backPoints": [
@@ -64,21 +68,20 @@
       "memoryLine": "Occipital lobe = the brain's visual processing centre."
     },
     {
-  "title": "",
-  "image": "foundations/images/brain_lobes.png",
-  "overlay": "",
-  "frontPrompt": "Why can a problem on one side of the brain affect the opposite side of the body?",
-  "backHeading": "Crossed Brain Control",
-  "backPoints": [
-    "Most movement pathways cross over",
-    "Most sensory pathways cross over",
-    "Left brain affects the right body",
-    "Right brain affects the left body"
+      "title": "",
+      "image": "foundations/images/brain_lobes.png",
+      "overlay": "",
+      "frontPrompt": "Why can a problem on one side of the brain affect the opposite side of the body?",
+      "backHeading": "Crossed Brain Control",
+      "backPoints": [
+        "Most movement pathways cross over",
+        "Most sensory pathways cross over",
+        "Left brain affects the right body",
+        "Right brain affects the left body"
+      ],
+      "memoryLine": "Opposite sides control each other."
+    }
   ],
-  "memoryLine": "Opposite sides control each other."
-}
-  ],
-  
   "questions": [
     {
       "question": "Which lobe is mainly responsible for vision?",
@@ -145,16 +148,17 @@
       ],
       "answer": 0,
       "feedback": "The occipital lobe is responsible for processing vision."
-    },{
-  "question": "A stroke affects the left side of the brain. Which side of the body is most likely to become weak?",
-  "options": [
-    "Left side",
-    "Right side",
-    "Both sides equally",
-    "Neither side"
-  ],
-  "answer": 1,
-  "feedback": "Most movement pathways cross over, so the left side of the brain controls the right side of the body."
-}
+    },
+    {
+      "question": "A stroke affects the left side of the brain. Which side of the body is most likely to become weak?",
+      "options": [
+        "Left side",
+        "Right side",
+        "Both sides equally",
+        "Neither side"
+      ],
+      "answer": 1,
+      "feedback": "Most movement pathways cross over, so the left side of the brain controls the right side of the body."
+    }
   ]
 }

@@ -1,7 +1,7 @@
 {
-  "id": "brain-anatomy",
+  "id": "brain_anatomy",
   "title": "Brain Anatomy",
-  "subtitle": "four structures every neuro learner should recognise.",
+  "subtitle": "Four structures every neuro learner should recognise.",
   "reward": {
     "xp": 50,
     "brains": 1
@@ -11,6 +11,7 @@
       "title": "Cerebrum",
       "image": "foundations/images/brain_sagittal.png",
       "overlay": "foundations/images/cerebrum_overlay.png",
+      "overlayEffect": "grow-glow",
       "frontPrompt": "Which structure forms the largest part of the brain?",
       "backHeading": "The Cerebrum",
       "backPoints": [
@@ -25,6 +26,7 @@
       "title": "Cerebellum",
       "image": "foundations/images/brain_sagittal.png",
       "overlay": "foundations/images/cerebellum_overlay.png",
+      "overlayEffect": "grow-glow",
       "frontPrompt": "Which structure helps make movement smooth and coordinated?",
       "backHeading": "The Cerebellum",
       "backPoints": [
@@ -39,6 +41,7 @@
       "title": "Brainstem",
       "image": "foundations/images/brain_sagittal.png",
       "overlay": "foundations/images/brainstem_overlay.png",
+      "overlayEffect": "grow-glow",
       "frontPrompt": "Which structure connects the brain to the spinal cord?",
       "backHeading": "The Brainstem",
       "backPoints": [
@@ -53,6 +56,7 @@
       "title": "Ventricles",
       "image": "foundations/images/ventricles.png",
       "overlay": "foundations/images/ventricles_overlay.png",
+      "overlayEffect": "grow-glow",
       "frontPrompt": "Which spaces contain and circulate cerebrospinal fluid?",
       "backHeading": "The Ventricular System",
       "backPoints": [
@@ -65,61 +69,60 @@
     }
   ],
   "questions": [
-  {
-    "question": "Which is the largest part of the brain?",
-    "options": [
-      "Brainstem",
-      "Cerebrum",
-      "Cerebellum",
-      "Fourth ventricle"
-    ],
-    "answer": 1,
-    "feedback": "The cerebrum is the largest part of the brain."
-  },
-  {
-    "question": "Which part of the brain helps with balance and coordination?",
-    "options": [
-      "Ventricles",
-      "Brainstem",
-      "Cerebellum",
-      "Cerebrum"
-    ],
-    "answer": 2,
-    "feedback": "The cerebellum coordinates balance and smooth movement."
-  },
-  {
-    "question": "What is the main job of the brainstem?",
-    "options": [
-      "Memory and language",
-      "Balance and coordination",
-      "CSF production",
-      "Breathing and consciousness"
-    ],
-    "answer": 3,
-    "feedback": "The brainstem helps control breathing, consciousness and other vital functions."
-  },
-  {
-    "question": "Where is cerebrospinal fluid (CSF) found?",
-    "options": [
-      "Within the ventricular system",
-      "Only inside arteries",
-      "Only beneath the scalp",
-      "Inside the cerebral cortex"
-    ],
-    "answer": 0,
-    "feedback": "CSF circulates through the ventricles and around the brain and spinal cord."
-  },
-  {
-    "question": "What can happen if CSF flow becomes blocked?",
-    "options": [
-      "Peripheral neuropathy",
-      "Hydrocephalus",
-      "Ataxia",
-      "Aphasia"
-    ],
-    "answer": 1,
-    "feedback": "Blocked CSF flow can cause hydrocephalus."
-  }
-]
-
+    {
+      "question": "Which is the largest part of the brain?",
+      "options": [
+        "Brainstem",
+        "Cerebrum",
+        "Cerebellum",
+        "Fourth ventricle"
+      ],
+      "answer": 1,
+      "feedback": "The cerebrum is the largest part of the brain."
+    },
+    {
+      "question": "Which part of the brain helps with balance and coordination?",
+      "options": [
+        "Ventricles",
+        "Brainstem",
+        "Cerebellum",
+        "Cerebrum"
+      ],
+      "answer": 2,
+      "feedback": "The cerebellum coordinates balance and smooth movement."
+    },
+    {
+      "question": "What is the main job of the brainstem?",
+      "options": [
+        "Memory and language",
+        "Balance and coordination",
+        "CSF production",
+        "Breathing and consciousness"
+      ],
+      "answer": 3,
+      "feedback": "The brainstem helps control breathing, consciousness and other vital functions."
+    },
+    {
+      "question": "Where is cerebrospinal fluid (CSF) found?",
+      "options": [
+        "Within the ventricular system",
+        "Only inside arteries",
+        "Only beneath the scalp",
+        "Inside the cerebral cortex"
+      ],
+      "answer": 0,
+      "feedback": "CSF circulates through the ventricles and around the brain and spinal cord."
+    },
+    {
+      "question": "What can happen if CSF flow becomes blocked?",
+      "options": [
+        "Peripheral neuropathy",
+        "Hydrocephalus",
+        "Ataxia",
+        "Aphasia"
+      ],
+      "answer": 1,
+      "feedback": "Blocked CSF flow can cause hydrocephalus."
+    }
+  ]
 }

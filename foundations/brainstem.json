@@ -20,6 +20,7 @@
       "type": "info",
       "image": "foundations/images/brain_sagittal.png",
       "overlay": "foundations/images/brainstem_overlay.png",
+      "overlayEffect": "glow",
       "frontPrompt": "Can you identify the whole brainstem?",
       "backHeading": "Three Connected Parts",
       "backPoints": [
@@ -34,7 +35,9 @@
       "type": "info",
       "image": "foundations/images/brain_sagittal.png",
       "overlay": "foundations/images/brainstem_overlay.png",
+      "overlayEffect": "glow",
       "focusOverlay": "foundations/images/midbrain_overlay.png",
+      "focusOverlayEffect": "grow-glow",
       "frontPrompt": "Which part sits at the top of the brainstem?",
       "backHeading": "Midbrain",
       "backPoints": [
@@ -49,7 +52,9 @@
       "type": "info",
       "image": "foundations/images/brain_sagittal.png",
       "overlay": "foundations/images/brainstem_overlay.png",
+      "overlayEffect": "glow",
       "focusOverlay": "foundations/images/pons_overlay.png",
+      "focusOverlayEffect": "grow-glow",
       "frontPrompt": "Which part forms the rounded bulge?",
       "backHeading": "Pons",
       "backPoints": [
@@ -64,7 +69,9 @@
       "type": "info",
       "image": "foundations/images/brain_sagittal.png",
       "overlay": "foundations/images/brainstem_overlay.png",
+      "overlayEffect": "glow",
       "focusOverlay": "foundations/images/medulla_overlay.png",
+      "focusOverlayEffect": "grow-glow",
       "frontPrompt": "Which part continues into the spinal cord?",
       "backHeading": "Medulla",
       "backPoints": [
@@ -79,6 +86,7 @@
       "type": "info",
       "image": "foundations/images/brain_sagittal.png",
       "overlay": "foundations/images/brainstem_overlay.png",
+      "overlayEffect": "glow",
       "frontPrompt": "Why can brainstem injury affect consciousness?",
       "backHeading": "Consciousness and the Brainstem",
       "backPoints": [
@@ -93,6 +101,7 @@
       "type": "info",
       "image": "foundations/images/brain_sagittal.png",
       "overlay": "foundations/images/brainstem_overlay.png",
+      "overlayEffect": "glow",
       "frontPrompt": "What changes might suggest brainstem dysfunction?",
       "backHeading": "Clinical Importance",
       "backPoints": [
@@ -110,7 +119,7 @@
       "options": [
         "Midbrain, pons and medulla",
         "Frontal, parietal and temporal lobes",
-        "midbrain, cerebellum and medulla",
+        "Midbrain, cerebellum and medulla",
         "Thalamus, hypothalamus and basal ganglia"
       ],
       "answer": 0
