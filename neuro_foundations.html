@@ -33,7 +33,7 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:24px;overflow:hidden;background:var(--panel);border:1px solid var(--line);box-shadow:0 0 24px rgba(71,243,255,.11)}
 .back{transform:rotateY(180deg);padding:28px;display:flex;flex-direction:column;justify-content:center}
 .anatomy-image{position:relative;width:100%;height:390px;overflow:hidden;background:#000}
-.card-image,.card-overlay,.pupil-eye-image{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.card-image,.card-overlay,.card-focus-overlay,.pupil-eye-image{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
 .card-image{opacity:.28;filter:saturate(.75) brightness(.72)}
 .pupil-stage{position:absolute;inset:0;background:#000}
 .pupil-eye-image{z-index:1;opacity:1;filter:none}
@@ -74,13 +74,22 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 }
 .pupil-torch-btn.both{background:#8f5cff;color:#fff}
 .pupil-torch-btn:disabled{opacity:.55;cursor:not-allowed}
-.card-overlay{
+.card-overlay,
+.card-focus-overlay{
   opacity:1;
   pointer-events:none;
   transform-origin:center;
+}
+.card-overlay{
   filter:
     drop-shadow(0 0 8px rgba(71,243,255,.9))
     drop-shadow(0 0 18px rgba(71,243,255,.55));
+}
+.card-focus-overlay{
+  z-index:3;
+  filter:
+    drop-shadow(0 0 9px rgba(255,255,255,.9))
+    drop-shadow(0 0 20px rgba(255,255,255,.55));
   animation:anatomyPulse 2.2s ease-in-out infinite;
 }
 
@@ -345,6 +354,7 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
           <div class="anatomy-image">
             <img id="cardImage" class="card-image" alt="">
             <img id="cardOverlay" class="card-overlay" alt="" aria-hidden="true">
+            <img id="cardFocusOverlay" class="card-focus-overlay hidden" alt="" aria-hidden="true">
 
             <div id="pupilStage" class="pupil-stage hidden">
               <img id="pupilEyeImage" class="pupil-eye-image" src="foundations/images/eyes.png" alt="Eyes for pupil assessment">
@@ -462,7 +472,8 @@ const TOTAL_FOUNDATION_MODULES=8;
 const FOUNDATION_MODULES=[
   {id:"brain_anatomy",title:"Brain Anatomy"},
   {id:"brain_lobes",title:"Brain Lobes"},
-  {id:"pupils",title:"Pupil Assessment"}
+  {id:"pupils",title:"Pupil Assessment"},
+  {id:"brainstem",title:"Brainstem"}
 ];
 
 let user=null,moduleData=null,cardIndex=0,questionIndex=0,score=0,answered=false;
@@ -601,6 +612,7 @@ async function preloadModuleImages(){
         [
           card.image,
           card.overlay,
+          card.focusOverlay,
           (selectedModuleId==="pupils"||card.type==="pupil")
             ?"foundations/images/eyes.png"
             :null
@@ -732,6 +744,7 @@ function showPupilCard(card){
   pupilStage.classList.remove("hidden");
   document.getElementById("cardImage").classList.add("hidden");
   document.getElementById("cardOverlay").classList.add("hidden");
+  document.getElementById("cardFocusOverlay").classList.add("hidden");
   resetPupilDisplay();
 }
 
@@ -744,6 +757,7 @@ function showStandardCard(card){
 
   const cardImage=document.getElementById("cardImage");
   const cardOverlay=document.getElementById("cardOverlay");
+  const cardFocusOverlay=document.getElementById("cardFocusOverlay");
 
   cardImage.classList.remove("hidden");
   cardImage.src=card.image||(
@@ -761,6 +775,14 @@ function showStandardCard(card){
   }else{
     cardOverlay.removeAttribute("src");
     cardOverlay.classList.add("hidden");
+  }
+
+  if(card.focusOverlay){
+    cardFocusOverlay.src=card.focusOverlay;
+    cardFocusOverlay.classList.remove("hidden");
+  }else{
+    cardFocusOverlay.removeAttribute("src");
+    cardFocusOverlay.classList.add("hidden");
   }
 }
 
