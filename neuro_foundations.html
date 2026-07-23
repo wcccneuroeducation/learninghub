@@ -2605,6 +2605,12 @@ function isInteractiveVerbalAssessment(){
   );
 }
 
+function isInteractiveMotorAssessment(){
+  return ["interactive_motor","gcs_motor"].includes(
+    String(moduleData.assessment?.type||"").toLowerCase()
+  );
+}
+
 function getAssessmentTotal(){
   return ["interactive_eye","interactive_verbal"].includes(assessmentMode)
     ?assessmentItems.length
@@ -2618,6 +2624,10 @@ async function startAssessment(){
   }
   if(isInteractiveVerbalAssessment()){
     await startInteractiveVerbalAssessment();
+    return;
+  }
+   if(isInteractiveMotorAssessment()){
+    await startInteractiveMotorAssessment();
     return;
   }
   startQuiz();
