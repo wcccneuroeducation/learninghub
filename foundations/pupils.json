@@ -1,5 +1,6 @@
 {
   "id": "pupils",
+  "phase": "assessment",
   "title": "Pupil Assessment",
   "subtitle": "Recognise normal and abnormal pupil responses.",
   "reward": {

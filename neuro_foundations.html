@@ -530,6 +530,79 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   white-space:nowrap;
 }
 .next-module-btn.hidden{display:none!important}
+
+/* Foundations phase labels and transition screen */
+.phase-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  margin-bottom:9px;
+  padding:7px 11px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(71,243,255,.07);
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.55px;
+  text-transform:uppercase;
+}
+.topic-phase-heading{
+  grid-column:1 / -1;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:8px 2px 0;
+  padding:9px 4px 5px;
+  color:var(--cyan);
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+}
+.phase-transition{
+  padding:30px;
+  border-radius:24px;
+  text-align:center;
+  background:linear-gradient(145deg,rgba(7,22,42,.98),rgba(15,31,58,.98));
+  border:1px solid rgba(107,232,255,.36);
+  box-shadow:0 0 28px rgba(71,243,255,.13);
+}
+.phase-transition-icon{
+  font-size:52px;
+  line-height:1;
+  filter:drop-shadow(0 0 12px rgba(71,243,255,.32));
+}
+.phase-transition .eyebrow{margin-top:14px}
+.phase-transition h2{
+  margin:8px 0 10px;
+  font-size:clamp(29px,6vw,43px);
+}
+.phase-transition p{
+  max-width:650px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:17px;
+  line-height:1.55;
+}
+.phase-topic-preview{
+  width:min(560px,100%);
+  margin:20px auto;
+  padding:15px 18px;
+  border-radius:16px;
+  text-align:left;
+  background:rgba(71,243,255,.06);
+  border:1px solid var(--line);
+}
+.phase-topic-preview-title{
+  margin-bottom:8px;
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.65px;
+  text-transform:uppercase;
+}
+.phase-topic-preview div+div{margin-top:7px}
 @media(max-width:650px){
   header{padding:11px 12px}
   .brand-icon{font-size:28px}
@@ -579,6 +652,8 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   .hotspot-option{padding:7px 9px;font-size:12px}
   .option-grid{grid-template-columns:1fr}
   .topic-list{grid-template-columns:1fr}
+  .phase-transition{padding:24px 18px}
+  .phase-transition p{font-size:15px}
   .resume-panel{
     align-items:stretch;
     flex-direction:column;
@@ -688,8 +763,20 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   </section>
 
   <section class="hero">
+    <div id="phaseChip" class="phase-chip hidden"></div>
     <h1 id="moduleTitle">Brain Anatomy</h1>
     <p id="moduleSubtitle">Loading module…</p>
+  </section>
+
+  <section id="phaseTransitionSection" class="hidden">
+    <article class="phase-transition">
+      <div id="phaseTransitionIcon" class="phase-transition-icon">🩺</div>
+      <div id="phaseTransitionEyebrow" class="eyebrow">Foundations phase</div>
+      <h2 id="phaseTransitionTitle">Neurological Assessment</h2>
+      <p id="phaseTransitionText"></p>
+      <div id="phaseTopicPreview" class="phase-topic-preview"></div>
+      <button id="phaseContinueBtn" class="btn" type="button">Continue</button>
+    </article>
   </section>
 
   <section id="lessonSection">
@@ -833,8 +920,32 @@ const FOUNDATION_MODULES = [
   { id: "pupils", title: "Pupil Assessment" },
   { id: "brainstem", title: "Brainstem" },
   { id: "ventricles", title: "Ventricles & CSF Spaces" },
+  { id: "cerebellum", title: "The Cerebellum" },
   { id: "brain_coverings", title: "Brain Coverings" }
 ];
+
+const FOUNDATION_PHASES={
+  anatomy:{
+    number:1,
+    title:"Brain Anatomy",
+    icon:"🧠",
+    description:"Learn the main structures of the brain and how they fit together."
+  },
+  assessment:{
+    number:2,
+    title:"Neurological Assessment",
+    icon:"🩺",
+    description:"Use structured neurological assessment to recognise normal findings and detect change."
+  },
+  clinical:{
+    number:3,
+    title:"Clinical Recognition",
+    icon:"🚨",
+    description:"Apply anatomy and assessment knowledge to recognise neurological deterioration and common emergencies."
+  }
+};
+
+const moduleMetadataCache=new Map();
 
 let user=null,moduleData=null,cardIndex=0,questionIndex=0,score=0,answered=false;
 let quizAttemptStartedAt=null;
@@ -1226,6 +1337,76 @@ function getResumeState(){
   };
 }
 
+
+function normalisePhase(value){
+  const phase=String(value||"anatomy").trim().toLowerCase();
+  return FOUNDATION_PHASES[phase]?phase:"anatomy";
+}
+
+function getPhaseDefinition(phase){
+  return FOUNDATION_PHASES[normalisePhase(phase)];
+}
+
+async function getModuleMetadata(moduleId){
+  if(moduleMetadataCache.has(moduleId)){
+    return moduleMetadataCache.get(moduleId);
+  }
+
+  try{
+    const response=await fetch(`foundations/${moduleId}.json`);
+    if(!response.ok)throw new Error(`Could not read ${moduleId} metadata.`);
+
+    const data=await response.json();
+    const metadata={
+      id:data.id||moduleId,
+      title:data.title||
+        FOUNDATION_MODULES.find(module=>module.id===moduleId)?.title||
+        moduleId,
+      subtitle:data.subtitle||"",
+      phase:normalisePhase(data.phase)
+    };
+
+    moduleMetadataCache.set(moduleId,metadata);
+    return metadata;
+  }catch(error){
+    console.warn(error);
+    const fallback={
+      id:moduleId,
+      title:FOUNDATION_MODULES.find(module=>module.id===moduleId)?.title||moduleId,
+      subtitle:"",
+      phase:"anatomy"
+    };
+    moduleMetadataCache.set(moduleId,fallback);
+    return fallback;
+  }
+}
+
+async function loadAllModuleMetadata(){
+  await Promise.all(
+    FOUNDATION_MODULES.map(module=>getModuleMetadata(module.id))
+  );
+}
+
+function getCachedModuleMetadata(moduleId){
+  return moduleMetadataCache.get(moduleId)||{
+    id:moduleId,
+    title:FOUNDATION_MODULES.find(module=>module.id===moduleId)?.title||moduleId,
+    phase:"anatomy"
+  };
+}
+
+function updatePhaseChip(){
+  const chip=document.getElementById("phaseChip");
+  if(!moduleData){
+    chip.classList.add("hidden");
+    return;
+  }
+
+  const phase=getPhaseDefinition(moduleData.phase);
+  chip.textContent=`${phase.icon} Phase ${phase.number}: ${phase.title}`;
+  chip.classList.remove("hidden");
+}
+
 function getNextIncompleteModule(){
   return FOUNDATION_MODULES.find(module=>completedModules[module.id]!==true)
     ||FOUNDATION_MODULES[0];
@@ -1372,7 +1553,24 @@ function renderTopicList(){
   const topicList=document.getElementById("topicList");
   topicList.innerHTML="";
 
+  let previousPhase=null;
+
   FOUNDATION_MODULES.forEach((module,index)=>{
+    const metadata=getCachedModuleMetadata(module.id);
+    const phaseKey=normalisePhase(metadata.phase);
+    const phase=getPhaseDefinition(phaseKey);
+
+    if(phaseKey!==previousPhase){
+      const heading=document.createElement("div");
+      heading.className="topic-phase-heading";
+      heading.innerHTML=`
+        <span>${phase.icon}</span>
+        <span>Phase ${phase.number}: ${phase.title}</span>
+      `;
+      topicList.appendChild(heading);
+      previousPhase=phaseKey;
+    }
+
     const complete=completedModules[module.id]===true;
     const unlocked=isModuleUnlocked(index);
     const current=module.id===selectedModuleId;
@@ -1380,7 +1578,7 @@ function renderTopicList(){
     const link=document.createElement("a");
     link.className="topic-link";
     link.innerHTML=`
-      <span>${complete?"✅":current?"▶":"🧠"} ${module.title}</span>
+      <span>${complete?"✅":current?"▶":"🧠"} ${metadata.title||module.title}</span>
       <span class="topic-status">${
         complete?"Review":current?"Current":unlocked?"Start":"Locked"
       }</span>
@@ -1395,7 +1593,7 @@ function renderTopicList(){
         toggleTopicMenu(false);
         navigateWithLoading(
           link.href,
-          `${complete?"Opening review":"Opening"} ${module.title}`
+          `${complete?"Opening review":"Opening"} ${metadata.title||module.title}`
         );
       });
     }else{
@@ -1420,6 +1618,48 @@ function getNextModule(){
   return FOUNDATION_MODULES[currentIndex+1];
 }
 
+
+function getModulesInPhase(phaseKey){
+  return FOUNDATION_MODULES
+    .map(module=>getCachedModuleMetadata(module.id))
+    .filter(metadata=>normalisePhase(metadata.phase)===normalisePhase(phaseKey));
+}
+
+function showPhaseTransition(nextModule){
+  const nextMetadata=getCachedModuleMetadata(nextModule.id);
+  const phase=getPhaseDefinition(nextMetadata.phase);
+  const phaseModules=getModulesInPhase(nextMetadata.phase);
+
+  document.getElementById("lessonSection").classList.add("hidden");
+  document.getElementById("quizSection").classList.add("hidden");
+  document.getElementById("resultSection").classList.add("hidden");
+  document.getElementById("phaseTransitionSection").classList.remove("hidden");
+
+  document.getElementById("phaseTransitionIcon").textContent=phase.icon;
+  document.getElementById("phaseTransitionEyebrow").textContent=
+    `Foundations · Phase ${phase.number}`;
+  document.getElementById("phaseTransitionTitle").textContent=phase.title;
+  document.getElementById("phaseTransitionText").textContent=
+    phase.description;
+
+  const preview=document.getElementById("phaseTopicPreview");
+  preview.innerHTML=`
+    <div class="phase-topic-preview-title">Topics in this phase</div>
+    ${phaseModules.map(module=>`<div>✓ ${module.title}</div>`).join("")}
+  `;
+
+  const continueBtn=document.getElementById("phaseContinueBtn");
+  continueBtn.textContent=`Start ${nextMetadata.title}`;
+  continueBtn.onclick=()=>{
+    navigateWithLoading(
+      `neuro_foundations.html?module=${nextModule.id}`,
+      `Opening ${nextMetadata.title}`
+    );
+  };
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
 function updateNextModuleButton(show){
   const button=document.getElementById("nextModuleBtn");
   const nextModule=getNextModule();
@@ -1429,13 +1669,23 @@ function updateNextModuleButton(show){
     return;
   }
 
-  button.textContent=`Next: ${nextModule.title}`;
+  const nextMetadata=getCachedModuleMetadata(nextModule.id);
+  button.textContent=`Next: ${nextMetadata.title||nextModule.title}`;
   button.href=`neuro_foundations.html?module=${nextModule.id}`;
   button.onclick=event=>{
     event.preventDefault();
+
+    const currentPhase=normalisePhase(moduleData?.phase);
+    const nextPhase=normalisePhase(nextMetadata.phase);
+
+    if(currentPhase!==nextPhase){
+      showPhaseTransition(nextModule);
+      return;
+    }
+
     navigateWithLoading(
       button.href,
-      `Opening ${nextModule.title}`
+      `Opening ${nextMetadata.title||nextModule.title}`
     );
   };
   button.classList.remove("hidden");
@@ -1461,6 +1711,7 @@ async function loadModule(){
     selectedModuleId=getRequestedModuleId();
   }
 
+  await loadAllModuleMetadata();
   renderTopicList();
 
   const response=await fetch(`foundations/${selectedModuleId}.json`);
@@ -1469,6 +1720,15 @@ async function loadModule(){
   }
 
   moduleData=await response.json();
+  moduleData.phase=normalisePhase(moduleData.phase);
+  moduleMetadataCache.set(selectedModuleId,{
+    id:moduleData.id||selectedModuleId,
+    title:moduleData.title,
+    subtitle:moduleData.subtitle||"",
+    phase:moduleData.phase
+  });
+  updatePhaseChip();
+  renderTopicList();
 
   const resume=getResumeState();
   if(!explicitModuleSelection&&resume.lastModuleId===selectedModuleId){
@@ -2426,6 +2686,7 @@ document.querySelectorAll('a[href="index.html"]').forEach(link=>{
 
 document.getElementById("restartBtn").onclick=()=>{
   quizAttemptStartedAt=null;
+  document.getElementById("phaseTransitionSection").classList.add("hidden");
   document.getElementById("resultSection").classList.add("hidden");
   document.getElementById("lessonSection").classList.remove("hidden");
   cardIndex=0;

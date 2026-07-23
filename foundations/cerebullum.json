@@ -1,0 +1,143 @@
+{
+  "id": "cerebellum",
+  "phase": "anatomy",
+  "title": "The Cerebellum",
+  "subtitle": "Learn the role of the cerebellum in movement and balance.",
+
+  "cards": [
+    {
+      "type": "info",
+      "image": "foundations/images/brain_sagittal.png",
+      "frontPrompt": "Where is the cerebellum located?",
+      "backHeading": "The Cerebellum",
+      "backPoints": [
+        "The cerebellum sits at the back of the brain.",
+        "It lies behind the brainstem.",
+        "Although smaller than the cerebrum, it contains many neurones.",
+        "It constantly helps fine tune movement."
+      ],
+      "memoryLine": "The cerebellum sits behind the brainstem."
+    },
+
+    {
+      "type": "info",
+      "image": "foundations/images/brain_sagittal.png",
+      "overlay": "foundations/images/cerebellum_overlay.png",
+      "overlayEffect": "grow-glow",
+      "frontPrompt": "Can you identify the cerebellum?",
+      "backHeading": "Recognising the Cerebellum",
+      "backPoints": [
+        "The cerebellum is easily recognised at the back of the brain.",
+        "It communicates with the cerebrum and brainstem.",
+        "It helps movements become smooth and accurate."
+      ],
+      "memoryLine": "Back of the brain = cerebellum."
+    },
+
+    {
+      "type": "info",
+      "image": "foundations/images/brain_sagittal.png",
+      "overlay": "foundations/images/cerebellum_overlay.png",
+      "overlayEffect": "grow-glow",
+      "frontPrompt": "What does the cerebellum do?",
+      "backHeading": "Main Functions",
+      "backPoints": [
+        "Coordinates voluntary movement.",
+        "Maintains balance.",
+        "Helps posture.",
+        "Makes movements smooth rather than jerky."
+      ],
+      "memoryLine": "Balance • Coordination • Smooth movement."
+    },
+
+    {
+      "type": "info",
+      "image": "foundations/images/brain_sagittal.png",
+      "overlay": "foundations/images/cerebellum_overlay.png",
+      "overlayEffect": "grow-glow",
+      "frontPrompt": "What happens if the cerebellum is damaged?",
+      "backHeading": "Clinical Signs",
+      "backPoints": [
+        "Unsteady walking (ataxia).",
+        "Poor coordination.",
+        "Difficulty performing accurate movements.",
+        "Speech may become slurred."
+      ],
+      "memoryLine": "Cerebellar damage causes poor coordination."
+    },
+
+    {
+      "type": "info",
+      "image": "foundations/images/brain_sagittal.png",
+      "overlay": "foundations/images/cerebellum_overlay.png",
+      "overlayEffect": "grow-glow",
+      "frontPrompt": "Why is the cerebellum important?",
+      "backHeading": "Clinical Importance",
+      "backPoints": [
+        "The cerebellum does not start movement.",
+        "It adjusts movement while it happens.",
+        "Without it, movements become inaccurate and unstable.",
+        "Always consider cerebellar dysfunction in patients with new ataxia."
+      ],
+      "memoryLine": "The cerebellum fine tunes movement."
+    }
+  ],
+
+  "quiz": [
+    {
+      "question": "Where is the cerebellum located?",
+      "options": [
+        "Behind the brainstem",
+        "In the frontal lobe",
+        "Within the lateral ventricle",
+        "Above the frontal lobe"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Which is a main function of the cerebellum?",
+      "options": [
+        "Speech production",
+        "Balance and coordination",
+        "Memory storage",
+        "Vision"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "Damage to the cerebellum commonly causes:",
+      "options": [
+        "Ataxia",
+        "Aphasia",
+        "Blindness",
+        "Hearing loss"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "The cerebellum helps make movement:",
+      "options": [
+        "Smooth and accurate",
+        "Faster only",
+        "Stronger only",
+        "More painful"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Which symptom might suggest cerebellar dysfunction?",
+      "options": [
+        "Unsteady walking",
+        "Chest pain",
+        "Abdominal swelling",
+        "Skin rash"
+      ],
+      "answer": 0
+    }
+  ],
+
+  "reward": {
+    "xp": 50,
+    "brains": 1
+  }
+}

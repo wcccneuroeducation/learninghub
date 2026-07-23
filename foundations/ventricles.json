@@ -1,5 +1,6 @@
 {
   "id": "ventricles",
+  "phase": "anatomy",
   "title": "Ventricles & CSF Spaces",
   "subtitle": "Recognise the main CSF-filled spaces as they appear on axial CT images.",
   "reward": {

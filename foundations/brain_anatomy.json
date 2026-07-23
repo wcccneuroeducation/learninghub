@@ -1,5 +1,6 @@
 {
   "id": "brain_anatomy",
+  "phase": "anatomy",
   "title": "Brain Anatomy",
   "subtitle": "Four structures every neuro learner should recognise.",
   "reward": {
