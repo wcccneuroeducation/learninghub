@@ -14,6 +14,69 @@
 body{margin:0;min-height:100vh;background:linear-gradient(180deg,#163451 0%,#0d2239 45%,#07111f 100%);font-family:Arial,sans-serif;color:#fff}
 button,a{font:inherit}
 .hidden{display:none!important}
+
+/* Reusable loading acknowledgement */
+.loading-overlay{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(2,8,18,.72);
+  backdrop-filter:blur(5px);
+  opacity:1;
+  visibility:visible;
+  transition:opacity .18s ease,visibility .18s ease;
+}
+.loading-overlay.is-hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.loading-card{
+  width:min(360px,calc(100vw - 36px));
+  padding:26px 22px;
+  border-radius:22px;
+  text-align:center;
+  background:linear-gradient(145deg,rgba(7,22,42,.98),rgba(14,29,54,.98));
+  border:1px solid rgba(107,232,255,.38);
+  box-shadow:0 0 30px rgba(71,243,255,.18);
+}
+.loading-title{
+  color:var(--cyan);
+  font-size:20px;
+  font-weight:900;
+}
+.loading-message{
+  margin-top:7px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.45;
+}
+.loading-brains{
+  min-height:46px;
+  margin-top:18px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:7px;
+  font-size:28px;
+}
+.loading-brain{
+  opacity:.18;
+  transform:scale(.82);
+  transition:opacity .2s ease,transform .2s ease;
+}
+.loading-brain.active{
+  opacity:1;
+  transform:scale(1);
+  filter:drop-shadow(0 0 8px rgba(71,243,255,.5));
+}
+body.is-loading{
+  overflow:hidden;
+}
 header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 20px;background:rgba(3,10,22,.94);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
 .brand{display:flex;align-items:center;gap:12px}
 .brand-icon{font-size:34px}
@@ -473,7 +536,19 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 }
 </style>
 </head>
-<body>
+<body class="is-loading">
+<div id="loadingOverlay" class="loading-overlay" role="status" aria-live="polite" aria-label="Loading">
+  <div class="loading-card">
+    <div id="loadingTitle" class="loading-title">Preparing Neuro Foundations</div>
+    <div id="loadingMessage" class="loading-message">Checking your progress and loading the lesson.</div>
+    <div class="loading-brains" aria-hidden="true">
+      <span class="loading-brain">🧠</span>
+      <span class="loading-brain">🧠</span>
+      <span class="loading-brain">🧠</span>
+      <span class="loading-brain">🧠</span>
+    </div>
+  </div>
+</div>
 <header>
   <div class="brand"><div class="brand-icon">🧠</div><div class="brand-title">NEURO <span>FOUNDATIONS</span></div></div>
   <a class="hub-link" href="index.html">← Hub</a>
@@ -645,6 +720,55 @@ let selectedModuleId="brain_anatomy";
 let explicitModuleSelection=false;
 let resumeSaveTimer=null;
 const RESUME_STORAGE_KEY="neuroFoundationsResume";
+
+/* Loading acknowledgement */
+const loadingOverlay=document.getElementById("loadingOverlay");
+const loadingTitle=document.getElementById("loadingTitle");
+const loadingMessage=document.getElementById("loadingMessage");
+const loadingBrains=[...document.querySelectorAll(".loading-brain")];
+let loadingBrainTimer=null;
+let loadingBrainStep=0;
+
+function startLoadingBrains(){
+  clearInterval(loadingBrainTimer);
+  loadingBrainStep=0;
+
+  const paint=()=>{
+    const visibleCount=(loadingBrainStep%4)+1;
+    loadingBrains.forEach((brain,index)=>{
+      brain.classList.toggle("active",index<visibleCount);
+    });
+    loadingBrainStep++;
+  };
+
+  paint();
+  loadingBrainTimer=setInterval(paint,320);
+}
+
+function showLoading(
+  title="Preparing Neuro Foundations",
+  message="Checking your progress and loading the lesson."
+){
+  loadingTitle.textContent=title;
+  loadingMessage.textContent=message;
+  loadingOverlay.classList.remove("is-hidden");
+  document.body.classList.add("is-loading");
+  startLoadingBrains();
+}
+
+function hideLoading(){
+  clearInterval(loadingBrainTimer);
+  loadingBrainTimer=null;
+  loadingOverlay.classList.add("is-hidden");
+  document.body.classList.remove("is-loading");
+}
+
+function navigateWithLoading(url,title="Opening your lesson"){
+  showLoading(title,"Loading your saved progress and teaching cards.");
+  window.setTimeout(()=>{
+    window.location.href=url;
+  },80);
+}
 
 /* CPD active-time tracking */
 const CPD_IDLE_LIMIT_MS=2*60*1000;
@@ -1063,7 +1187,10 @@ function updateResumePanel(){
       showCard();
       document.getElementById("lessonSection").scrollIntoView({behavior:"smooth"});
     }else{
-      window.location.href=`neuro_foundations.html?module=${target.id}`;
+      navigateWithLoading(
+        `neuro_foundations.html?module=${target.id}`,
+        `Opening ${target.title}`
+      );
     }
   };
 
@@ -1129,7 +1256,14 @@ function renderTopicList(){
 
     if(unlocked||complete){
       link.href=`neuro_foundations.html?module=${module.id}`;
-      link.addEventListener("click",()=>toggleTopicMenu(false));
+      link.addEventListener("click",event=>{
+        event.preventDefault();
+        toggleTopicMenu(false);
+        navigateWithLoading(
+          link.href,
+          `${complete?"Opening review":"Opening"} ${module.title}`
+        );
+      });
     }else{
       link.href="#";
       link.classList.add("locked");
@@ -1163,11 +1297,27 @@ function updateNextModuleButton(show){
 
   button.textContent=`Next: ${nextModule.title}`;
   button.href=`neuro_foundations.html?module=${nextModule.id}`;
+  button.onclick=event=>{
+    event.preventDefault();
+    navigateWithLoading(
+      button.href,
+      `Opening ${nextModule.title}`
+    );
+  };
   button.classList.remove("hidden");
 }
 
 async function loadModule(){
   selectedModuleId=getRequestedModuleId();
+
+  const requestedTitle=FOUNDATION_MODULES.find(
+    module=>module.id===selectedModuleId
+  )?.title||"Neuro Foundations";
+
+  showLoading(
+    `Preparing ${requestedTitle}`,
+    "Loading your progress and teaching images."
+  );
 
   const selectedIndex=FOUNDATION_MODULES.findIndex(
     module=>module.id===selectedModuleId
@@ -1208,6 +1358,7 @@ async function loadModule(){
   updateResumePanel();
   startCpdTimer();
   recordModuleVisit();
+  hideLoading();
 }
 
 async function preloadModuleImages(){
@@ -1891,6 +2042,16 @@ async function saveQuizAttempt({
     }
   };
 }
+document.querySelectorAll('a[href="index.html"]').forEach(link=>{
+  link.addEventListener("click",event=>{
+    event.preventDefault();
+    navigateWithLoading(
+      link.href,
+      "Returning to the Learning Hub"
+    );
+  });
+});
+
 document.getElementById("restartBtn").onclick=()=>{
   quizAttemptStartedAt=null;
   document.getElementById("resultSection").classList.add("hidden");
@@ -1923,6 +2084,7 @@ onAuthStateChanged(auth,async currentUser=>{
     await loadModule();
   }catch(error){
     console.error(error);
+    hideLoading();
     alert(error.message);
   }
 });

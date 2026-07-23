@@ -22,6 +22,73 @@ body{
   color:#fff;
 }
 .hidden{display:none!important}
+
+/* Reusable Learning Hub loading overlay */
+.loading-overlay{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(2,8,18,.74);
+  backdrop-filter:blur(5px);
+  opacity:1;
+  visibility:visible;
+  transition:opacity .18s ease,visibility .18s ease;
+}
+.loading-overlay.is-hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.loading-card{
+  width:min(390px,calc(100vw - 36px));
+  padding:27px 22px;
+  border-radius:22px;
+  text-align:center;
+  background:linear-gradient(145deg,rgba(7,22,42,.98),rgba(14,29,54,.98));
+  border:1px solid rgba(107,232,255,.38);
+  box-shadow:0 0 30px rgba(71,243,255,.18);
+}
+.loading-title{
+  color:var(--cyan);
+  font-size:20px;
+  font-weight:900;
+}
+.loading-message{
+  margin-top:7px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.45;
+}
+.loading-reassurance{
+  margin-top:8px;
+  color:rgba(199,213,232,.76);
+  font-size:12px;
+}
+.loading-brains{
+  min-height:46px;
+  margin-top:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  font-size:28px;
+}
+.loading-brain{
+  opacity:.18;
+  transform:scale(.82);
+  transition:opacity .2s ease,transform .2s ease;
+}
+.loading-brain.active{
+  opacity:1;
+  transform:scale(1);
+  filter:drop-shadow(0 0 8px rgba(71,243,255,.5));
+}
+body.is-loading{overflow:hidden}
+
 header{
   position:sticky;
   top:0;
@@ -220,7 +287,24 @@ main{
 }
 </style>
 </head>
-<body>
+<body class="is-loading">
+<div id="loadingOverlay" class="loading-overlay" role="status" aria-live="polite" aria-label="Loading">
+  <div class="loading-card">
+    <div id="loadingTitle" class="loading-title">Loading your Learning Record</div>
+    <div id="loadingMessage" class="loading-message">
+      Preparing your CPD time, module progress, scores and achievements.
+    </div>
+    <div id="loadingReassurance" class="loading-reassurance">
+      This normally takes a few seconds...
+    </div>
+    <div class="loading-brains" aria-hidden="true">
+      <span class="loading-brain">🧠</span>
+      <span class="loading-brain">🧠</span>
+      <span class="loading-brain">🧠</span>
+      <span class="loading-brain">🧠</span>
+    </div>
+  </div>
+</div>
 <header>
   <div class="brand">
     <div class="brand-icon">🧠</div>
@@ -306,6 +390,60 @@ const APP_ROOT="neuroQuest";
 
 let currentUser=null;
 
+const loadingOverlay=document.getElementById("loadingOverlay");
+const loadingTitle=document.getElementById("loadingTitle");
+const loadingMessage=document.getElementById("loadingMessage");
+const loadingReassurance=document.getElementById("loadingReassurance");
+const loadingBrains=[...document.querySelectorAll(".loading-brain")];
+
+let loadingBrainTimer=null;
+let loadingBrainStep=0;
+
+function startLoadingBrains(){
+  clearInterval(loadingBrainTimer);
+  loadingBrainStep=0;
+
+  const paint=()=>{
+    const visibleCount=(loadingBrainStep%4)+1;
+
+    loadingBrains.forEach((brain,index)=>{
+      brain.classList.toggle("active",index<visibleCount);
+    });
+
+    loadingBrainStep++;
+  };
+
+  paint();
+  loadingBrainTimer=setInterval(paint,320);
+}
+
+function showLoading(
+  title="Loading your Learning Record",
+  message="Preparing your CPD time, module progress, scores and achievements.",
+  reassurance="This normally takes a few seconds..."
+){
+  loadingTitle.textContent=title;
+  loadingMessage.textContent=message;
+  loadingReassurance.textContent=reassurance;
+  loadingOverlay.classList.remove("is-hidden");
+  document.body.classList.add("is-loading");
+  startLoadingBrains();
+}
+
+function hideLoading(){
+  clearInterval(loadingBrainTimer);
+  loadingBrainTimer=null;
+  loadingOverlay.classList.add("is-hidden");
+  document.body.classList.remove("is-loading");
+}
+
+function navigateWithLoading(url,title,message){
+  showLoading(title,message,"");
+  window.setTimeout(()=>{
+    window.location.href=url;
+  },80);
+}
+
 function formatDuration(totalSeconds){
   const seconds=Math.max(0,Math.floor(Number(totalSeconds)||0));
   const hours=Math.floor(seconds/3600);
@@ -329,6 +467,7 @@ function formatDate(value){
 }
 
 function showError(message){
+  hideLoading();
   document.getElementById("loadingState").classList.add("hidden");
   document.getElementById("content").classList.add("hidden");
   const box=document.getElementById("errorState");
@@ -509,9 +648,16 @@ function renderRecord(progress){
   document.getElementById("loadingState").classList.add("hidden");
   document.getElementById("errorState").classList.add("hidden");
   document.getElementById("content").classList.remove("hidden");
+  hideLoading();
 }
 async function loadRecord(){
   if(!currentUser)return;
+
+  showLoading(
+    "Loading your Learning Record",
+    "Preparing your CPD time, module progress, scores and achievements.",
+    "This normally takes a few seconds..."
+  );
 
   document.getElementById("content").classList.add("hidden");
   document.getElementById("errorState").classList.add("hidden");
@@ -530,9 +676,27 @@ async function loadRecord(){
 
 document.getElementById("refreshBtn").addEventListener("click",loadRecord);
 
+document.querySelectorAll('a[href="index.html"]').forEach(link=>{
+  link.addEventListener("click",event=>{
+    event.preventDefault();
+    navigateWithLoading(
+      link.href,
+      "Returning to the Learning Hub",
+      "Loading your dashboard and latest progress."
+    );
+  });
+});
+
 onAuthStateChanged(auth,user=>{
   if(!user){
-    window.location.replace("index.html");
+    showLoading(
+      "Returning to the Learning Hub",
+      "Your sign-in is needed before viewing this record.",
+      ""
+    );
+    window.setTimeout(()=>{
+      window.location.replace("index.html");
+    },80);
     return;
   }
   currentUser=user;
