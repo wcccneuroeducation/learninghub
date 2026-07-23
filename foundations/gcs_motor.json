@@ -1,0 +1,24 @@
+{
+  "id": "gcs_motor",
+  "title": "GCS: Motor Response",
+  "assessment": {
+    "type": "interactive_motor",
+    "stimulus": "trapezius_squeeze",
+    "scoreOptions": [
+      {"value":6,"label":"M6 – Obeys commands"},
+      {"value":5,"label":"M5 – Localises pain"},
+      {"value":4,"label":"M4 – Withdraws from pain"},
+      {"value":3,"label":"M3 – Abnormal flexion"},
+      {"value":2,"label":"M2 – Extension"},
+      {"value":1,"label":"M1 – No motor response"}
+    ],
+    "scenarios": [
+      {"score":6,"command":"The patient lifts both arms on request.","pain":"Pain was not required.","emoji":"🙆‍♂️"},
+      {"score":5,"command":"The patient does not lift either arm.","pain":"The patient reaches towards your hand and tries to remove the stimulus.","emoji":"🙋‍♂️"},
+      {"score":4,"command":"The patient does not lift either arm.","pain":"The patient pulls the arm away but does not reach towards your hand.","emoji":"🫷"},
+      {"score":3,"command":"The patient does not lift either arm.","pain":"The arms flex abnormally towards the chest.","emoji":"🤜"},
+      {"score":2,"command":"The patient does not lift either arm.","pain":"The arms extend and rotate in response to the stimulus.","emoji":"🫸"},
+      {"score":1,"command":"The patient does not lift either arm.","pain":"There is no motor response to the trapezius squeeze.","emoji":"👨"}
+    ]
+  }
+}
