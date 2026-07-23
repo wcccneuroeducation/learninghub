@@ -1102,7 +1102,7 @@ const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getDatabase(app);
 const APP_ROOT="neuroQuest";
-const TOTAL_FOUNDATION_MODULES=9;
+const TOTAL_FOUNDATION_MODULES=10;
 
 const FOUNDATION_MODULES = [
   { id: "brain_anatomy", title: "Brain Anatomy" },
@@ -1114,6 +1114,7 @@ const FOUNDATION_MODULES = [
   { id: "pupils", title: "Pupil Assessment" },
   { id: "gcs_eye_opening", title: "GCS: Eye Opening" },
   { id: "gcs_verbal", title: "GCS: Verbal Response" },
+  { id: "gcs_motor", title: "GCS: Motor Response" }
 ];
 
 const FOUNDATION_PHASES={
