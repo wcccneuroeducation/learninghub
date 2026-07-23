@@ -1,202 +1,229 @@
 {
-  "id": "brainstem",
-  "title": "The Brainstem",
-  "subtitle": "Recognise the three parts of the brainstem and why they matter clinically.",
-  "cards": [
-    {
-      "type": "info",
-      "image": "foundations/images/brain_sagittal.png",
-      "frontPrompt": "Where is the brainstem located?",
-      "backHeading": "The Brainstem",
-      "backPoints": [
-        "The brainstem sits at the base of the brain.",
-        "It connects the cerebrum with the spinal cord.",
-        "The cerebellum lies behind it.",
-        "It carries many pathways travelling between the brain and the body."
-      ],
-      "memoryLine": "The brainstem connects the brain to the spinal cord."
-    },
-    {
-      "type": "info",
-      "image": "foundations/images/brain_sagittal.png",
-      "overlay": "foundations/images/brainstem_overlay.png",
-      "overlayEffect": "glow",
-      "frontPrompt": "Can you identify the whole brainstem?",
-      "backHeading": "Three Connected Parts",
-      "backPoints": [
-        "The brainstem is made up of the midbrain, pons and medulla.",
-        "These parts work together rather than acting as separate structures.",
-        "The brainstem helps control consciousness, breathing and cardiovascular function.",
-        "Many cranial nerve pathways also pass through it."
-      ],
-      "memoryLine": "Midbrain, pons and medulla."
-    },
-    {
-      "type": "info",
-      "image": "foundations/images/brain_sagittal.png",
-      "overlay": "foundations/images/brainstem_overlay.png",
-      "overlayEffect": "glow",
-      "focusOverlay": "foundations/images/midbrain_overlay.png",
-      "focusOverlayEffect": "grow-glow",
-      "frontPrompt": "Which part sits at the top of the brainstem?",
-      "backHeading": "Midbrain",
-      "backPoints": [
-        "The midbrain is the upper part of the brainstem.",
-        "It contains pathways involved in pupil responses and eye movements.",
-        "It also contributes to alertness and consciousness.",
-        "Midbrain dysfunction may therefore affect pupils, eye movement or conscious level."
-      ],
-      "memoryLine": "Midbrain: eyes, pupils and alertness."
-    },
-    {
-      "type": "info",
-      "image": "foundations/images/brain_sagittal.png",
-      "overlay": "foundations/images/brainstem_overlay.png",
-      "overlayEffect": "glow",
-      "focusOverlay": "foundations/images/pons_overlay.png",
-      "focusOverlayEffect": "grow-glow",
-      "frontPrompt": "Which part forms the rounded bulge?",
-      "backHeading": "Pons",
-      "backPoints": [
-        "The pons is the rounded middle part of the brainstem.",
-        "Its name means bridge.",
-        "It links important pathways between the cerebrum, cerebellum and medulla.",
-        "It also contributes to the control and pattern of breathing."
-      ],
-      "memoryLine": "Pons: the bridge and the bulge."
-    },
-    {
-      "type": "info",
-      "image": "foundations/images/brain_sagittal.png",
-      "overlay": "foundations/images/brainstem_overlay.png",
-      "overlayEffect": "glow",
-      "focusOverlay": "foundations/images/medulla_overlay.png",
-      "focusOverlayEffect": "grow-glow",
-      "frontPrompt": "Which part continues into the spinal cord?",
-      "backHeading": "Medulla",
-      "backPoints": [
-        "The medulla is the lowest part of the brainstem.",
-        "It continues into the spinal cord.",
-        "It contains centres involved in breathing, heart rate and blood pressure.",
-        "Severe medullary dysfunction can rapidly become life-threatening."
-      ],
-      "memoryLine": "Medulla: breathing, heart rate and blood pressure."
-    },
-    {
-      "type": "info",
-      "image": "foundations/images/brain_sagittal.png",
-      "overlay": "foundations/images/brainstem_overlay.png",
-      "overlayEffect": "glow",
-      "frontPrompt": "Why can brainstem injury affect consciousness?",
-      "backHeading": "Consciousness and the Brainstem",
-      "backPoints": [
-        "Brainstem networks help maintain arousal and wakefulness.",
-        "Damage or compression can reduce a person's level of consciousness.",
-        "A falling conscious level may therefore indicate serious neurological deterioration.",
-        "Always assess the whole clinical picture and escalate new changes."
-      ],
-      "memoryLine": "The brainstem helps keep the brain awake."
-    },
-    {
-      "type": "info",
-      "image": "foundations/images/brain_sagittal.png",
-      "overlay": "foundations/images/brainstem_overlay.png",
-      "overlayEffect": "glow",
-      "frontPrompt": "What changes might suggest brainstem dysfunction?",
-      "backHeading": "Clinical Importance",
-      "backPoints": [
-        "Possible signs include a reduced conscious level.",
-        "Pupil or eye movement abnormalities may occur.",
-        "Breathing pattern, heart rate or blood pressure may change.",
-        "New brainstem signs require urgent assessment and escalation."
-      ],
-      "memoryLine": "Consciousness, pupils, breathing and circulation may all change."
-    }
-  ],
-  "quiz": [
-    {
-      "question": "Which three structures make up the brainstem?",
-      "options": [
-        "Midbrain, pons and medulla",
-        "Frontal, parietal and temporal lobes",
-        "Midbrain, cerebellum and medulla",
-        "Thalamus, hypothalamus and basal ganglia"
-      ],
-      "answer": 0
-    },
-    {
-      "question": "Which part is at the top of the brainstem?",
-      "options": [
-        "Medulla",
-        "Pons",
-        "Midbrain",
-        "Spinal cord"
-      ],
-      "answer": 2
-    },
-    {
-      "question": "Which part of the brainstem forms the obvious rounded bulge?",
-      "options": [
-        "Midbrain",
-        "Pons",
-        "Medulla",
-        "Spinal cord"
-      ],
-      "answer": 1
-    },
-    {
-      "question": "Which part of the brainstem continues into the spinal cord?",
-      "options": [
-        "Midbrain",
-        "Pons",
-        "Medulla",
-        "Spinal cord"
-      ],
-      "answer": 2
-    },
-    {
-      "question": "Which brainstem region is most closely associated with pupil pathways and eye movements?",
-      "options": [
-        "Midbrain",
-        "Pons",
-        "Medulla",
-        "Frontal lobe"
-      ],
-      "answer": 0
-    },
-    {
-      "question": "The word pons is commonly remembered as meaning:",
-      "options": [
-        "Pulse",
-        "Bridge",
-        "Breath",
-        "Balance"
-      ],
-      "answer": 1
-    },
-    {
-      "question": "Which functions are strongly associated with the medulla?",
-      "options": [
-        "Heart rate and blood pressure only",
-        "Vision and hearing only",
-        "Breathing, heart rate and blood pressure",
-        "Breathing, vision and hearing"
-      ],
-      "answer": 2
-    },
-    {
-      "question": "Which combination may indicate brainstem dysfunction?",
-      "options": [
-        "Reduced blood pressure and heart rate",
-        "Reduced consciousness, abnormal pupils and altered breathing",
-        "Altered sensation and movement in the arms and legs",
-        "Normal pupils with stable observations"
-      ],
-      "answer": 1
-    }
-  ],
-  "reward": {
-    "xp": 50,
-    "brains": 1
-  }
+"id": "brainstem",
+"title": "The Brainstem",
+"subtitle": "Recognise the three parts of the brainstem and why they matter clinically.",
+"cards": [
+{
+"type": "info",
+"image": "foundations/images/brain_sagittal.png",
+"frontPrompt": "Where is the brainstem located?",
+"backHeading": "The Brainstem",
+"backPoints": [
+"The brainstem sits at the base of the brain.",
+"It connects the cerebrum with the spinal cord.",
+"The cerebellum lies behind it.",
+"It carries many pathways travelling between the brain and the body."
+],
+"memoryLine": "The brainstem connects the brain to the spinal cord."
+},
+{
+"type": "hotspot-sequence",
+"title": "Identify the Brainstem",
+"image": "foundations/images/brain_sagittal.png",
+"imageOpacity": 0.4,
+"frontPrompt": "Can you identify the three parts of the brainstem?",
+"showButtons": true,
+"tryAgainText": "Not quite — look again at the position of each structure.",
+"completePrompt": "All three parts identified.",
+"completeText": "Excellent — you have identified the midbrain, pons and medulla. You can now flip the card.",
+"steps": [
+{
+"id": "midbrain",
+"label": "Midbrain",
+"prompt": "Select the upper part of the brainstem.",
+"overlay": "foundations/images/midbrain_overlay.png",
+"successText": "Correct. The midbrain is the upper part of the brainstem."
+},
+{
+"id": "pons",
+"label": "Pons",
+"prompt": "Now select the rounded middle part.",
+"overlay": "foundations/images/pons_overlay.png",
+"successText": "Correct. The pons forms the rounded bulge in the middle."
+},
+{
+"id": "medulla",
+"label": "Medulla",
+"prompt": "Finally, select the part that continues into the spinal cord.",
+"overlay": "foundations/images/medulla_overlay.png",
+"successText": "Correct. The medulla is the lowest part of the brainstem."
+}
+],
+"backHeading": "Three Connected Parts",
+"backPoints": [
+"The brainstem is made up of the midbrain, pons and medulla.",
+"The midbrain is at the top.",
+"The pons forms the rounded middle section.",
+"The medulla continues into the spinal cord."
+],
+"memoryLine": "Top to bottom: midbrain, pons, medulla."
+},
+{
+"type": "info",
+"image": "foundations/images/brain_sagittal.png",
+"overlay": "foundations/images/brainstem_overlay.png",
+"overlayEffect": "glow",
+"focusOverlay": "foundations/images/midbrain_overlay.png",
+"focusOverlayEffect": "grow-glow",
+"frontPrompt": "Which part sits at the top of the brainstem?",
+"backHeading": "Midbrain",
+"backPoints": [
+"The midbrain is the upper part of the brainstem.",
+"It contains pathways involved in pupil responses and eye movements.",
+"It also contributes to alertness and consciousness.",
+"Midbrain dysfunction may therefore affect pupils, eye movement or conscious level."
+],
+"memoryLine": "Midbrain: eyes, pupils and alertness."
+},
+{
+"type": "info",
+"image": "foundations/images/brain_sagittal.png",
+"overlay": "foundations/images/brainstem_overlay.png",
+"overlayEffect": "glow",
+"focusOverlay": "foundations/images/pons_overlay.png",
+"focusOverlayEffect": "grow-glow",
+"frontPrompt": "Which part forms the rounded bulge?",
+"backHeading": "Pons",
+"backPoints": [
+"The pons is the rounded middle part of the brainstem.",
+"Its name means bridge.",
+"It links important pathways between the cerebrum, cerebellum and medulla.",
+"It also contributes to the control and pattern of breathing."
+],
+"memoryLine": "Pons: the bridge and the bulge."
+},
+{
+"type": "info",
+"image": "foundations/images/brain_sagittal.png",
+"overlay": "foundations/images/brainstem_overlay.png",
+"overlayEffect": "glow",
+"focusOverlay": "foundations/images/medulla_overlay.png",
+"focusOverlayEffect": "grow-glow",
+"frontPrompt": "Which part continues into the spinal cord?",
+"backHeading": "Medulla",
+"backPoints": [
+"The medulla is the lowest part of the brainstem.",
+"It continues into the spinal cord.",
+"It contains centres involved in breathing, heart rate and blood pressure.",
+"Severe medullary dysfunction can rapidly become life-threatening."
+],
+"memoryLine": "Medulla: breathing, heart rate and blood pressure."
+},
+{
+"type": "info",
+"image": "foundations/images/brain_sagittal.png",
+"overlay": "foundations/images/brainstem_overlay.png",
+"overlayEffect": "glow",
+"frontPrompt": "Why can brainstem injury affect consciousness?",
+"backHeading": "Consciousness and the Brainstem",
+"backPoints": [
+"Brainstem networks help maintain arousal and wakefulness.",
+"Damage or compression can reduce a person's level of consciousness.",
+"A falling conscious level may therefore indicate serious neurological deterioration.",
+"Always assess the whole clinical picture and escalate new changes."
+],
+"memoryLine": "The brainstem helps keep the brain awake."
+},
+{
+"type": "info",
+"image": "foundations/images/brain_sagittal.png",
+"overlay": "foundations/images/brainstem_overlay.png",
+"overlayEffect": "glow",
+"frontPrompt": "What changes might suggest brainstem dysfunction?",
+"backHeading": "Clinical Importance",
+"backPoints": [
+"Possible signs include a reduced conscious level.",
+"Pupil or eye movement abnormalities may occur.",
+"Breathing pattern, heart rate or blood pressure may change.",
+"New brainstem signs require urgent assessment and escalation."
+],
+"memoryLine": "Consciousness, pupils, breathing and circulation may all change."
+}
+],
+"quiz": [
+{
+"question": "Which three structures make up the brainstem?",
+"options": [
+"Midbrain, pons and medulla",
+"Frontal, parietal and temporal lobes",
+"Midbrain, cerebellum and medulla",
+"Thalamus, hypothalamus and basal ganglia"
+],
+"answer": 0
+},
+{
+"question": "Which part is at the top of the brainstem?",
+"options": [
+"Medulla",
+"Pons",
+"Midbrain",
+"Spinal cord"
+],
+"answer": 2
+},
+{
+"question": "Which part of the brainstem forms the obvious rounded bulge?",
+"options": [
+"Midbrain",
+"Pons",
+"Medulla",
+"Spinal cord"
+],
+"answer": 1
+},
+{
+"question": "Which part of the brainstem continues into the spinal cord?",
+"options": [
+"Midbrain",
+"Pons",
+"Medulla",
+"Spinal cord"
+],
+"answer": 2
+},
+{
+"question": "Which brainstem region is most closely associated with pupil pathways and eye movements?",
+"options": [
+"Midbrain",
+"Pons",
+"Medulla",
+"Frontal lobe"
+],
+"answer": 0
+},
+{
+"question": "The word pons is commonly remembered as meaning:",
+"options": [
+"Pulse",
+"Bridge",
+"Breath",
+"Balance"
+],
+"answer": 1
+},
+{
+"question": "Which functions are strongly associated with the medulla?",
+"options": [
+"Heart rate and blood pressure only",
+"Vision and hearing only",
+"Breathing, heart rate and blood pressure",
+"Breathing, vision and hearing"
+],
+"answer": 2
+},
+{
+"question": "Which combination may indicate brainstem dysfunction?",
+"options": [
+"Reduced blood pressure and heart rate",
+"Reduced consciousness, abnormal pupils and altered breathing",
+"Altered sensation and movement in the arms and legs",
+"Normal pupils with stable observations"
+],
+"answer": 1
+}
+],
+"reward": {
+"xp": 50,
+"brains": 1
+}
 }
