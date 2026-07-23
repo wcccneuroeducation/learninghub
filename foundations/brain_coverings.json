@@ -1,0 +1,189 @@
+{
+  "id": "brain_coverings",
+  "title": "Brain Coverings",
+  "subtitle": "Explore the skull, meninges and the space surrounding the brain.",
+  "cards": [
+    {
+      "type": "info",
+      "image": "foundations/images/meninges_background.png",
+      "frontPrompt": "What protects and surrounds the brain?",
+      "backHeading": "The Brain's Protective Coverings",
+      "backPoints": [
+        "The brain is protected by the skull and three meningeal layers.",
+        "The meninges are called the dura mater, arachnoid mater and pia mater.",
+        "These layers surround the brain and support the spaces and blood vessels around it.",
+        "We will work through them from outside to inside."
+      ],
+      "memoryLine": "Skull, dura, arachnoid, pia, brain."
+    },
+    {
+      "type": "info",
+      "image": "foundations/images/meninges_background.png",
+      "overlay": "foundations/images/skull_overlay.png",
+      "frontPrompt": "Which structure provides the brain's rigid outer protection?",
+      "backHeading": "The Skull",
+      "backPoints": [
+        "The skull forms a strong protective case around the brain.",
+        "It helps protect the brain from external injury.",
+        "Unlike other tissues, the skull cannot expand when pressure inside it rises.",
+        "The meninges lie between the skull and the brain."
+      ],
+      "memoryLine": "The skull protects the brain but cannot expand."
+    },
+    {
+      "type": "info",
+      "image": "foundations/images/meninges_background.png",
+      "overlay": "foundations/images/dura_overlay.png",
+      "frontPrompt": "Which tough membrane lies beneath the skull?",
+      "backHeading": "Dura Mater",
+      "backPoints": [
+        "The dura mater is the tough outermost meningeal covering.",
+        "It lies immediately inside the skull.",
+        "It is thick, strong and fibrous.",
+        "Its strength helps protect and support the structures within the skull."
+      ],
+      "memoryLine": "Dura is the tough outer meningeal layer."
+    },
+    {
+      "type": "info",
+      "image": "foundations/images/meninges_background.png",
+      "overlay": "foundations/images/arachnoid_overlay.png",
+      "frontPrompt": "What lies beneath the dura and surrounds the CSF and cerebral arteries?",
+      "backHeading": "Arachnoid and Subarachnoid Space",
+      "backPoints": [
+        "The arachnoid mater is a thin membrane lying beneath the dura.",
+        "The subarachnoid space lies beneath the arachnoid and above the pia.",
+        "This space contains cerebrospinal fluid, commonly called CSF.",
+        "Major cerebral arteries also travel through this space."
+      ],
+      "memoryLine": "The subarachnoid space contains CSF and arteries."
+    },
+    {
+      "type": "info",
+      "image": "foundations/images/meninges_background.png",
+      "overlay": "foundations/images/pia_overlay.png",
+      "frontPrompt": "Which meningeal layer closely hugs the surface of the brain?",
+      "backHeading": "Pia Mater",
+      "backPoints": [
+        "The pia mater is the delicate innermost meningeal layer.",
+        "It adheres closely to the surface of the brain.",
+        "It follows the brain into its sulci and around its gyri.",
+        "The subarachnoid space lies between the arachnoid and pia."
+      ],
+      "memoryLine": "Pia closely follows every contour of the brain."
+    },
+    {
+      "type": "info",
+      "image": "foundations/images/meninges_background.png",
+      "overlay": "foundations/images/arachnoid_overlay.png",
+      "frontPrompt": "Why is the subarachnoid space clinically important?",
+      "backHeading": "A Space Containing CSF and Arteries",
+      "backPoints": [
+        "The subarachnoid space normally contains CSF.",
+        "Cerebral arteries travel through the same space.",
+        "If one of these arteries bleeds, blood can spread into the CSF-filled subarachnoid space.",
+        "This is why the anatomy of this space is important when learning about subarachnoid haemorrhage."
+      ],
+      "memoryLine": "SAH occurs where cerebral arteries travel through CSF."
+    },
+    {
+      "type": "info",
+      "image": "foundations/images/meninges_background.png",
+      "frontPrompt": "Can you remember the protective layers from outside to inside?",
+      "backHeading": "Outside to Inside",
+      "backPoints": [
+        "First comes the skull.",
+        "Beneath the skull lies the dura mater.",
+        "Next comes the arachnoid mater and the subarachnoid space.",
+        "The pia mater then closely covers the brain."
+      ],
+      "memoryLine": "Skull → dura → arachnoid → subarachnoid space → pia → brain."
+    }
+  ],
+  "quiz": [
+    {
+      "question": "Which structure provides rigid outer protection for the brain?",
+      "options": [
+        "Skull",
+        "Arachnoid mater",
+        "Pia mater",
+        "Subarachnoid space"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Which is the tough outermost meningeal layer?",
+      "options": [
+        "Pia mater",
+        "Arachnoid mater",
+        "Dura mater",
+        "Cerebral cortex"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "Which meningeal layer lies directly beneath the dura?",
+      "options": [
+        "Pia mater",
+        "Arachnoid mater",
+        "Skull",
+        "Cerebral cortex"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "Where is the subarachnoid space located?",
+      "options": [
+        "Between the skull and dura",
+        "Between the dura and skull",
+        "Between the arachnoid and pia",
+        "Inside the brain tissue"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "What does the subarachnoid space normally contain?",
+      "options": [
+        "CSF and cerebral arteries",
+        "Only venous blood",
+        "Air and lymphatic fluid",
+        "Brain tissue and ventricles"
+      ],
+      "answer": 0
+    },
+    {
+      "question": "Which layer closely follows the sulci and gyri of the brain?",
+      "options": [
+        "Dura mater",
+        "Arachnoid mater",
+        "Pia mater",
+        "Skull"
+      ],
+      "answer": 2
+    },
+    {
+      "question": "Why can blood spread through the subarachnoid space during a subarachnoid haemorrhage?",
+      "options": [
+        "The space contains the ventricles",
+        "Cerebral arteries travel through the CSF-filled space",
+        "The skull produces blood",
+        "The dura contains brain tissue"
+      ],
+      "answer": 1
+    },
+    {
+      "question": "Which sequence is correct from outside to inside?",
+      "options": [
+        "Skull, dura, arachnoid, pia, brain",
+        "Skull, pia, dura, arachnoid, brain",
+        "Dura, skull, pia, arachnoid, brain",
+        "Skull, arachnoid, dura, pia, brain"
+      ],
+      "answer": 0
+    }
+  ],
+  "reward": {
+    "xp": 50,
+    "brains": 1
+  }
+}
