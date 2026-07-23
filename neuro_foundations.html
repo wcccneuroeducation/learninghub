@@ -650,12 +650,14 @@ const RESUME_STORAGE_KEY="neuroFoundationsResume";
 const CPD_IDLE_LIMIT_MS=2*60*1000;
 const CPD_SAVE_INTERVAL_MS=30*1000;
 const CPD_MAX_SESSION_SECONDS=2*60*60;
+const LEARNING_DAY_THRESHOLD_SECONDS=60;
 let cpdSessionSeconds=0;
 let cpdUnsavedSeconds=0;
 let cpdLastTickAt=Date.now();
 let cpdLastActivityAt=Date.now();
 let cpdTimer=null;
 let cpdSaveInProgress=false;
+let learningDayRecordedThisSession=false;
 
 const pupilStage=document.getElementById("pupilStage");
 const leftPupil=document.getElementById("leftPupil");
@@ -676,6 +678,60 @@ let ambientPupilTimer=null;
 let activePupilCard=null;
 let ambientPupilCard=false;
 
+
+function getLocalLearningDayKey(){
+  const parts=new Intl.DateTimeFormat("en-GB",{
+    timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone,
+    year:"numeric",
+    month:"2-digit",
+    day:"2-digit"
+  }).formatToParts(new Date());
+
+  const values=Object.fromEntries(
+    parts
+      .filter(part=>part.type!=="literal")
+      .map(part=>[part.type,part.value])
+  );
+
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+async function recordLearningDay(){
+  if(
+    !user||
+    learningDayRecordedThisSession||
+    cpdSessionSeconds<LEARNING_DAY_THRESHOLD_SECONDS
+  )return;
+
+  const dayKey=getLocalLearningDayKey();
+  const existingDays=progressData.cpd?.learningDays||{};
+
+  if(existingDays[dayKey]===true){
+    learningDayRecordedThisSession=true;
+    return;
+  }
+
+  try{
+    await update(
+      ref(db,`${APP_ROOT}/foundationsProgress/${user.uid}`),
+      {
+        [`cpd/learningDays/${dayKey}`]:true
+      }
+    );
+
+    progressData.cpd={
+      ...(progressData.cpd||{}),
+      learningDays:{
+        ...existingDays,
+        [dayKey]:true
+      }
+    };
+
+    learningDayRecordedThisSession=true;
+  }catch(error){
+    console.warn("Could not record Learning Day.",error);
+  }
+}
 
 function isCpdActivityActive(){
   return (
@@ -715,6 +771,13 @@ function startCpdTimer(){
 
     cpdSessionSeconds+=creditedSeconds;
     cpdUnsavedSeconds+=creditedSeconds;
+
+    if(
+      !learningDayRecordedThisSession&&
+      cpdSessionSeconds>=LEARNING_DAY_THRESHOLD_SECONDS
+    ){
+      recordLearningDay();
+    }
 
     if(cpdUnsavedSeconds>=CPD_SAVE_INTERVAL_MS/1000){
       flushCpdTime();
