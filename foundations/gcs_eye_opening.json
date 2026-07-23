@@ -6,7 +6,7 @@
   "cards": [
     {
       "type": "info",
-      "image": "foundations/images/eyes.png",
+      "image": "foundations/images/eyes_gcs.png",
       "imageOpacity": 1,
       "imageFilter": "none",
       "frontPrompt": "What is the Glasgow Coma Scale used for?",
@@ -21,7 +21,7 @@
     },
     {
       "type": "info",
-      "image": "foundations/images/eyes.png",
+      "image": "foundations/images/eyes_gcs.png",
       "imageOpacity": 1,
       "imageFilter": "none",
       "frontPrompt": "How should Eye Opening be assessed?",
@@ -36,7 +36,7 @@
     },
     {
       "type": "info",
-      "image": "foundations/images/eyes.png",
+      "image": "foundations/images/eyes_gcs.png",
       "imageOpacity": 1,
       "imageFilter": "none",
       "frontPrompt": "Why must voice be tested before pain?",
@@ -55,6 +55,23 @@
     "randomiseScenarios": true,
     "restartOnInvalidSequence": true,
     "instructions": "Assess the patient using the correct sequence, then select the Eye Opening score.",
+    "visuals": {
+      "baseImage": "foundations/images/eyes_gcs.png",
+      "states": {
+        "open": {
+          "left": null,
+          "right": null
+        },
+        "closed": {
+          "left": "foundations/images/eyes_lc.png",
+          "right": "foundations/images/eyes_rc.png"
+        },
+        "half": {
+          "left": "foundations/images/eyes_lh.png",
+          "right": "foundations/images/eyes_rh.png"
+        }
+      }
+    },
     "scoreOptions": [
       { "value": 4, "label": "E4 – Spontaneous" },
       { "value": 3, "label": "E3 – To voice" },
@@ -79,30 +96,30 @@
       {
         "id": "eye_e4",
         "name": "Spontaneous eye opening",
-        "initialEyes": { "left": "open", "right": "open" },
+        "initialState": "open",
         "respondsTo": "spontaneous",
         "correctScore": 4
       },
       {
         "id": "eye_e3",
         "name": "Eye opening to voice",
-        "initialEyes": { "left": "closed", "right": "closed" },
+        "initialState": "closed",
         "respondsTo": "voice",
-        "eyeOpeningAfterResponse": { "left": "open", "right": "open" },
+        "responseState": "open",
         "correctScore": 3
       },
       {
         "id": "eye_e2",
         "name": "Eye opening to pain",
-        "initialEyes": { "left": "closed", "right": "closed" },
+        "initialState": "closed",
         "respondsTo": "pain",
-        "eyeOpeningAfterResponse": { "left": "half", "right": "half" },
+        "responseState": "half",
         "correctScore": 2
       },
       {
         "id": "eye_e1",
         "name": "No eye opening",
-        "initialEyes": { "left": "closed", "right": "closed" },
+        "initialState": "closed",
         "respondsTo": "none",
         "correctScore": 1
       }
