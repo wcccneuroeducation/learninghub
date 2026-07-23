@@ -1591,8 +1591,13 @@ function showStandardCard(card){
       :""
   );
   cardImage.alt=card.title||moduleData.title;
-  cardImage.style.opacity=selectedModuleId==="pupils"?"1":"";
-  cardImage.style.filter=selectedModuleId==="pupils"?"none":"";
+  cardImage.style.opacity =
+    card.imageOpacity ??
+    (selectedModuleId === "pupils" ? "1" : "");
+
+cardImage.style.filter =
+    card.imageFilter ??
+    (selectedModuleId === "pupils" ? "none" : "");
 
   clearOverlayEffects(cardOverlay);
   clearOverlayEffects(cardFocusOverlay);
