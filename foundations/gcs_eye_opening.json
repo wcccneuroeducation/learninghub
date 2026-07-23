@@ -1,0 +1,116 @@
+{
+  "id": "gcs_eye_opening",
+  "title": "GCS: Eye Opening",
+  "subtitle": "Assess eye opening using the correct clinical sequence.",
+  "phase": "assessment",
+  "cards": [
+    {
+      "type": "info",
+      "image": "foundations/images/eyes.png",
+      "imageOpacity": 1,
+      "imageFilter": "none",
+      "frontPrompt": "What is the Glasgow Coma Scale used for?",
+      "backHeading": "Purpose of the GCS",
+      "backPoints": [
+        "The Glasgow Coma Scale provides a standardised assessment of a patient's level of consciousness.",
+        "It allows neurological findings to be communicated consistently.",
+        "Repeated assessments help identify deterioration or improvement.",
+        "The GCS assesses Eye Opening, Verbal Response and Motor Response."
+      ],
+      "memoryLine": "A consistent assessment allows reliable neurological trending."
+    },
+    {
+      "type": "info",
+      "image": "foundations/images/eyes.png",
+      "imageOpacity": 1,
+      "imageFilter": "none",
+      "frontPrompt": "How should Eye Opening be assessed?",
+      "backHeading": "Use the least stimulus required",
+      "backPoints": [
+        "First observe whether the patient's eyes are already open.",
+        "If their eyes are closed, speak to them.",
+        "Only use a painful stimulus if there is no response to voice.",
+        "Record the best response demonstrated during a valid assessment."
+      ],
+      "memoryLine": "Observe → Voice → Pain → Score"
+    },
+    {
+      "type": "info",
+      "image": "foundations/images/eyes.png",
+      "imageOpacity": 1,
+      "imageFilter": "none",
+      "frontPrompt": "Why must voice be tested before pain?",
+      "backHeading": "Avoid underestimating the GCS",
+      "backPoints": [
+        "A patient who opens their eyes to voice scores E3.",
+        "The same patient may also open their eyes when pain is applied.",
+        "If pain is used first, you cannot know whether they would have responded to voice.",
+        "Recording E2 after skipping voice could make the patient's GCS appear lower than it really is."
+      ],
+      "memoryLine": "Skipping voice can produce an invalidly low Eye Opening score."
+    }
+  ],
+  "assessment": {
+    "type": "interactive_eye_opening",
+    "randomiseScenarios": true,
+    "restartOnInvalidSequence": true,
+    "instructions": "Assess the patient using the correct sequence, then select the Eye Opening score.",
+    "scoreOptions": [
+      { "value": 4, "label": "E4 – Spontaneous" },
+      { "value": 3, "label": "E3 – To voice" },
+      { "value": 2, "label": "E2 – To pain" },
+      { "value": 1, "label": "E1 – No eye opening" }
+    ],
+    "feedback": {
+      "painBeforeVoice": {
+        "heading": "Assessment sequence invalid",
+        "message": "Pain was applied before voice. The patient may also have opened their eyes to voice, so you cannot assign a valid Eye Opening score. Restart and assess in the correct order: Observe → Voice → Pain."
+      },
+      "correct": {
+        "heading": "Correct assessment",
+        "message": "Correct. You used the appropriate assessment sequence and selected the correct Eye Opening score."
+      },
+      "incorrectScore": {
+        "heading": "Reconsider the response",
+        "message": "The selected score does not match the response demonstrated during this assessment."
+      }
+    },
+    "scenarios": [
+      {
+        "id": "eye_e4",
+        "name": "Spontaneous eye opening",
+        "initialEyes": { "left": "open", "right": "open" },
+        "respondsTo": "spontaneous",
+        "correctScore": 4
+      },
+      {
+        "id": "eye_e3",
+        "name": "Eye opening to voice",
+        "initialEyes": { "left": "closed", "right": "closed" },
+        "respondsTo": "voice",
+        "eyeOpeningAfterResponse": { "left": "open", "right": "open" },
+        "correctScore": 3
+      },
+      {
+        "id": "eye_e2",
+        "name": "Eye opening to pain",
+        "initialEyes": { "left": "closed", "right": "closed" },
+        "respondsTo": "pain",
+        "eyeOpeningAfterResponse": { "left": "half", "right": "half" },
+        "correctScore": 2
+      },
+      {
+        "id": "eye_e1",
+        "name": "No eye opening",
+        "initialEyes": { "left": "closed", "right": "closed" },
+        "respondsTo": "none",
+        "correctScore": 1
+      }
+    ]
+  },
+  "passMark": 4,
+  "reward": {
+    "xp": 50,
+    "brains": 1
+  }
+}
