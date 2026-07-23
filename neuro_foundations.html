@@ -522,6 +522,11 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 }
 .assessment-feedback-card.good{border-color:var(--good);color:var(--good)}
 .assessment-feedback-card.bad{border-color:var(--bad);color:#ffd5df}
+.clinical-assessment #quizNextBtn{
+  display:block;
+  width:min(260px,100%);
+  margin:12px auto 0;
+}
 
 .feedback{min-height:48px;margin-top:16px;color:var(--muted);line-height:1.5}
 .reward{font-size:28px;font-weight:900;color:var(--cyan);margin:18px 0}
@@ -2673,6 +2678,9 @@ async function showInteractiveEyeScenario(){
   document.getElementById("quizNextBtn").classList.add("hidden");
   interactiveEyeAssessment.classList.remove("hidden");
 
+  const quizNextBtn=document.getElementById("quizNextBtn");
+  interactiveEyeAssessment.appendChild(quizNextBtn);
+
   voiceStimulusBtn.disabled=false;
   painStimulusBtn.disabled=false;
   voiceStimulusBtn.classList.remove("used");
@@ -2824,6 +2832,10 @@ function startQuiz(){
   assessmentMode="legacy";
   assessmentItems=getLegacyQuestions();
   interactiveEyeAssessment.classList.add("hidden");
+
+  const quizNextBtn=document.getElementById("quizNextBtn");
+  const quizCard=document.querySelector("#quizSection .quiz-card");
+  quizCard.appendChild(quizNextBtn);
   document.querySelector("#quizSection .eyebrow").textContent="Knowledge check";
   quizAttemptStartedAt=new Date().toISOString();
   saveResumeProgress("quiz");
