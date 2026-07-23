@@ -1,0 +1,241 @@
+{
+  "id": "gcs_verbal",
+  "title": "GCS: Verbal Response",
+  "subtitle": "Ask the patient questions, assess orientation and record the best verbal response.",
+  "phase": "assessment",
+  "reward": {
+    "xp": 50,
+    "brains": 1
+  },
+  "passMark": 4,
+  "cards": [
+    {
+      "type": "info",
+      "title": "Assess verbal response",
+      "frontPrompt": "What does the verbal component of the GCS assess?",
+      "backHeading": "Listen to the quality of the response",
+      "backPoints": [
+        "V5: orientated conversation.",
+        "V4: confused conversation.",
+        "V3: inappropriate words.",
+        "V2: incomprehensible sounds.",
+        "V1: no verbal response."
+      ],
+      "memoryLine": "Score the patient's best verbal response."
+    },
+    {
+      "type": "info",
+      "title": "Confirm orientation",
+      "frontPrompt": "How should you establish that a patient is orientated?",
+      "backHeading": "Use more than one orientation question",
+      "backPoints": [
+        "Confirm orientation to person.",
+        "Confirm orientation to place.",
+        "Confirm orientation to time.",
+        "A single correct answer is not enough evidence for V5."
+      ],
+      "memoryLine": "Person + place + time support an orientated V5 response."
+    },
+    {
+      "type": "info",
+      "title": "Use natural conversation",
+      "frontPrompt": "What should the assessment feel like?",
+      "backHeading": "Talk to the patient",
+      "backPoints": [
+        "Ask clear, simple questions.",
+        "Allow enough time for a response.",
+        "Compare the answer with the patient details.",
+        "Record the best response demonstrated."
+      ],
+      "memoryLine": "Assess the conversation, not just isolated words."
+    }
+  ],
+  "assessment": {
+    "type": "interactive_verbal",
+    "instructions": "Ask enough questions to assess the patient's verbal response, then select the correct GCS verbal score.",
+    "randomiseScenarios": true,
+    "minimumQuestionsForV5": 3,
+    "requiredOrientationDomainsForV5": [
+      "person",
+      "place",
+      "time"
+    ],
+    "patientImage": "foundations/images/gcs_patient_male.png",
+    "scoreOptions": [
+      {
+        "value": 5,
+        "label": "V5 \u2013 Orientated"
+      },
+      {
+        "value": 4,
+        "label": "V4 \u2013 Confused conversation"
+      },
+      {
+        "value": 3,
+        "label": "V3 \u2013 Inappropriate words"
+      },
+      {
+        "value": 2,
+        "label": "V2 \u2013 Incomprehensible sounds"
+      },
+      {
+        "value": 1,
+        "label": "V1 \u2013 No verbal response"
+      }
+    ],
+    "questions": [
+      {
+        "id": "name",
+        "domain": "person",
+        "label": "Tell me your name",
+        "text": "Can you tell me your full name?"
+      },
+      {
+        "id": "place",
+        "domain": "place",
+        "label": "Where are you?",
+        "text": "Can you tell me where you are?"
+      },
+      {
+        "id": "year",
+        "domain": "time",
+        "label": "What year is it?",
+        "text": "What year is it?"
+      },
+      {
+        "id": "reason",
+        "domain": "situation",
+        "label": "Why are you here?",
+        "text": "Can you tell me why you are in hospital?"
+      }
+    ],
+    "patientProfiles": [
+      {
+        "id": "patient_01",
+        "firstName": "Daniel",
+        "surname": "Harris",
+        "dob": "1968-03-14",
+        "location": "Neuro Critical Care",
+        "reason": "a bleed on my brain"
+      },
+      {
+        "id": "patient_02",
+        "firstName": "James",
+        "surname": "Walker",
+        "dob": "1957-09-22",
+        "location": "Neuro Critical Care",
+        "reason": "a head injury"
+      },
+      {
+        "id": "patient_03",
+        "firstName": "Thomas",
+        "surname": "Bennett",
+        "dob": "1974-01-08",
+        "location": "Neuro Critical Care",
+        "reason": "a stroke"
+      },
+      {
+        "id": "patient_04",
+        "firstName": "Samuel",
+        "surname": "Price",
+        "dob": "1981-11-30",
+        "location": "Neuro Critical Care",
+        "reason": "a seizure"
+      }
+    ],
+    "scenarios": [
+      {
+        "id": "verbal_v5",
+        "correctScore": 5,
+        "responses": {
+          "name": "{patientFullName}",
+          "place": "I'm in {patientLocation}.",
+          "year": "{currentYear}.",
+          "reason": "I was brought in because of {patientReason}."
+        }
+      },
+      {
+        "id": "verbal_v4",
+        "correctScore": 4,
+        "responses": {
+          "name": "{wrongFirstName} {patientSurname}.",
+          "place": "{wrongPlace}.",
+          "year": "{wrongYear}.",
+          "reason": "{confusedReason}."
+        }
+      },
+      {
+        "id": "verbal_v3",
+        "correctScore": 3,
+        "responses": {
+          "name": "{randomWord}.",
+          "place": "{randomWord}... {randomWord}.",
+          "year": "{randomWord}.",
+          "reason": "{randomWord}... {randomWord}."
+        }
+      },
+      {
+        "id": "verbal_v2",
+        "correctScore": 2,
+        "responses": {
+          "name": "Mmm... ahh...",
+          "place": "Nngh... uh...",
+          "year": "Ahh... mmm...",
+          "reason": "Uhhh... nngh..."
+        }
+      },
+      {
+        "id": "verbal_v1",
+        "correctScore": 1,
+        "responses": {
+          "name": "",
+          "place": "",
+          "year": "",
+          "reason": ""
+        }
+      }
+    ],
+    "dynamicValues": {
+      "wrongFirstNames": [
+        "David",
+        "Peter",
+        "Michael",
+        "Robert",
+        "Andrew",
+        "Stephen",
+        "John"
+      ],
+      "wrongPlaces": [
+        "At home",
+        "At work",
+        "At the shops",
+        "At the bus station",
+        "At school"
+      ],
+      "confusedReasons": [
+        "I'm waiting for the bus",
+        "I've come to work",
+        "I'm here to collect my shopping",
+        "I'm waiting for my wife",
+        "I've come for a meeting"
+      ],
+      "randomWords": [
+        "Banana",
+        "Blue",
+        "Football",
+        "Window",
+        "Tuesday",
+        "Biscuit",
+        "Chair",
+        "Green"
+      ],
+      "wrongYearMinimumOffset": 5,
+      "wrongYearMaximumOffset": 15
+    },
+    "feedback": {
+      "correct": "Correct. The patient's best verbal response is V{score}.",
+      "incorrect": "The responses demonstrated correspond to V{score}.",
+      "incompleteV5": "You selected V5, but the assessment is incomplete. Confirm orientation to person, place and time before recording an orientated verbal response."
+    }
+  }
+}
