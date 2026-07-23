@@ -1082,6 +1082,7 @@ let techniqueScore=0;
 let eyeSequence=[];
 let eyeScenarioInvalid=false;
 let eyeResponseEstablished=false;
+const gcsImageCache=new Map();
 let completedModules={};
 let progressData={};
 let selectedModuleId="brain_anatomy";
@@ -1899,40 +1900,81 @@ async function loadModule(){
   hideLoading();
 }
 
+function preloadImage(src){
+  if(!src)return Promise.resolve();
+
+  if(gcsImageCache.has(src)){
+    return gcsImageCache.get(src);
+  }
+
+  const promise=new Promise(resolve=>{
+    const image=new Image();
+
+    image.onload=async()=>{
+      try{
+        if(typeof image.decode==="function"){
+          await image.decode();
+        }
+      }catch(error){
+        // The image is already loaded, so decoding failure is non-fatal.
+      }
+      resolve();
+    };
+
+    image.onerror=()=>{
+      console.warn(`Could not preload image: ${src}`);
+      resolve();
+    };
+
+    image.src=src;
+  });
+
+  gcsImageCache.set(src,promise);
+  return promise;
+}
+
 async function preloadModuleImages(){
-  const imagePaths=[
-    ...new Set(
-      moduleData.cards.flatMap(card=>
-        [
-          card.image,
-          card.overlay,
-          card.focusOverlay,
-          ...(Array.isArray(card.steps)
-            ?card.steps.map(step=>step.overlay).filter(Boolean)
-            :[]),
-          (selectedModuleId==="pupils"||card.type==="pupil")
-            ?"foundations/images/eyes.png"
-            :null
-        ].filter(Boolean)
-      )
-    )
-  ];
-
-  await Promise.all(
-    imagePaths.map(src=>
-      new Promise(resolve=>{
-        const image=new Image();
-
-        image.onload=resolve;
-        image.onerror=()=>{
-          console.warn(`Could not preload image: ${src}`);
-          resolve();
-        };
-
-        image.src=src;
-      })
-    )
+  const cardImagePaths=moduleData.cards.flatMap(card=>
+    [
+      card.image,
+      card.overlay,
+      card.focusOverlay,
+      ...(Array.isArray(card.steps)
+        ?card.steps.map(step=>step.overlay).filter(Boolean)
+        :[]),
+      (selectedModuleId==="pupils"||card.type==="pupil")
+        ?"foundations/images/eyes.png"
+        :null
+    ].filter(Boolean)
   );
+
+  const assessmentVisuals=moduleData.assessment?.visuals||{};
+  const assessmentImagePaths=[
+    assessmentVisuals.baseImage,
+    assessmentVisuals.states?.open?.left,
+    assessmentVisuals.states?.open?.right,
+    assessmentVisuals.states?.closed?.left,
+    assessmentVisuals.states?.closed?.right,
+    assessmentVisuals.states?.half?.left,
+    assessmentVisuals.states?.half?.right
+  ].filter(Boolean);
+
+  if(isInteractiveEyeAssessment()){
+    assessmentImagePaths.push(
+      assessmentVisuals.baseImage||"foundations/images/eyes_gcs.png",
+      assessmentVisuals.states?.closed?.left||"foundations/images/eyes_lc.png",
+      assessmentVisuals.states?.closed?.right||"foundations/images/eyes_rc.png",
+      assessmentVisuals.states?.half?.left||"foundations/images/eyes_lh.png",
+      assessmentVisuals.states?.half?.right||"foundations/images/eyes_rh.png"
+    );
+  }
+
+  const imagePaths=[...new Set([
+    ...cardImagePaths,
+    ...assessmentImagePaths
+  ])];
+
+  await Promise.all(imagePaths.map(preloadImage));
 }
 
 function clearPupilTimers(){
@@ -2445,14 +2487,14 @@ document.getElementById("flipCard").onclick=flipCard;
 document.getElementById("flipCard").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipCard()}};
 document.getElementById("flipBtn").onclick=flipCard;
 document.getElementById("previousBtn").onclick=()=>{if(cardIndex>0){cardIndex--;showCard()}};
-document.getElementById("nextBtn").onclick=()=>{
+document.getElementById("nextBtn").onclick=async()=>{
   if(activeHotspotCard&&!hotspotCompleted){
     hotspotFeedback.textContent="Complete the identification sequence first.";
     hotspotFeedback.className="hotspot-feedback bad";
     return;
   }
   if(cardIndex<moduleData.cards.length-1){cardIndex++;showCard()}
-  else startAssessment();
+  else await startAssessment();
 };
 
 
@@ -2481,15 +2523,15 @@ function getAssessmentTotal(){
     :getLegacyQuestions().length;
 }
 
-function startAssessment(){
+async function startAssessment(){
   if(isInteractiveEyeAssessment()){
-    startInteractiveEyeAssessment();
+    await startInteractiveEyeAssessment();
     return;
   }
   startQuiz();
 }
 
-function startInteractiveEyeAssessment(){
+async function startInteractiveEyeAssessment(){
   const assessment=moduleData.assessment||{};
   const scenarios=Array.isArray(assessment.scenarios)?assessment.scenarios:[];
   if(!scenarios.length){
@@ -2509,7 +2551,7 @@ function startInteractiveEyeAssessment(){
   questionIndex=0;
   score=0;
   techniqueScore=0;
-  showInteractiveEyeScenario();
+  await showInteractiveEyeScenario();
 }
 
 function getEyeVisualConfig(){
@@ -2540,14 +2582,24 @@ function applyEyeOverlay(imageElement,src){
   }
 }
 
-function setGcsEyeState(state){
+async function setGcsEyeState(state){
   const normalised=["open","half","closed"].includes(state)?state:"closed";
   const visuals=getEyeVisualConfig();
   const stateVisual=visuals.states[normalised]||visuals.states.closed;
+  const requiredImages=[
+    visuals.baseImage,
+    stateVisual.left,
+    stateVisual.right
+  ].filter(Boolean);
+
+  await Promise.all(requiredImages.map(preloadImage));
 
   gcsEyeBase.src=visuals.baseImage;
   applyEyeOverlay(gcsLeftEyeOverlay,stateVisual.left||null);
   applyEyeOverlay(gcsRightEyeOverlay,stateVisual.right||null);
+
+  // Allow the browser one paint cycle before answer controls are enabled.
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
 }
 
 function getScenarioEyeState(scenario){
@@ -2597,7 +2649,7 @@ function buildEyeScoreButtons(){
   });
 }
 
-function showInteractiveEyeScenario(){
+async function showInteractiveEyeScenario(){
   answered=false;
   eyeSequence=[];
   eyeScenarioInvalid=false;
@@ -2631,7 +2683,7 @@ function showInteractiveEyeScenario(){
   buildEyeScoreButtons();
 
   const initialState=getScenarioEyeState(scenario);
-  setGcsEyeState(initialState);
+  await setGcsEyeState(initialState);
   eyePatientStatus.textContent=initialState==="open"
     ?"The patient's eyes are open before stimulation."
     :"The patient's eyes are closed. Observe before proceeding.";
@@ -2656,7 +2708,7 @@ function invalidateEyeScenario(message){
   restartEyeScenarioBtn.classList.remove("hidden");
 }
 
-function applyEyeStimulus(stimulus){
+async function applyEyeStimulus(stimulus){
   if(answered||eyeScenarioInvalid)return;
   const assessment=moduleData.assessment||{};
   const scenario=assessmentItems[questionIndex];
@@ -2669,7 +2721,9 @@ function applyEyeStimulus(stimulus){
     voiceStimulusBtn.disabled=true;
 
     if(respondsTo==="voice"){
-      setGcsEyeState(scenario.responseState||scenario.eyeOpeningAfterResponse?.left||"open");
+      enableEyeScoreButtons(false);
+      eyePatientStatus.textContent="The patient is responding to voice…";
+      await setGcsEyeState(scenario.responseState||scenario.eyeOpeningAfterResponse?.left||"open");
       eyePatientStatus.textContent="The patient opens their eyes to voice.";
       eyeResponseEstablished=true;
       painStimulusBtn.disabled=true;
@@ -2692,7 +2746,9 @@ function applyEyeStimulus(stimulus){
 
     if(!eyeSequence.includes("voice")&&respondsTo!=="spontaneous"){
       if(["voice","pain"].includes(respondsTo)){
-        setGcsEyeState(scenario.responseState||scenario.eyeOpeningAfterResponse?.left||"open");
+        enableEyeScoreButtons(false);
+        eyePatientStatus.textContent="The patient is responding to painful stimulation…";
+        await setGcsEyeState(scenario.responseState||scenario.eyeOpeningAfterResponse?.left||"open");
         eyePatientStatus.textContent="The patient's eyes open after painful stimulation.";
       }
       const feedback=assessment.feedback?.painBeforeVoice;
@@ -2704,11 +2760,13 @@ function applyEyeStimulus(stimulus){
     }
 
     painStimulusBtn.disabled=true;
+    enableEyeScoreButtons(false);
     if(respondsTo==="pain"){
-      setGcsEyeState(scenario.responseState||scenario.eyeOpeningAfterResponse?.left||"half");
+      eyePatientStatus.textContent="The patient is responding to painful stimulation…";
+      await setGcsEyeState(scenario.responseState||scenario.eyeOpeningAfterResponse?.left||"half");
       eyePatientStatus.textContent="The patient opens their eyes to painful stimulation.";
     }else{
-      setGcsEyeState("closed");
+      await setGcsEyeState("closed");
       eyePatientStatus.textContent="There is no eye opening to voice or pain.";
     }
     eyeResponseEstablished=true;
@@ -2758,9 +2816,9 @@ function submitEyeScore(selectedScore,button){
   document.getElementById("quizNextBtn").classList.remove("hidden");
 }
 
-voiceStimulusBtn.onclick=()=>applyEyeStimulus("voice");
-painStimulusBtn.onclick=()=>applyEyeStimulus("pain");
-restartEyeScenarioBtn.onclick=()=>showInteractiveEyeScenario();
+voiceStimulusBtn.onclick=async()=>await applyEyeStimulus("voice");
+painStimulusBtn.onclick=async()=>await applyEyeStimulus("pain");
+restartEyeScenarioBtn.onclick=async()=>await showInteractiveEyeScenario();
 
 function startQuiz(){
   assessmentMode="legacy";
@@ -2911,11 +2969,11 @@ function answerQuestion(index,button){
     questionIndex===questions.length-1?"See result":"Next question";
   document.getElementById("quizNextBtn").classList.remove("hidden");
 }
-document.getElementById("quizNextBtn").onclick=()=>{
+document.getElementById("quizNextBtn").onclick=async()=>{
   if(assessmentMode==="interactive_eye"){
     if(questionIndex<assessmentItems.length-1){
       questionIndex++;
-      showInteractiveEyeScenario();
+      await showInteractiveEyeScenario();
     }else{
       finishModule();
     }
