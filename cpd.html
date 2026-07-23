@@ -62,7 +62,7 @@ main{
 }
 .summary-grid{
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:14px;
   margin-bottom:18px;
 }
@@ -96,33 +96,65 @@ main{
 .module-row{
   display:grid;
   grid-template-columns:minmax(0,1fr) auto;
-  gap:14px;
-  align-items:center;
-  padding:14px;
-  border-radius:14px;
+  gap:18px;
+  align-items:start;
+  padding:16px;
+  border-radius:16px;
   border:1px solid var(--line);
   background:rgba(255,255,255,.04);
 }
-.module-name{font-weight:900;font-size:17px}
-.module-meta{
-  margin-top:5px;
+.module-name{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  font-weight:900;
+  font-size:18px;
+}
+.module-details{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px 18px;
+  margin-top:11px;
+}
+.module-detail{
   color:var(--muted);
   font-size:13px;
-  line-height:1.45;
+  line-height:1.4;
 }
+.module-detail strong{color:#fff}
 .module-time{
   color:var(--cyan);
   font-weight:900;
-  font-size:18px;
+  font-size:20px;
   white-space:nowrap;
   text-align:right;
 }
 .status{
   display:inline-block;
-  margin-left:7px;
+  padding:4px 8px;
+  border-radius:999px;
   color:var(--good);
-  font-size:12px;
+  background:rgba(97,245,169,.10);
+  border:1px solid rgba(97,245,169,.35);
+  font-size:11px;
   font-weight:900;
+}
+.status.in-progress{
+  color:#ffd27a;
+  background:rgba(255,210,122,.10);
+  border-color:rgba(255,210,122,.35);
+}
+.status.not-passed{
+  color:#ff9db3;
+  background:rgba(255,157,179,.10);
+  border-color:rgba(255,157,179,.35);
+}
+.reward-line{
+  margin-top:10px;
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:800;
 }
 .empty,
 .loading,
@@ -165,9 +197,13 @@ main{
   .brand-icon{font-size:27px}
   .hub-link{font-size:13px;padding:8px 10px}
   main{padding-top:16px}
-  .summary-grid{grid-template-columns:1fr}
+  .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .module-row{grid-template-columns:1fr}
+  .module-details{grid-template-columns:1fr}
   .module-time{text-align:left}
+}
+@media(max-width:430px){
+  .summary-grid{grid-template-columns:1fr}
 }
 @media print{
   body{background:#fff;color:#000}
@@ -212,12 +248,16 @@ main{
         <div id="totalTime" class="summary-value">0 min</div>
       </article>
       <article class="summary-card">
-        <div class="summary-label">Topics recorded</div>
-        <div id="topicCount" class="summary-value">0</div>
-      </article>
-      <article class="summary-card">
         <div class="summary-label">Completed topics</div>
         <div id="completedCount" class="summary-value">0</div>
+      </article>
+      <article class="summary-card">
+        <div class="summary-label">Average best score</div>
+        <div id="averageBestScore" class="summary-value">—</div>
+      </article>
+      <article class="summary-card">
+        <div class="summary-label">Quiz attempts</div>
+        <div id="totalAttempts" class="summary-value">0</div>
       </article>
     </section>
 
@@ -232,10 +272,9 @@ main{
     <section class="panel">
       <h2>About this record</h2>
       <p class="note">
-        Time is recorded in seconds and displayed here as hours and minutes. The learning timer pauses
-        after inactivity, when the page is hidden, and when the maximum session allowance is reached.
-        This page can only display time that has actually been written to Firebase; it cannot reconstruct
-        learning undertaken before CPD tracking was added.
+        Active learning time is displayed as hours and minutes. The timer pauses after inactivity,
+        when the learning page is hidden, and when the maximum session allowance is reached. Quiz attempts,
+        best and latest scores, reviews, completion dates and earned rewards are shown for each topic.
       </p>
       <div class="actions">
         <button class="btn secondary" type="button" onclick="window.print()">Print / Save as PDF</button>
@@ -264,14 +303,6 @@ const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getDatabase(app);
 const APP_ROOT="neuroQuest";
-
-const MODULE_TITLES={
-  brain_anatomy:"Brain Anatomy",
-  brain_lobes:"Brain Lobes",
-  pupils:"Pupil Assessment",
-  brainstem:"Brainstem",
-  ventricles:"Ventricles & CSF Spaces"
-};
 
 let currentUser=null;
 
@@ -305,19 +336,81 @@ function showError(message){
   box.classList.remove("hidden");
 }
 
+function getModuleStatus(data){
+  if(data.completed===true){
+    return {
+      label:"✓ Complete",
+      className:"status"
+    };
+  }
+
+  if(Number(data.attempts||0)>0){
+    return {
+      label:"Not yet passed",
+      className:"status not-passed"
+    };
+  }
+
+  return {
+    label:"In progress",
+    className:"status in-progress"
+  };
+}
+
+function formatScore(value){
+  const score=Number(value);
+  return Number.isFinite(score)?`${score}%`:"Not recorded";
+}
+
 function renderRecord(progress){
   const cpd=progress?.cpd||{};
   const modules=cpd.modules||{};
+
   const entries=Object.entries(modules)
-    .filter(([,data])=>Number(data?.seconds||0)>0||Number(data?.visits||0)>0)
-    .sort((a,b)=>Number(b[1]?.seconds||0)-Number(a[1]?.seconds||0));
+    .filter(([,data])=>
+      Number(data?.totalLearningSeconds||0)>0||
+      Number(data?.reviewCount||0)>0||
+      Number(data?.attempts||0)>0||
+      data?.completed===true
+    )
+    .sort((a,b)=>
+      Number(b[1]?.totalLearningSeconds||0)-
+      Number(a[1]?.totalLearningSeconds||0)
+    );
 
-  const totalSeconds=Number(cpd.totalSeconds||0);
-  const completedCount=entries.filter(([,data])=>data?.completed===true).length;
+  const totalSeconds=Number(cpd.totalLearningSeconds||0);
+  const completedCount=entries.filter(
+    ([,data])=>data?.completed===true
+  ).length;
 
-  document.getElementById("totalTime").textContent=formatDuration(totalSeconds);
-  document.getElementById("topicCount").textContent=String(entries.length);
-  document.getElementById("completedCount").textContent=String(completedCount);
+  const totalAttempts=entries.reduce(
+    (sum,[,data])=>sum+Number(data?.attempts||0),
+    0
+  );
+
+  const scoredModules=entries.filter(
+    ([,data])=>
+      Number(data?.attempts||0)>0&&
+      Number.isFinite(Number(data?.bestPercentage))
+  );
+
+  const averageBestScore=scoredModules.length
+    ?Math.round(
+        scoredModules.reduce(
+          (sum,[,data])=>sum+Number(data.bestPercentage),
+          0
+        )/scoredModules.length
+      )
+    :null;
+
+  document.getElementById("totalTime").textContent=
+    formatDuration(totalSeconds);
+  document.getElementById("completedCount").textContent=
+    String(completedCount);
+  document.getElementById("averageBestScore").textContent=
+    averageBestScore===null?"—":`${averageBestScore}%`;
+  document.getElementById("totalAttempts").textContent=
+    String(totalAttempts);
 
   const list=document.getElementById("moduleList");
   list.innerHTML="";
@@ -326,32 +419,97 @@ function renderRecord(progress){
     const row=document.createElement("article");
     row.className="module-row";
 
-    const title=MODULE_TITLES[moduleId]||
-      moduleId.replaceAll("_"," ").replace(/\b\w/g,letter=>letter.toUpperCase());
+    const title=data.title||
+      moduleId.replaceAll("_"," ").replace(
+        /\b\w/g,
+        letter=>letter.toUpperCase()
+      );
+
+    const status=getModuleStatus(data);
+    const firstCompleted=
+      data.firstCompletedAt||null;
+    const lastCompleted=
+      data.lastCompletedAt||null;
+    const lastReviewed=
+      data.lastReviewedAt||
+      data.lastAttemptAt||
+      data.lastActiveAt||
+      null;
+
+    const latestScore=Number(data.attempts||0)>0
+      ?formatScore(data.latestPercentage)
+      :"Not attempted";
+
+    const bestScore=Number(data.attempts||0)>0
+      ?formatScore(data.bestPercentage)
+      :"Not attempted";
+
+    const rewards=[];
+    if(Number(data.xpEarned||0)>0){
+      rewards.push(`${Number(data.xpEarned)} XP`);
+    }
+    if(Number(data.brainsEarned||0)>0){
+      rewards.push(`🧠 ${Number(data.brainsEarned)} Brain${
+        Number(data.brainsEarned)===1?"":"s"
+      }`);
+    }
 
     row.innerHTML=`
       <div>
         <div class="module-name">
-          ${title}
-          ${data.completed===true?'<span class="status">✓ Complete</span>':""}
+          <span>${title}</span>
+          <span class="${status.className}">${status.label}</span>
         </div>
-        <div class="module-meta">
-          Visits: ${Number(data.visits||0)}
-          · Last opened: ${formatDate(data.lastOpenedAt)}
-          ${data.completedAt?` · Completed: ${formatDate(data.completedAt)}`:""}
+
+        <div class="module-details">
+          <div class="module-detail">
+            <strong>Best score:</strong> ${bestScore}
+          </div>
+          <div class="module-detail">
+            <strong>Latest score:</strong> ${latestScore}
+          </div>
+          <div class="module-detail">
+            <strong>Quiz attempts:</strong> ${Number(data.attempts||0)}
+          </div>
+          <div class="module-detail">
+            <strong>Reviews:</strong> ${Number(data.reviewCount||0)}
+          </div>
+          <div class="module-detail">
+            <strong>First completed:</strong> ${formatDate(firstCompleted)}
+          </div>
+          <div class="module-detail">
+            <strong>Last completed:</strong> ${formatDate(lastCompleted)}
+          </div>
+          <div class="module-detail">
+            <strong>Last reviewed:</strong> ${formatDate(lastReviewed)}
+          </div>
+          <div class="module-detail">
+            <strong>Last opened:</strong> ${formatDate(data.lastOpenedAt)}
+          </div>
         </div>
+
+        ${rewards.length
+          ?`<div class="reward-line">Earned: ${rewards.join(" · ")}</div>`
+          :""
+        }
       </div>
-      <div class="module-time">${formatDuration(data.seconds)}</div>
+
+      <div class="module-time">
+        ${formatDuration(data.totalLearningSeconds)}
+      </div>
     `;
+
     list.appendChild(row);
   });
 
-  document.getElementById("emptyState").classList.toggle("hidden",entries.length>0);
+  document.getElementById("emptyState").classList.toggle(
+    "hidden",
+    entries.length>0
+  );
   document.getElementById("loadingState").classList.add("hidden");
   document.getElementById("errorState").classList.add("hidden");
   document.getElementById("content").classList.remove("hidden");
 }
-
 async function loadRecord(){
   if(!currentUser)return;
 
