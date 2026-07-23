@@ -101,7 +101,7 @@
     {
       "type": "info",
       "image": "foundations/images/meninges_background.png",
-      "imageOpacity": 0.4,
+      "imageOpacity": 0.8,
       "imageFilter": "saturate(1) brightness(1)",   
       "frontPrompt": "Can you remember the protective layers from outside to inside?",
       "backHeading": "Outside to Inside",
@@ -112,7 +112,51 @@
         "The pia mater then closely covers the brain."
       ],
       "memoryLine": "Skull → dura → arachnoid → subarachnoid space → pia → brain."
+    },{
+  "type": "hotspot-sequence",
+  "title": "Identify the Meningeal Layers",
+  "image": "foundations/images/meninges_background.png",
+  "imageOpacity": 0.40,
+
+  "instruction": "Select each meningeal layer from outside to inside.",
+
+  "steps": [
+    {
+      "id": "dura",
+      "prompt": "Select the outer meningeal layer.",
+      "button": "Dura mater",
+      "overlay": "foundations/images/dura_overlay.png",
+      "overlayEffect": "grow",
+      "success": "Correct! The dura mater is the tough outer layer."
+    },
+    {
+      "id": "arachnoid",
+      "prompt": "Now select the middle meningeal layer.",
+      "button": "Arachnoid mater",
+      "overlay": "foundations/images/arachnoid_overlay.png",
+      "overlayEffect": "grow",
+      "success": "Correct! The arachnoid lies beneath the dura."
+    },
+    {
+      "id": "pia",
+      "prompt": "Finally select the layer attached directly to the brain.",
+      "button": "Pia mater",
+      "overlay": "foundations/images/pia_overlay.png",
+      "overlayEffect": "grow",
+      "success": "Correct! The pia mater closely follows the brain surface."
     }
+  ],
+
+  "backHeading": "The Meninges",
+  "backPoints": [
+    "Dura mater is the tough outer protective layer.",
+    "Arachnoid mater is the middle layer.",
+    "The subarachnoid space contains CSF and cerebral blood vessels.",
+    "Pia mater is tightly adherent to the brain surface."
+  ],
+
+  "memoryLine": "Outside → Dura → Arachnoid → Pia → Brain"
+}
   ],
   "quiz": [
     {

@@ -96,6 +96,114 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:24px;overflow:hidden;background:var(--panel);border:1px solid var(--line);box-shadow:0 0 24px rgba(71,243,255,.11)}
 .back{transform:rotateY(180deg);padding:28px;display:flex;flex-direction:column;justify-content:center}
 .anatomy-image{position:relative;width:100%;height:390px;overflow:hidden;background:#000}
+
+/* Reusable hotspot-sequence teaching cards */
+.hotspot-stage{
+  position:absolute;
+  inset:0;
+  z-index:6;
+  pointer-events:none;
+}
+.hotspot-target{
+  position:absolute;
+  z-index:7;
+  border:2px solid transparent;
+  border-radius:14px;
+  background:rgba(71,243,255,.02);
+  cursor:pointer;
+  pointer-events:auto;
+  transition:border-color .18s ease,background .18s ease,box-shadow .18s ease;
+}
+.hotspot-target:hover,
+.hotspot-target:focus-visible{
+  outline:none;
+  border-color:rgba(71,243,255,.72);
+  background:rgba(71,243,255,.10);
+  box-shadow:0 0 16px rgba(71,243,255,.28);
+}
+.hotspot-target.correct{
+  border-color:var(--good);
+  background:rgba(97,245,169,.12);
+  box-shadow:0 0 18px rgba(97,245,169,.30);
+}
+.hotspot-target.wrong{
+  border-color:var(--bad);
+  background:rgba(255,117,151,.14);
+  animation:hotspotWrong .34s ease;
+}
+@keyframes hotspotWrong{
+  0%,100%{transform:translateX(0)}
+  35%{transform:translateX(-5px)}
+  70%{transform:translateX(5px)}
+}
+.hotspot-overlay{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  pointer-events:none;
+  filter:
+    brightness(1.15)
+    drop-shadow(0 0 10px rgba(71,243,255,.95))
+    drop-shadow(0 0 24px rgba(71,243,255,.62));
+  animation:hotspotReveal .55s ease-out both;
+}
+@keyframes hotspotReveal{
+  from{opacity:0;filter:brightness(.7) drop-shadow(0 0 0 rgba(71,243,255,0))}
+  to{opacity:1;filter:brightness(1.15) drop-shadow(0 0 10px rgba(71,243,255,.95)) drop-shadow(0 0 24px rgba(71,243,255,.62))}
+}
+.hotspot-panel{
+  position:absolute;
+  z-index:9;
+  left:50%;
+  bottom:10px;
+  width:min(94%,680px);
+  transform:translateX(-50%);
+  padding:10px;
+  border-radius:15px;
+  background:rgba(3,10,22,.88);
+  border:1px solid var(--line);
+  backdrop-filter:blur(6px);
+  pointer-events:auto;
+}
+.hotspot-instruction{
+  color:#fff;
+  font-weight:900;
+  text-align:center;
+  line-height:1.35;
+}
+.hotspot-feedback{
+  min-height:20px;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:13px;
+  text-align:center;
+}
+.hotspot-feedback.good{color:var(--good)}
+.hotspot-feedback.bad{color:var(--bad)}
+.hotspot-options{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:7px;
+  margin-top:8px;
+}
+.hotspot-option{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:8px 11px;
+  background:rgba(255,255,255,.07);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+.hotspot-option:hover{background:rgba(71,243,255,.12)}
+.hotspot-option.correct{border-color:var(--good);background:rgba(97,245,169,.14)}
+.hotspot-option:disabled{opacity:.48;cursor:not-allowed}
+.flip-card.hotspot-active{cursor:default}
+.flip-card.hotspot-active .front-copy p{display:none}
 .card-image,.card-overlay,.card-focus-overlay,.pupil-eye-image{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
 .card-image{opacity:0.35;filter:saturate(.75) brightness(.72)}
 .pupil-stage{position:absolute;inset:0;background:#000}
@@ -466,6 +574,9 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   .pupil-select-grid{grid-template-columns:1fr}
   .pupil-select-check{grid-column:1}
 
+  .hotspot-panel{bottom:6px;padding:8px}
+  .hotspot-instruction{font-size:14px}
+  .hotspot-option{padding:7px 9px;font-size:12px}
   .option-grid{grid-template-columns:1fr}
   .topic-list{grid-template-columns:1fr}
   .resume-panel{
@@ -528,7 +639,9 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 .flip-card.flipped .card-image,
 .flip-card.flipped .card-overlay,
 .flip-card.flipped .card-focus-overlay,
-.flip-card.flipped .pupil-stage{
+.flip-card.flipped .pupil-stage,
+.flip-card.flipped .hotspot-stage,
+.flip-card.flipped .hotspot-panel{
   opacity:0 !important;
   visibility:hidden !important;
   animation:none !important;
@@ -590,6 +703,16 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
             <img id="cardImage" class="card-image" alt="">
             <img id="cardOverlay" class="card-overlay" alt="" aria-hidden="true">
             <img id="cardFocusOverlay" class="card-focus-overlay hidden" alt="" aria-hidden="true">
+
+            <div id="hotspotStage" class="hotspot-stage hidden" aria-label="Interactive image identification">
+              <div id="hotspotTargets"></div>
+              <div id="hotspotOverlays"></div>
+              <div id="hotspotPanel" class="hotspot-panel">
+                <div id="hotspotInstruction" class="hotspot-instruction"></div>
+                <div id="hotspotFeedback" class="hotspot-feedback" aria-live="polite"></div>
+                <div id="hotspotOptions" class="hotspot-options"></div>
+              </div>
+            </div>
 
             <div id="pupilStage" class="pupil-stage hidden">
               <img id="pupilEyeImage" class="pupil-eye-image" src="foundations/images/eyes.png" alt="Eyes for pupil assessment">
@@ -802,6 +925,16 @@ let rightPupilTimer=null;
 let ambientPupilTimer=null;
 let activePupilCard=null;
 let ambientPupilCard=false;
+
+const hotspotStage=document.getElementById("hotspotStage");
+const hotspotTargets=document.getElementById("hotspotTargets");
+const hotspotOverlays=document.getElementById("hotspotOverlays");
+const hotspotInstruction=document.getElementById("hotspotInstruction");
+const hotspotFeedback=document.getElementById("hotspotFeedback");
+const hotspotOptions=document.getElementById("hotspotOptions");
+let activeHotspotCard=null;
+let hotspotStepIndex=0;
+let hotspotCompleted=false;
 
 
 function getLocalLearningDayKey(){
@@ -1370,6 +1503,9 @@ async function preloadModuleImages(){
           card.image,
           card.overlay,
           card.focusOverlay,
+          ...(Array.isArray(card.steps)
+            ?card.steps.map(step=>step.overlay).filter(Boolean)
+            :[]),
           (selectedModuleId==="pupils"||card.type==="pupil")
             ?"foundations/images/eyes.png"
             :null
@@ -1479,6 +1615,7 @@ function scheduleAmbientPupilBreath(){
 }
 
 function showAmbientPupilCard(){
+  resetHotspotCard();
   clearPupilTimers();
   activePupilCard=null;
   ambientPupilCard=true;
@@ -1494,6 +1631,7 @@ function showAmbientPupilCard(){
 }
 
 function showPupilCard(card){
+  resetHotspotCard();
   clearPupilTimers();
   ambientPupilCard=false;
   activePupilCard=card;
@@ -1573,7 +1711,216 @@ function applyOverlayEffect(element,effectClass){
   if(effectClass)element.classList.add(effectClass);
 }
 
+function resetHotspotCard(){
+  activeHotspotCard=null;
+  hotspotStepIndex=0;
+  hotspotCompleted=false;
+  hotspotStage.classList.add("hidden");
+  hotspotTargets.innerHTML="";
+  hotspotOverlays.innerHTML="";
+  hotspotOptions.innerHTML="";
+  hotspotInstruction.textContent="";
+  hotspotFeedback.textContent="";
+  hotspotFeedback.className="hotspot-feedback";
+  document.getElementById("flipCard").classList.remove("hotspot-active");
+}
+
+function getHotspotSteps(card){
+  return Array.isArray(card.steps)?card.steps:[];
+}
+
+function getHotspotOptions(card){
+  if(Array.isArray(card.options)&&card.options.length){
+    return card.options;
+  }
+
+  return getHotspotSteps(card).map(step=>({
+    id:step.id,
+    label:step.label||step.id
+  }));
+}
+
+function addHotspotOverlay(step){
+  if(!step?.overlay)return;
+
+  const existing=hotspotOverlays.querySelector(
+    `[data-hotspot-overlay="${CSS.escape(String(step.id))}"]`
+  );
+  if(existing)return;
+
+  const image=document.createElement("img");
+  image.className="hotspot-overlay";
+  image.src=step.overlay;
+  image.alt="";
+  image.setAttribute("aria-hidden","true");
+  image.dataset.hotspotOverlay=String(step.id);
+  hotspotOverlays.appendChild(image);
+}
+
+function completeHotspotCard(){
+  hotspotCompleted=true;
+  hotspotInstruction.textContent=
+    activeHotspotCard.completePrompt||"All structures identified.";
+  hotspotFeedback.textContent=
+    activeHotspotCard.completeText||"Excellent — sequence complete. You can now flip the card.";
+  hotspotFeedback.className="hotspot-feedback good";
+
+  hotspotTargets.querySelectorAll("button").forEach(button=>{
+    button.disabled=true;
+  });
+  hotspotOptions.querySelectorAll("button").forEach(button=>{
+    button.disabled=true;
+  });
+}
+
+function advanceHotspotStep(step){
+  addHotspotOverlay(step);
+
+  hotspotTargets
+    .querySelectorAll(`[data-hotspot-id="${CSS.escape(String(step.id))}"]`)
+    .forEach(button=>{
+      button.classList.add("correct");
+      button.disabled=true;
+    });
+
+  hotspotOptions
+    .querySelectorAll(`[data-hotspot-id="${CSS.escape(String(step.id))}"]`)
+    .forEach(button=>{
+      button.classList.add("correct");
+      button.disabled=true;
+    });
+
+  hotspotFeedback.textContent=step.successText||"Correct.";
+  hotspotFeedback.className="hotspot-feedback good";
+  hotspotStepIndex++;
+
+  const steps=getHotspotSteps(activeHotspotCard);
+  if(hotspotStepIndex>=steps.length){
+    window.setTimeout(completeHotspotCard,450);
+    return;
+  }
+
+  window.setTimeout(()=>{
+    if(!activeHotspotCard||hotspotCompleted)return;
+    hotspotInstruction.textContent=
+      steps[hotspotStepIndex].prompt||
+      `Select ${steps[hotspotStepIndex].label||"the next structure"}.`;
+    hotspotFeedback.textContent="";
+    hotspotFeedback.className="hotspot-feedback";
+  },500);
+}
+
+function chooseHotspot(id,sourceButton){
+  if(!activeHotspotCard||hotspotCompleted)return;
+
+  const steps=getHotspotSteps(activeHotspotCard);
+  const expected=steps[hotspotStepIndex];
+  if(!expected)return;
+
+  if(String(id)===String(expected.id)){
+    advanceHotspotStep(expected);
+    return;
+  }
+
+  hotspotFeedback.textContent=activeHotspotCard.tryAgainText||"Not quite — try again.";
+  hotspotFeedback.className="hotspot-feedback bad";
+
+  if(sourceButton){
+    sourceButton.classList.remove("wrong");
+    void sourceButton.offsetWidth;
+    sourceButton.classList.add("wrong");
+    window.setTimeout(()=>sourceButton.classList.remove("wrong"),420);
+  }
+}
+
+function renderCoordinateHotspots(card){
+  hotspotTargets.innerHTML="";
+
+  getHotspotSteps(card).forEach(step=>{
+    const spot=step.hotspot;
+    if(!spot)return;
+
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="hotspot-target";
+    button.dataset.hotspotId=String(step.id);
+    button.setAttribute("aria-label",step.label||`Select ${step.id}`);
+    button.style.left=`${Number(spot.x)||0}%`;
+    button.style.top=`${Number(spot.y)||0}%`;
+    button.style.width=`${Number(spot.width)||10}%`;
+    button.style.height=`${Number(spot.height)||10}%`;
+    button.addEventListener("click",event=>{
+      event.stopPropagation();
+      chooseHotspot(step.id,button);
+    });
+    hotspotTargets.appendChild(button);
+  });
+}
+
+function renderHotspotOptionButtons(card){
+  hotspotOptions.innerHTML="";
+
+  const options=getHotspotOptions(card);
+  if(card.showButtons===false||options.length===0)return;
+
+  options.forEach(option=>{
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="hotspot-option";
+    button.dataset.hotspotId=String(option.id);
+    button.textContent=option.label||option.id;
+    button.addEventListener("click",event=>{
+      event.stopPropagation();
+      chooseHotspot(option.id,button);
+    });
+    hotspotOptions.appendChild(button);
+  });
+}
+
+function showHotspotCard(card){
+  clearPupilTimers();
+  ambientPupilCard=false;
+  activePupilCard=null;
+  activeHotspotCard=card;
+  hotspotStepIndex=0;
+  hotspotCompleted=false;
+
+  pupilStage.classList.add("hidden");
+  document.querySelector(".pupil-torch-controls").classList.remove("hidden");
+  document.getElementById("flipCard").classList.add("hotspot-active");
+
+  const cardImage=document.getElementById("cardImage");
+  const cardOverlay=document.getElementById("cardOverlay");
+  const cardFocusOverlay=document.getElementById("cardFocusOverlay");
+
+  cardImage.classList.remove("hidden");
+  cardImage.src=card.image||"";
+  cardImage.alt=card.title||moduleData.title;
+  cardImage.style.opacity=card.imageOpacity??"";
+  cardImage.style.filter=card.imageFilter??"";
+
+  clearOverlayEffects(cardOverlay);
+  clearOverlayEffects(cardFocusOverlay);
+  cardOverlay.removeAttribute("src");
+  cardOverlay.classList.add("hidden");
+  cardFocusOverlay.removeAttribute("src");
+  cardFocusOverlay.classList.add("hidden");
+
+  hotspotOverlays.innerHTML="";
+  hotspotFeedback.textContent="";
+  hotspotFeedback.className="hotspot-feedback";
+
+  const steps=getHotspotSteps(card);
+  hotspotInstruction.textContent=
+    steps[0]?.prompt||card.instruction||"Select the first structure.";
+
+  renderCoordinateHotspots(card);
+  renderHotspotOptionButtons(card);
+  hotspotStage.classList.remove("hidden");
+}
+
 function showStandardCard(card){
+  resetHotspotCard();
   ambientPupilCard=false;
   activePupilCard=null;
   clearPupilTimers();
@@ -1629,6 +1976,8 @@ function showCard(){
 
   if(c.type==="pupil"){
     showPupilCard(c);
+  }else if(c.type==="hotspot-sequence"){
+    showHotspotCard(c);
   }else if(selectedModuleId==="pupils"&&c.type==="info"){
     showAmbientPupilCard();
   }else{
@@ -1636,7 +1985,12 @@ function showCard(){
   }
 
   document.getElementById("cardTitle").textContent="";
-  document.getElementById("frontPrompt").textContent=c.frontPrompt;
+  document.getElementById("frontPrompt").textContent=
+    c.frontPrompt||c.instruction||c.title||"Interactive identification";
+  document.querySelector(".front-copy p").textContent=
+    c.type==="hotspot-sequence"
+      ?"Complete the identification sequence, then flip the card."
+      :"Tap anywhere on the card to reveal the answer.";
   document.getElementById("backHeading").textContent=c.backHeading;
   document.getElementById("backPoints").innerHTML=(c.backPoints||[]).map(p=>`<li>${p}</li>`).join("");
   document.getElementById("memoryLine").textContent=c.memoryLine||"";
@@ -1673,12 +2027,24 @@ window.addEventListener("resize",()=>{
   }
 });
 
-function flipCard(){document.getElementById("flipCard").classList.toggle("flipped")}
+function flipCard(){
+  if(activeHotspotCard&&!hotspotCompleted){
+    hotspotFeedback.textContent="Complete the identification sequence before flipping.";
+    hotspotFeedback.className="hotspot-feedback bad";
+    return;
+  }
+  document.getElementById("flipCard").classList.toggle("flipped");
+}
 document.getElementById("flipCard").onclick=flipCard;
 document.getElementById("flipCard").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipCard()}};
 document.getElementById("flipBtn").onclick=flipCard;
 document.getElementById("previousBtn").onclick=()=>{if(cardIndex>0){cardIndex--;showCard()}};
 document.getElementById("nextBtn").onclick=()=>{
+  if(activeHotspotCard&&!hotspotCompleted){
+    hotspotFeedback.textContent="Complete the identification sequence first.";
+    hotspotFeedback.className="hotspot-feedback bad";
+    return;
+  }
   if(cardIndex<moduleData.cards.length-1){cardIndex++;showCard()}
   else startQuiz();
 };
