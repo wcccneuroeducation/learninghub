@@ -638,6 +638,7 @@ const FOUNDATION_MODULES=[
 ];
 
 let user=null,moduleData=null,cardIndex=0,questionIndex=0,score=0,answered=false;
+let quizAttemptStartedAt=null;
 let completedModules={};
 let progressData={};
 let selectedModuleId="brain_anatomy";
@@ -744,30 +745,57 @@ async function flushCpdTime(){
     const modules=cpd.modules||{};
     const currentModule=modules[selectedModuleId]||{};
 
-    const updatedModuleSeconds=
-      Number(currentModule.seconds||0)+secondsToSave;
-    const updatedTotalSeconds=
-      Number(cpd.totalSeconds||0)+secondsToSave;
+    /*
+      Keep the original "seconds" fields for backwards compatibility,
+      while also writing clearer CPD field names for the Learning Record.
+    */
+    const currentModuleSeconds=Number(
+      currentModule.totalLearningSeconds ??
+      currentModule.seconds ??
+      0
+    );
+    const currentTotalSeconds=Number(
+      cpd.totalLearningSeconds ??
+      cpd.totalSeconds ??
+      0
+    );
+
+    const updatedModuleSeconds=currentModuleSeconds+secondsToSave;
+    const updatedTotalSeconds=currentTotalSeconds+secondsToSave;
+    const nowIso=new Date().toISOString();
 
     await update(progressRef,{
       "cpd/totalSeconds":updatedTotalSeconds,
+      "cpd/totalLearningSeconds":updatedTotalSeconds,
+
       [`cpd/modules/${selectedModuleId}/seconds`]:
         updatedModuleSeconds,
+      [`cpd/modules/${selectedModuleId}/totalLearningSeconds`]:
+        updatedModuleSeconds,
+
       [`cpd/modules/${selectedModuleId}/visits`]:
         Number(currentModule.visits||0),
+      [`cpd/modules/${selectedModuleId}/reviewCount`]:
+        Number(currentModule.reviewCount??currentModule.visits??0),
+
+      [`cpd/modules/${selectedModuleId}/title`]:
+        moduleData.title,
       [`cpd/modules/${selectedModuleId}/lastActiveAt`]:
-        new Date().toISOString()
+        nowIso
     });
 
     progressData.cpd={
       ...cpd,
       totalSeconds:updatedTotalSeconds,
+      totalLearningSeconds:updatedTotalSeconds,
       modules:{
         ...modules,
         [selectedModuleId]:{
           ...currentModule,
+          title:moduleData.title,
           seconds:updatedModuleSeconds,
-          lastActiveAt:new Date().toISOString()
+          totalLearningSeconds:updatedModuleSeconds,
+          lastActiveAt:nowIso
         }
       }
     };
@@ -778,7 +806,6 @@ async function flushCpdTime(){
     cpdSaveInProgress=false;
   }
 }
-
 async function recordModuleVisit(){
   if(!user||!moduleData)return;
 
@@ -790,18 +817,53 @@ async function recordModuleVisit(){
     const snap=await get(progressRef);
     const current=snap.exists()?snap.val():{};
     const moduleCpd=current.cpd?.modules?.[selectedModuleId]||{};
+    const nowIso=new Date().toISOString();
 
-    await update(progressRef,{
+    const existingVisits=Number(
+      moduleCpd.reviewCount ??
+      moduleCpd.visits ??
+      0
+    );
+    const updatedVisits=existingVisits+1;
+
+    const updates={
+      [`cpd/modules/${selectedModuleId}/title`]:
+        moduleData.title,
       [`cpd/modules/${selectedModuleId}/visits`]:
-        Number(moduleCpd.visits||0)+1,
+        updatedVisits,
+      [`cpd/modules/${selectedModuleId}/reviewCount`]:
+        updatedVisits,
       [`cpd/modules/${selectedModuleId}/lastOpenedAt`]:
-        new Date().toISOString()
-    });
+        nowIso
+    };
+
+    if(!moduleCpd.firstOpenedAt){
+      updates[`cpd/modules/${selectedModuleId}/firstOpenedAt`]=nowIso;
+    }
+
+    await update(progressRef,updates);
+
+    const existingCpd=progressData.cpd||{};
+    const existingModules=existingCpd.modules||{};
+
+    progressData.cpd={
+      ...existingCpd,
+      modules:{
+        ...existingModules,
+        [selectedModuleId]:{
+          ...moduleCpd,
+          title:moduleData.title,
+          visits:updatedVisits,
+          reviewCount:updatedVisits,
+          firstOpenedAt:moduleCpd.firstOpenedAt||nowIso,
+          lastOpenedAt:nowIso
+        }
+      }
+    };
   }catch(error){
     console.warn("Could not record module visit.",error);
   }
 }
-
 ["pointerdown","keydown","touchstart","scroll"].forEach(eventName=>{
   window.addEventListener(
     eventName,
@@ -1402,6 +1464,7 @@ document.getElementById("nextBtn").onclick=()=>{
 };
 
 function startQuiz(){
+  quizAttemptStartedAt=new Date().toISOString();
   saveResumeProgress("quiz");
   document.getElementById("lessonSection").classList.add("hidden");
   document.getElementById("quizSection").classList.remove("hidden");
@@ -1555,7 +1618,10 @@ async function finishModule(){
   document.getElementById("quizSection").classList.add("hidden");
   document.getElementById("resultSection").classList.remove("hidden");
 
-  const passed=score>=4;
+  const questions=moduleData.questions||moduleData.quiz||[];
+  const totalQuestions=questions.length;
+  const passMark=Number(moduleData.passMark??4);
+  const passed=score>=passMark;
   const wasAlreadyComplete=completedModules[moduleData.id]===true;
 
   document.getElementById("resultHeading").textContent=
@@ -1563,13 +1629,13 @@ async function finishModule(){
 
   if(passed&&wasAlreadyComplete){
     document.getElementById("resultText").textContent=
-      `You scored ${score} out of ${(moduleData.questions||moduleData.quiz||[]).length}. Review complete — your original reward remains saved.`;
+      `You scored ${score} out of ${totalQuestions}. Review complete — your original reward remains saved.`;
   }else if(passed){
     document.getElementById("resultText").textContent=
-      `You scored ${score} out of ${(moduleData.questions||moduleData.quiz||[]).length}. Your reward has been added to your Learning Hub.`;
+      `You scored ${score} out of ${totalQuestions}. Your reward has been added to your Learning Hub.`;
   }else{
     document.getElementById("resultText").textContent=
-      `You scored ${score} out of ${(moduleData.questions||moduleData.quiz||[]).length}. Review the cards and try again to earn the module reward.`;
+      `You scored ${score} out of ${totalQuestions}. Review the cards and try again to earn the module reward.`;
   }
 
   document.querySelector(".reward").classList.toggle(
@@ -1577,8 +1643,15 @@ async function finishModule(){
     !passed||wasAlreadyComplete
   );
 
+  if(user){
+    await saveQuizAttempt({
+      passed,
+      wasAlreadyComplete,
+      totalQuestions
+    });
+  }
+
   if(passed&&user){
-    await saveCompletion();
     completedModules[moduleData.id]=true;
     progressData.completedModules=completedModules;
     renderTopicList();
@@ -1587,39 +1660,176 @@ async function finishModule(){
   }else{
     updateNextModuleButton(false);
   }
+
+  quizAttemptStartedAt=null;
 }
-async function saveCompletion(){
-  const progressRef=ref(db,`${APP_ROOT}/foundationsProgress/${user.uid}`);
+
+async function saveQuizAttempt({
+  passed,
+  wasAlreadyComplete,
+  totalQuestions
+}){
+  const progressRef=ref(
+    db,
+    `${APP_ROOT}/foundationsProgress/${user.uid}`
+  );
   const snap=await get(progressRef);
   const current=snap.exists()?snap.val():{};
   const completed=current.completedModules||{};
-  if(completed[moduleData.id]===true){
-    completedModules=completed;
-    return;
+  const moduleCpd=current.cpd?.modules?.[moduleData.id]||{};
+
+  const nowIso=new Date().toISOString();
+  const existingAttempts=Number(moduleCpd.attempts||0);
+  const updatedAttempts=existingAttempts+1;
+  const existingBestScore=Number(moduleCpd.bestScore||0);
+  const bestScore=Math.max(existingBestScore,score);
+  const percentageScore=totalQuestions>0
+    ?Math.round((score/totalQuestions)*100)
+    :0;
+  const existingBestPercentage=Number(moduleCpd.bestPercentage||0);
+  const bestPercentage=Math.max(existingBestPercentage,percentageScore);
+
+  const updates={
+    [`cpd/modules/${moduleData.id}/title`]:
+      moduleData.title,
+    [`cpd/modules/${moduleData.id}/attempts`]:
+      updatedAttempts,
+    [`cpd/modules/${moduleData.id}/latestScore`]:
+      score,
+    [`cpd/modules/${moduleData.id}/latestScoreOutOf`]:
+      totalQuestions,
+    [`cpd/modules/${moduleData.id}/latestPercentage`]:
+      percentageScore,
+    [`cpd/modules/${moduleData.id}/bestScore`]:
+      bestScore,
+    [`cpd/modules/${moduleData.id}/bestScoreOutOf`]:
+      totalQuestions,
+    [`cpd/modules/${moduleData.id}/bestPercentage`]:
+      bestPercentage,
+    [`cpd/modules/${moduleData.id}/lastAttemptAt`]:
+      nowIso,
+    [`cpd/modules/${moduleData.id}/lastReviewedAt`]:
+      nowIso,
+    [`cpd/modules/${moduleData.id}/lastAttemptPassed`]:
+      passed,
+    [`cpd/modules/${moduleData.id}/lastAttemptStartedAt`]:
+      quizAttemptStartedAt||nowIso
+  };
+
+  if(!moduleCpd.firstAttemptAt){
+    updates[`cpd/modules/${moduleData.id}/firstAttemptAt`]=
+      quizAttemptStartedAt||nowIso;
   }
 
-  completed[moduleData.id]=true;
-  completedModules=completed;
-  const completedCount=Object.values(completed).filter(Boolean).length;
-  const brains=Number(current.brains||0)+Number(moduleData.reward.brains||0);
-  const xp=Number(current.xp||0)+Number(moduleData.reward.xp||0);
-  const percentComplete=Math.round((completedCount/TOTAL_FOUNDATION_MODULES)*100);
+  if(passed){
+    completed[moduleData.id]=true;
+    completedModules=completed;
 
-  await update(progressRef,{
-    completedModules:completed,
-    completedCount,
-    totalModules:TOTAL_FOUNDATION_MODULES,
-    percentComplete,
-    brains,
-    xp,
-    lastCompletedModule:moduleData.id,
-    lastCompletedAt:new Date().toISOString(),
-    [`cpd/modules/${moduleData.id}/completed`]:true,
-    [`cpd/modules/${moduleData.id}/completedAt`]:
-      new Date().toISOString()
-  });
+    const completedCount=Object.values(completed).filter(Boolean).length;
+    const alreadyRewarded=
+      moduleCpd.rewardGranted===true||
+      wasAlreadyComplete;
+
+    const brains=alreadyRewarded
+      ?Number(current.brains||0)
+      :Number(current.brains||0)+Number(moduleData.reward?.brains||0);
+
+    const xp=alreadyRewarded
+      ?Number(current.xp||0)
+      :Number(current.xp||0)+Number(moduleData.reward?.xp||0);
+
+    const percentComplete=Math.round(
+      (completedCount/TOTAL_FOUNDATION_MODULES)*100
+    );
+
+    Object.assign(updates,{
+      completedModules:completed,
+      completedCount,
+      totalModules:TOTAL_FOUNDATION_MODULES,
+      percentComplete,
+      brains,
+      xp,
+      lastCompletedModule:moduleData.id,
+      lastCompletedAt:nowIso,
+
+      [`cpd/modules/${moduleData.id}/completed`]:
+        true,
+      [`cpd/modules/${moduleData.id}/lastCompletedAt`]:
+        nowIso,
+      [`cpd/modules/${moduleData.id}/completedAt`]:
+        moduleCpd.completedAt||nowIso,
+      [`cpd/modules/${moduleData.id}/firstCompletedAt`]:
+        moduleCpd.firstCompletedAt||
+        moduleCpd.completedAt||
+        nowIso,
+      [`cpd/modules/${moduleData.id}/rewardGranted`]:
+        true,
+      [`cpd/modules/${moduleData.id}/xpEarned`]:
+        Number(moduleCpd.xpEarned||0)||
+        Number(moduleData.reward?.xp||0),
+      [`cpd/modules/${moduleData.id}/brainsEarned`]:
+        Number(moduleCpd.brainsEarned||0)||
+        Number(moduleData.reward?.brains||0)
+    });
+  }
+
+  await update(progressRef,updates);
+
+  const existingCpd=progressData.cpd||{};
+  const existingModules=existingCpd.modules||{};
+
+  progressData={
+    ...progressData,
+    ...(passed?{
+      completedModules:completed,
+      completedCount:Object.values(completed).filter(Boolean).length,
+      totalModules:TOTAL_FOUNDATION_MODULES
+    }:{})
+  };
+
+  progressData.cpd={
+    ...existingCpd,
+    modules:{
+      ...existingModules,
+      [moduleData.id]:{
+        ...moduleCpd,
+        title:moduleData.title,
+        attempts:updatedAttempts,
+        latestScore:score,
+        latestScoreOutOf:totalQuestions,
+        latestPercentage:percentageScore,
+        bestScore,
+        bestScoreOutOf:totalQuestions,
+        bestPercentage,
+        firstAttemptAt:
+          moduleCpd.firstAttemptAt||
+          quizAttemptStartedAt||
+          nowIso,
+        lastAttemptAt:nowIso,
+        lastReviewedAt:nowIso,
+        lastAttemptPassed:passed,
+        ...(passed?{
+          completed:true,
+          completedAt:moduleCpd.completedAt||nowIso,
+          firstCompletedAt:
+            moduleCpd.firstCompletedAt||
+            moduleCpd.completedAt||
+            nowIso,
+          lastCompletedAt:nowIso,
+          rewardGranted:true,
+          xpEarned:
+            Number(moduleCpd.xpEarned||0)||
+            Number(moduleData.reward?.xp||0),
+          brainsEarned:
+            Number(moduleCpd.brainsEarned||0)||
+            Number(moduleData.reward?.brains||0)
+        }:{})
+      }
+    }
+  };
 }
 document.getElementById("restartBtn").onclick=()=>{
+  quizAttemptStartedAt=null;
   document.getElementById("resultSection").classList.add("hidden");
   document.getElementById("lessonSection").classList.remove("hidden");
   cardIndex=0;
