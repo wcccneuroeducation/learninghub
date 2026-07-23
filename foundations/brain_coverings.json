@@ -6,7 +6,7 @@
     {
       "type": "info",
       "image": "foundations/images/meninges_background.png",
-      "imageOpacity": 0.6,
+      "imageOpacity": 0.4,
       "imageFilter": "saturate(1) brightness(1)",
       "frontPrompt": "What protects and surrounds the brain?",
       "backHeading": "The Brain's Protective Coverings",
@@ -21,7 +21,7 @@
     {
       "type": "info",
       "image": "foundations/images/meninges_background.png",
-      "imageOpacity": 0.6,
+      "imageOpacity": 0.4,
       "imageFilter": "saturate(1) brightness(1)",
       "overlay": "foundations/images/skull_overlay.png",
       "frontPrompt": "Which structure provides the brain's rigid outer protection?",
@@ -37,7 +37,7 @@
     {
       "type": "info",
       "image": "foundations/images/meninges_background.png",
-      "imageOpacity": 0.6,
+      "imageOpacity": 0.4,
       "imageFilter": "saturate(1) brightness(1)",
       "overlay": "foundations/images/dura_overlay.png",
       "frontPrompt": "Which tough membrane lies beneath the skull?",
@@ -53,7 +53,7 @@
     {
       "type": "info",
       "image": "foundations/images/meninges_background.png",
-      "imageOpacity": 0.6,
+      "imageOpacity": 0.4,
       "imageFilter": "saturate(1) brightness(1)",
       "overlay": "foundations/images/arachnoid_overlay.png",
       "frontPrompt": "What lies beneath the dura and surrounds the CSF and cerebral arteries?",
@@ -69,7 +69,7 @@
     {
       "type": "info",
       "image": "foundations/images/meninges_background.png",
-      "imageOpacity": 0.6,
+      "imageOpacity": 0.4,
       "imageFilter": "saturate(1) brightness(1)",   
       "overlay": "foundations/images/pia_overlay.png",
       "frontPrompt": "Which meningeal layer closely hugs the surface of the brain?",
@@ -85,7 +85,7 @@
     {
       "type": "info",
       "image": "foundations/images/meninges_background.png",
-      "imageOpacity": 0.6,
+      "imageOpacity": 0.4,
       "imageFilter": "saturate(1) brightness(1)",
       "overlay": "foundations/images/arachnoid_overlay.png",
       "frontPrompt": "Why is the subarachnoid space clinically important?",
@@ -101,7 +101,7 @@
     {
       "type": "info",
       "image": "foundations/images/meninges_background.png",
-      "imageOpacity": 0.6,
+      "imageOpacity": 0.4,
       "imageFilter": "saturate(1) brightness(1)",   
       "frontPrompt": "Can you remember the protective layers from outside to inside?",
       "backHeading": "Outside to Inside",
