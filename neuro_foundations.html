@@ -424,6 +424,38 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 }
 
 
+
+/* Assessment Engine V3: verbal-response renderer */
+.verbal-assessment-stage{display:grid;grid-template-columns:minmax(230px,.8fr) minmax(0,1.2fr);gap:16px;margin-top:16px}
+.verbal-patient-panel,.verbal-conversation-panel{border:1px solid var(--line);border-radius:18px;background:rgba(3,10,22,.74);overflow:hidden}
+.verbal-patient-heading{padding:11px 14px;color:var(--cyan);background:rgba(71,243,255,.07);border-bottom:1px solid var(--line);font-size:12px;font-weight:900;letter-spacing:.7px;text-transform:uppercase}
+.verbal-patient-details{display:grid;grid-template-columns:auto 1fr;gap:9px 12px;padding:15px}
+.verbal-patient-details dt{color:var(--muted);font-size:12px;font-weight:900}
+.verbal-patient-details dd{margin:0;font-weight:900}
+.verbal-conversation-panel{min-height:285px;display:flex;flex-direction:column;justify-content:flex-end;padding:16px}
+.verbal-patient-visual{flex:1;display:flex;align-items:center;justify-content:center;min-height:145px}
+.verbal-patient-image{max-width:210px;max-height:170px;object-fit:contain;filter:drop-shadow(0 0 18px rgba(71,243,255,.2))}
+.verbal-patient-fallback{font-size:92px;line-height:1;filter:drop-shadow(0 0 18px rgba(71,243,255,.25))}
+.verbal-speech{position:relative;min-height:68px;padding:15px 17px;border-radius:18px;background:#fff;color:#07111f;font-size:17px;font-weight:800;line-height:1.4}
+.verbal-speech::before{content:"";position:absolute;left:38px;top:-13px;border-width:0 12px 14px;border-style:solid;border-color:transparent transparent #fff}
+.verbal-speech.silent{color:#627083;font-style:italic}
+.verbal-question-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.verbal-question-btn{min-height:52px;padding:11px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.07);color:#fff;font-weight:900;cursor:pointer}
+.verbal-question-btn:hover{background:rgba(71,243,255,.12)}
+.verbal-question-btn.asked{border-color:var(--cyan);background:rgba(71,243,255,.11)}
+.verbal-question-btn:disabled{opacity:.5;cursor:not-allowed}
+.verbal-domain-progress{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:13px}
+.verbal-domain-chip{padding:7px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px;font-weight:900}
+.verbal-domain-chip.complete{border-color:var(--good);color:var(--good);background:rgba(97,245,169,.08)}
+.verbal-score-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-top:14px}
+@media(max-width:650px){
+  .verbal-assessment-stage{grid-template-columns:1fr}
+  .verbal-question-grid{grid-template-columns:1fr}
+  .verbal-score-grid{grid-template-columns:1fr 1fr}
+  .verbal-score-grid .gcs-score-btn:last-child{grid-column:1 / -1}
+  .verbal-conversation-panel{min-height:250px}
+}
+
 /* Reusable clinical assessment renderer */
 .clinical-assessment{
   margin-top:18px;
@@ -976,6 +1008,33 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
         <div id="eyeAssessmentFeedback" class="assessment-feedback-card hidden" aria-live="polite"></div>
         <button id="restartEyeScenarioBtn" class="btn secondary assessment-restart hidden" type="button">Restart this patient</button>
       </div>
+
+      <div id="interactiveVerbalAssessment" class="clinical-assessment hidden">
+        <div class="verbal-assessment-stage">
+          <section class="verbal-patient-panel" aria-label="Patient details">
+            <div class="verbal-patient-heading">Patient details</div>
+            <dl class="verbal-patient-details">
+              <dt>Name</dt><dd id="verbalPatientName"></dd>
+              <dt>DOB</dt><dd id="verbalPatientDob"></dd>
+              <dt>Location</dt><dd id="verbalPatientLocation"></dd>
+              <dt>Today's date</dt><dd id="verbalTodayDate"></dd>
+            </dl>
+          </section>
+          <section class="verbal-conversation-panel" aria-label="Conversation with patient">
+            <div class="verbal-patient-visual">
+              <img id="verbalPatientImage" class="verbal-patient-image hidden" alt="Illustrated patient">
+              <div id="verbalPatientFallback" class="verbal-patient-fallback" aria-hidden="true">👨</div>
+            </div>
+            <div id="verbalSpeechBubble" class="verbal-speech silent" aria-live="polite">Ask the patient a question.</div>
+          </section>
+        </div>
+        <div id="verbalQuestionGrid" class="verbal-question-grid"></div>
+        <div id="verbalDomainProgress" class="verbal-domain-progress"></div>
+        <div id="verbalScoreGrid" class="verbal-score-grid"></div>
+        <div id="verbalAssessmentFeedback" class="assessment-feedback-card hidden" aria-live="polite"></div>
+        <button id="restartVerbalScenarioBtn" class="btn secondary assessment-restart hidden" type="button">Restart this patient</button>
+      </div>
+
       <div id="options" class="option-grid"></div>
       <div id="pupilSelectAnswer" class="pupil-select-grid hidden">
         <div class="pupil-select-field">
@@ -1054,6 +1113,7 @@ const FOUNDATION_MODULES = [
   { id: "brain_coverings", title: "Brain Coverings" },
   { id: "pupils", title: "Pupil Assessment" },
   { id: "gcs_eye_opening", title: "GCS: Eye Opening" },
+  { id: "gcs_verbal", title: "GCS: Verbal Response" },
 ];
 
 const FOUNDATION_PHASES={
@@ -1181,6 +1241,23 @@ const eyeSequenceText=document.getElementById("eyeSequenceText");
 const eyeScoreGrid=document.getElementById("eyeScoreGrid");
 const eyeAssessmentFeedback=document.getElementById("eyeAssessmentFeedback");
 const restartEyeScenarioBtn=document.getElementById("restartEyeScenarioBtn");
+const interactiveVerbalAssessment=document.getElementById("interactiveVerbalAssessment");
+const verbalPatientName=document.getElementById("verbalPatientName");
+const verbalPatientDob=document.getElementById("verbalPatientDob");
+const verbalPatientLocation=document.getElementById("verbalPatientLocation");
+const verbalTodayDate=document.getElementById("verbalTodayDate");
+const verbalPatientImage=document.getElementById("verbalPatientImage");
+const verbalPatientFallback=document.getElementById("verbalPatientFallback");
+const verbalSpeechBubble=document.getElementById("verbalSpeechBubble");
+const verbalQuestionGrid=document.getElementById("verbalQuestionGrid");
+const verbalDomainProgress=document.getElementById("verbalDomainProgress");
+const verbalScoreGrid=document.getElementById("verbalScoreGrid");
+const verbalAssessmentFeedback=document.getElementById("verbalAssessmentFeedback");
+const restartVerbalScenarioBtn=document.getElementById("restartVerbalScenarioBtn");
+let verbalAskedQuestions=new Set();
+let verbalPatient=null;
+let verbalTokens={};
+
 let leftPupilTimer=null;
 let rightPupilTimer=null;
 let ambientPupilTimer=null;
@@ -2522,8 +2599,14 @@ function isInteractiveEyeAssessment(){
   );
 }
 
+function isInteractiveVerbalAssessment(){
+  return ["interactive_verbal","gcs_verbal"].includes(
+    String(moduleData.assessment?.type||"").toLowerCase()
+  );
+}
+
 function getAssessmentTotal(){
-  return assessmentMode==="interactive_eye"
+  return ["interactive_eye","interactive_verbal"].includes(assessmentMode)
     ?assessmentItems.length
     :getLegacyQuestions().length;
 }
@@ -2531,6 +2614,10 @@ function getAssessmentTotal(){
 async function startAssessment(){
   if(isInteractiveEyeAssessment()){
     await startInteractiveEyeAssessment();
+    return;
+  }
+  if(isInteractiveVerbalAssessment()){
+    await startInteractiveVerbalAssessment();
     return;
   }
   startQuiz();
@@ -2828,10 +2915,196 @@ voiceStimulusBtn.onclick=async()=>await applyEyeStimulus("voice");
 painStimulusBtn.onclick=async()=>await applyEyeStimulus("pain");
 restartEyeScenarioBtn.onclick=async()=>await showInteractiveEyeScenario();
 
+
+function randomItem(items,exclude=[]){
+  const blocked=new Set(exclude.map(value=>String(value).toLowerCase()));
+  const available=(Array.isArray(items)?items:[]).filter(value=>!blocked.has(String(value).toLowerCase()));
+  const source=available.length?available:(Array.isArray(items)?items:[]);
+  return source.length?source[Math.floor(Math.random()*source.length)]:"";
+}
+function formatDisplayDate(dateValue){
+  const date=dateValue instanceof Date?dateValue:new Date(dateValue);
+  return new Intl.DateTimeFormat("en-GB",{day:"2-digit",month:"long",year:"numeric"}).format(date);
+}
+function replaceAssessmentTokens(value,tokens){
+  return String(value??"").replace(/\{([A-Za-z0-9_]+)\}/g,(match,key)=>
+    Object.prototype.hasOwnProperty.call(tokens,key)?String(tokens[key]):match
+  );
+}
+function createVerbalTokens(patient,assessment){
+  const today=new Date();
+  const values=assessment.dynamicValues||{};
+  const minimum=Number(values.wrongYearMinimumOffset||5);
+  const maximum=Math.max(minimum,Number(values.wrongYearMaximumOffset||15));
+  const offset=minimum+Math.floor(Math.random()*(maximum-minimum+1));
+  return {
+    patientFirstName:patient.firstName,
+    patientSurname:patient.surname,
+    patientFullName:`${patient.firstName} ${patient.surname}`,
+    patientLocation:patient.location,
+    patientReason:patient.reason,
+    currentYear:today.getFullYear(),
+    currentDate:formatDisplayDate(today),
+    wrongYear:today.getFullYear()-offset,
+    wrongFirstName:randomItem(values.wrongFirstNames,[patient.firstName]),
+    wrongPlace:randomItem(values.wrongPlaces,[patient.location]),
+    confusedReason:randomItem(values.confusedReasons),
+    randomWord:randomItem(values.randomWords)
+  };
+}
+function setVerbalFeedback(message,type=""){
+  verbalAssessmentFeedback.textContent=message||"";
+  verbalAssessmentFeedback.className=`assessment-feedback-card${type?` ${type}`:""}`;
+  verbalAssessmentFeedback.classList.toggle("hidden",!message);
+}
+function renderVerbalDomainProgress(){
+  const assessment=moduleData.assessment||{};
+  const domains=[{id:"person",label:"Person"},{id:"place",label:"Place"},{id:"time",label:"Time"},{id:"situation",label:"Situation"}];
+  verbalDomainProgress.innerHTML="";
+  domains.forEach(domain=>{
+    const questionIds=(assessment.questions||[]).filter(question=>question.domain===domain.id).map(question=>question.id);
+    const complete=questionIds.some(id=>verbalAskedQuestions.has(id));
+    const chip=document.createElement("span");
+    chip.className=`verbal-domain-chip${complete?" complete":""}`;
+    chip.textContent=`${complete?"✓":"○"} ${domain.label}`;
+    verbalDomainProgress.appendChild(chip);
+  });
+}
+function buildVerbalQuestions(){
+  const assessment=moduleData.assessment||{};
+  verbalQuestionGrid.innerHTML="";
+  (assessment.questions||[]).forEach(question=>{
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="verbal-question-btn";
+    button.dataset.questionId=question.id;
+    button.textContent=`🗣️ ${question.label||question.text}`;
+    button.onclick=()=>askVerbalQuestion(question,button);
+    verbalQuestionGrid.appendChild(button);
+  });
+}
+function buildVerbalScoreButtons(){
+  const assessment=moduleData.assessment||{};
+  const options=Array.isArray(assessment.scoreOptions)?assessment.scoreOptions:[
+    {value:5,label:"V5 – Orientated"},{value:4,label:"V4 – Confused conversation"},{value:3,label:"V3 – Inappropriate words"},{value:2,label:"V2 – Incomprehensible sounds"},{value:1,label:"V1 – No verbal response"}
+  ];
+  verbalScoreGrid.innerHTML="";
+  options.forEach(option=>{
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="gcs-score-btn";
+    button.dataset.score=String(option.value);
+    button.textContent=option.label;
+    button.onclick=()=>submitVerbalScore(Number(option.value),button);
+    verbalScoreGrid.appendChild(button);
+  });
+}
+function askVerbalQuestion(question,button){
+  if(answered)return;
+  const scenario=assessmentItems[questionIndex];
+  verbalAskedQuestions.add(question.id);
+  button.classList.add("asked");
+  const raw=scenario.responses?.[question.id]??"";
+  const reply=replaceAssessmentTokens(raw,verbalTokens).trim();
+  verbalSpeechBubble.textContent=reply||"The patient gives no verbal response.";
+  verbalSpeechBubble.classList.toggle("silent",!reply);
+  renderVerbalDomainProgress();
+}
+function hasCompleteV5Orientation(){
+  const assessment=moduleData.assessment||{};
+  const required=assessment.requiredOrientationDomainsForV5||["person","place","time"];
+  const askedDomains=new Set((assessment.questions||[]).filter(question=>verbalAskedQuestions.has(question.id)).map(question=>question.domain));
+  return required.every(domain=>askedDomains.has(domain));
+}
+function submitVerbalScore(selectedScore,button){
+  if(answered)return;
+  const assessment=moduleData.assessment||{};
+  const scenario=assessmentItems[questionIndex];
+  const correctScore=Number(scenario.correctScore);
+  if(selectedScore===5&&!hasCompleteV5Orientation()){
+    setVerbalFeedback(assessment.feedback?.incompleteV5||"Confirm orientation to person, place and time before recording V5.","bad");
+    return;
+  }
+  answered=true;
+  techniqueScore++;
+  verbalQuestionGrid.querySelectorAll("button").forEach(item=>item.disabled=true);
+  verbalScoreGrid.querySelectorAll("button").forEach(scoreButton=>{
+    scoreButton.disabled=true;
+    if(Number(scoreButton.dataset.score)===correctScore)scoreButton.classList.add("correct");
+  });
+  const correct=selectedScore===correctScore;
+  if(correct){
+    score++;
+    button.classList.add("correct");
+    setVerbalFeedback(replaceAssessmentTokens(assessment.feedback?.correct||"Correct. The patient's best verbal response is V{score}.",{...verbalTokens,score:correctScore}),"good");
+  }else{
+    button.classList.add("wrong");
+    setVerbalFeedback(replaceAssessmentTokens(assessment.feedback?.incorrect||"The responses demonstrated correspond to V{score}.",{...verbalTokens,score:correctScore}),"bad");
+  }
+  document.getElementById("scoreText").textContent=`Accuracy: ${score} · Technique: ${techniqueScore}`;
+  document.getElementById("quizNextBtn").textContent=questionIndex===assessmentItems.length-1?"See result":"Next patient";
+  document.getElementById("quizNextBtn").classList.remove("hidden");
+}
+async function startInteractiveVerbalAssessment(){
+  const assessment=moduleData.assessment||{};
+  const scenarios=Array.isArray(assessment.scenarios)?assessment.scenarios:[];
+  if(!scenarios.length){alert("This verbal assessment has no scenarios configured.");return;}
+  assessmentMode="interactive_verbal";
+  assessmentItems=assessment.randomiseScenarios===false?[...scenarios]:shuffleArray(scenarios);
+  quizAttemptStartedAt=new Date().toISOString();
+  saveResumeProgress("assessment");
+  document.getElementById("lessonSection").classList.add("hidden");
+  document.getElementById("quizSection").classList.remove("hidden");
+  document.querySelector("#quizSection .eyebrow").textContent="Clinical assessment";
+  questionIndex=0;score=0;techniqueScore=0;
+  await showInteractiveVerbalScenario();
+}
+async function showInteractiveVerbalScenario(){
+  answered=false;
+  verbalAskedQuestions=new Set();
+  const assessment=moduleData.assessment||{};
+  const profiles=Array.isArray(assessment.patientProfiles)?assessment.patientProfiles:[];
+  verbalPatient=randomItem(profiles)||{firstName:"Daniel",surname:"Harris",dob:"1968-03-14",location:"Neuro Critical Care",reason:"a neurological problem"};
+  verbalTokens=createVerbalTokens(verbalPatient,assessment);
+  document.getElementById("questionCounter").textContent=`Patient ${questionIndex+1} of ${assessmentItems.length}`;
+  document.getElementById("scoreText").textContent=`Accuracy: ${score} · Technique: ${techniqueScore}`;
+  document.getElementById("quizFill").style.width=`${((questionIndex+1)/assessmentItems.length)*100}%`;
+  document.getElementById("questionText").textContent=assessment.instructions||"Ask enough questions to assess verbal response, then select the GCS verbal score.";
+  quizPupilStage.classList.add("hidden");
+  pupilSelectAnswer.classList.add("hidden");
+  interactiveEyeAssessment.classList.add("hidden");
+  interactiveVerbalAssessment.classList.remove("hidden");
+  document.getElementById("options").innerHTML="";
+  document.getElementById("feedback").textContent="";
+  document.getElementById("quizNextBtn").classList.add("hidden");
+  interactiveVerbalAssessment.appendChild(document.getElementById("quizNextBtn"));
+  verbalPatientName.textContent=`${verbalPatient.firstName} ${verbalPatient.surname}`;
+  verbalPatientDob.textContent=formatDisplayDate(verbalPatient.dob);
+  verbalPatientLocation.textContent=verbalPatient.location;
+  verbalTodayDate.textContent=formatDisplayDate(new Date());
+  const patientImage=assessment.patientImage||assessment.visuals?.patientImage;
+  verbalPatientImage.classList.add("hidden");
+  verbalPatientFallback.classList.remove("hidden");
+  if(patientImage){
+    verbalPatientImage.onload=()=>{verbalPatientImage.classList.remove("hidden");verbalPatientFallback.classList.add("hidden");};
+    verbalPatientImage.onerror=()=>{verbalPatientImage.classList.add("hidden");verbalPatientFallback.classList.remove("hidden");};
+    verbalPatientImage.src=patientImage;
+  }
+  verbalSpeechBubble.textContent="Ask the patient a question.";
+  verbalSpeechBubble.classList.add("silent");
+  restartVerbalScenarioBtn.classList.add("hidden");
+  setVerbalFeedback("");
+  buildVerbalQuestions();
+  buildVerbalScoreButtons();
+  renderVerbalDomainProgress();
+}
+restartVerbalScenarioBtn.onclick=async()=>await showInteractiveVerbalScenario();
+
 function startQuiz(){
   assessmentMode="legacy";
   assessmentItems=getLegacyQuestions();
   interactiveEyeAssessment.classList.add("hidden");
+  interactiveVerbalAssessment.classList.add("hidden");
 
   const quizNextBtn=document.getElementById("quizNextBtn");
   const quizCard=document.querySelector("#quizSection .quiz-card");
@@ -2992,6 +3265,16 @@ document.getElementById("quizNextBtn").onclick=async()=>{
     return;
   }
 
+  if(assessmentMode==="interactive_verbal"){
+    if(questionIndex<assessmentItems.length-1){
+      questionIndex++;
+      await showInteractiveVerbalScenario();
+    }else{
+      finishModule();
+    }
+    return;
+  }
+
   const questions=getLegacyQuestions();
   if(questionIndex<questions.length-1){questionIndex++;showQuestion()}
   else finishModule();
@@ -3101,9 +3384,9 @@ async function saveQuizAttempt({
     [`cpd/modules/${moduleData.id}/assessmentType`]:
       assessmentMode,
     [`cpd/modules/${moduleData.id}/latestTechniqueScore`]:
-      assessmentMode==="interactive_eye"?techniqueScore:null,
+      ["interactive_eye","interactive_verbal"].includes(assessmentMode)?techniqueScore:null,
     [`cpd/modules/${moduleData.id}/latestTechniqueScoreOutOf`]:
-      assessmentMode==="interactive_eye"?totalQuestions:null,
+      ["interactive_eye","interactive_verbal"].includes(assessmentMode)?totalQuestions:null,
     [`cpd/modules/${moduleData.id}/lastAttemptStartedAt`]:
       quizAttemptStartedAt||nowIso
   };
@@ -3235,6 +3518,7 @@ document.getElementById("restartBtn").onclick=()=>{
   assessmentMode="legacy";
   assessmentItems=[];
   interactiveEyeAssessment.classList.add("hidden");
+  interactiveVerbalAssessment.classList.add("hidden");
   document.getElementById("phaseTransitionSection").classList.add("hidden");
   document.getElementById("resultSection").classList.add("hidden");
   document.getElementById("lessonSection").classList.remove("hidden");
