@@ -1,24 +1,182 @@
 {
   "id": "gcs_motor",
   "title": "GCS: Motor Response",
+  "subtitle": "Give a command, apply trapezius squeeze when required and record the best motor response.",
+  "phase": "assessment",
+  "reward": {
+    "xp": 50,
+    "brains": 1
+  },
+  "passMark": 4,
+  "cards": [
+    {
+      "type": "info",
+      "title": "Assess motor response",
+      "frontPrompt": "How should you begin the motor component of the GCS?",
+      "backHeading": "Begin with a command",
+      "backPoints": [
+        "Ask the patient to lift both arms.",
+        "Allow enough time for the patient to respond.",
+        "If the patient obeys the command, record M6.",
+        "Apply trapezius squeeze only if the patient does not obey.",
+        "Record the best motor response demonstrated."
+      ],
+      "memoryLine": "Command first. Pain only if required."
+    },
+    {
+      "type": "info",
+      "title": "Localising and flexion withdrawal",
+      "frontPrompt": "How do you distinguish M5 from M4?",
+      "backHeading": "Look at the direction of movement",
+      "backPoints": [
+        "M5 localises: the patient reaches towards the stimulus and attempts to remove it.",
+        "M4 flexion withdrawal: the arm flexes and moves away from the painful stimulus.",
+        "Flexion withdrawal does not include reaching towards the examiner's hand."
+      ],
+      "memoryLine": "Towards the stimulus is M5. Away from the stimulus is M4."
+    },
+    {
+      "type": "info",
+      "title": "Abnormal flexion and extension",
+      "frontPrompt": "How do M3 and M2 differ?",
+      "backHeading": "Observe the posture",
+      "backPoints": [
+        "M3: abnormal flexion of the arms towards the chest.",
+        "M2: extension of the arms in response to painful stimulation.",
+        "M1: no motor response is observed."
+      ],
+      "memoryLine": "M3 flexes abnormally. M2 extends. M1 has no response."
+    }
+  ],
   "assessment": {
     "type": "interactive_motor",
+    "instructions": "Choose how to assess the patient. Give a command, apply trapezius squeeze when required, then select the correct GCS motor score.",
+    "randomiseScenarios": true,
+    "patientImage": "foundations/images/gcs_man.png",
     "stimulus": "trapezius_squeeze",
+    "actions": [
+      {
+        "id": "speak",
+        "label": "Ask patient to lift both arms"
+      },
+      {
+        "id": "pain",
+        "label": "Apply trapezius squeeze"
+      }
+    ],
     "scoreOptions": [
-      {"value":6,"label":"M6 – Obeys commands"},
-      {"value":5,"label":"M5 – Localises pain"},
-      {"value":4,"label":"M4 – Withdraws from pain"},
-      {"value":3,"label":"M3 – Abnormal flexion"},
-      {"value":2,"label":"M2 – Extension"},
-      {"value":1,"label":"M1 – No motor response"}
+      {
+        "value": 6,
+        "label": "M6 – Obeys commands"
+      },
+      {
+        "value": 5,
+        "label": "M5 – Localises pain"
+      },
+      {
+        "value": 4,
+        "label": "M4 – Flexion withdrawal"
+      },
+      {
+        "value": 3,
+        "label": "M3 – Abnormal flexion"
+      },
+      {
+        "value": 2,
+        "label": "M2 – Extension"
+      },
+      {
+        "value": 1,
+        "label": "M1 – No motor response"
+      }
     ],
     "scenarios": [
-      {"score":6,"command":"The patient lifts both arms on request.","pain":"Pain was not required.","emoji":"🙆‍♂️"},
-      {"score":5,"command":"The patient does not lift either arm.","pain":"The patient reaches towards your hand and tries to remove the stimulus.","emoji":"🙋‍♂️"},
-      {"score":4,"command":"The patient does not lift either arm.","pain":"The patient pulls the arm away but does not reach towards your hand.","emoji":"🫷"},
-      {"score":3,"command":"The patient does not lift either arm.","pain":"The arms flex abnormally towards the chest.","emoji":"🤜"},
-      {"score":2,"command":"The patient does not lift either arm.","pain":"The arms extend and rotate in response to the stimulus.","emoji":"🫸"},
-      {"score":1,"command":"The patient does not lift either arm.","pain":"There is no motor response to the trapezius squeeze.","emoji":"👨"}
-    ]
+      {
+        "id": "motor_m6",
+        "correctScore": 6,
+        "commandResponse": {
+          "text": "The patient lifts both arms on request.",
+          "image": "foundations/images/gcs_obeys.png",
+          "obeys": true
+        },
+        "painResponse": {
+          "text": "The patient has already obeyed the command. Painful stimulation was not required.",
+          "image": "foundations/images/gcs_obeys.png",
+          "techniqueError": "pain_not_required"
+        }
+      },
+      {
+        "id": "motor_m5",
+        "correctScore": 5,
+        "commandResponse": {
+          "text": "The patient does not lift either arm.",
+          "image": "foundations/images/gcs_man.png",
+          "obeys": false
+        },
+        "painResponse": {
+          "text": "During trapezius squeeze, the patient reaches towards your hand and attempts to remove the stimulus.",
+          "image": "foundations/images/gcs_localise.png"
+        }
+      },
+      {
+        "id": "motor_m4",
+        "correctScore": 4,
+        "commandResponse": {
+          "text": "The patient does not lift either arm.",
+          "image": "foundations/images/gcs_man.png",
+          "obeys": false
+        },
+        "painResponse": {
+          "text": "During trapezius squeeze, the patient flexes the arm and withdraws away from the painful stimulus.",
+          "image": "foundations/images/gcs_flex.png"
+        }
+      },
+      {
+        "id": "motor_m3",
+        "correctScore": 3,
+        "commandResponse": {
+          "text": "The patient does not lift either arm.",
+          "image": "foundations/images/gcs_man.png",
+          "obeys": false
+        },
+        "painResponse": {
+          "text": "During trapezius squeeze, the arms flex abnormally towards the chest.",
+          "image": "foundations/images/gcs_abflex.png"
+        }
+      },
+      {
+        "id": "motor_m2",
+        "correctScore": 2,
+        "commandResponse": {
+          "text": "The patient does not lift either arm.",
+          "image": "foundations/images/gcs_man.png",
+          "obeys": false
+        },
+        "painResponse": {
+          "text": "During trapezius squeeze, the arms extend in response to the stimulus.",
+          "image": "foundations/images/gcs_extend.png"
+        }
+      },
+      {
+        "id": "motor_m1",
+        "correctScore": 1,
+        "commandResponse": {
+          "text": "The patient does not lift either arm.",
+          "image": "foundations/images/gcs_man.png",
+          "obeys": false
+        },
+        "painResponse": {
+          "text": "There is no motor response to trapezius squeeze.",
+          "image": "foundations/images/gcs_man.png"
+        }
+      }
+    ],
+    "feedback": {
+      "correct": "Correct. The patient's best motor response is M{score}.",
+      "incorrect": "The response demonstrated corresponds to M{score}.",
+      "painNotRequired": "The patient obeyed the command, so painful stimulation was not required.",
+      "commandRequired": "Assess the patient's response to a command before applying painful stimulation.",
+      "assessmentIncomplete": "Complete the motor assessment before selecting a score."
+    }
   }
 }
