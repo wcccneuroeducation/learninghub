@@ -3199,33 +3199,31 @@ restartVerbalScenarioBtn.onclick=async()=>await showInteractiveVerbalScenario();
 
 async function startInteractiveMotorAssessment(){
 
-  assessmentMode="interactive_motor";
+    assessmentMode="interactive_motor";
 
-  assessmentItems=[
-    ...(moduleData.assessment?.scenarios||[])
-  ];
+    assessmentItems=[
+        ...(moduleData.assessment?.scenarios||[])
+    ];
 
-  if(!assessmentItems.length){
-    alert("No Motor assessment scenarios were found in the JSON.");
-    return;
-  }
+    if(!assessmentItems.length){
+        alert("No Motor assessment scenarios were found in the JSON.");
+        return;
+    }
 
-  assessmentItems=shuffleArray(assessmentItems);
+    assessmentItems=shuffleArray(assessmentItems);
 
-  questionIndex=0;
-  score=0;
-  techniqueScore=0;
+    quizAttemptStartedAt=new Date().toISOString();
+    saveResumeProgress("assessment");
 
-  interactiveEyeAssessment.classList.add("hidden");
-  interactiveVerbalAssessment.classList.add("hidden");
-  interactiveMotorAssessment.classList.remove("hidden");
+    document.getElementById("lessonSection").classList.add("hidden");
+    document.getElementById("quizSection").classList.remove("hidden");
+    document.querySelector("#quizSection .eyebrow").textContent="Clinical assessment";
 
-  questionCard.classList.add("hidden");
+    questionIndex=0;
+    score=0;
+    techniqueScore=0;
 
-  nextBtn.classList.add("hidden");
-  finishBtn.classList.add("hidden");
-
-  await showInteractiveMotorScenario();
+    await showInteractiveMotorScenario();
 }
 async function showInteractiveMotorScenario(){
 
@@ -3650,7 +3648,7 @@ document.getElementById("quizNextBtn").onclick=async()=>{
     }
     return;
   }
-  
+
 if(assessmentMode==="interactive_motor"){
   if(questionIndex<assessmentItems.length-1){
     questionIndex++;
