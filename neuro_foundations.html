@@ -1035,6 +1035,71 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
         <button id="restartVerbalScenarioBtn" class="btn secondary assessment-restart hidden" type="button">Restart this patient</button>
       </div>
 
+<div id="interactiveMotorAssessment" class="clinical-assessment hidden">
+
+  <div class="verbal-assessment-stage">
+
+    <section class="verbal-patient-panel" aria-label="Patient assessment">
+
+      <div class="verbal-patient-heading">
+        Motor Assessment
+      </div>
+
+      <div class="verbal-patient-visual">
+        <img id="motorPatientImage"
+             class="verbal-patient-image"
+             src=""
+             alt="Patient">
+      </div>
+
+    </section>
+
+    <section class="verbal-conversation-panel">
+
+      <div id="motorResponseText"
+           class="verbal-speech silent"
+           aria-live="polite">
+
+        Assess the patient. Ask them to lift both arms before applying pain.
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <div id="motorActionGrid" class="verbal-question-grid">
+
+    <button id="motorCommandBtn"
+            class="verbal-question-btn"
+            type="button">
+      🙋 Ask patient to lift both arms
+    </button>
+
+    <button id="motorPainBtn"
+            class="verbal-question-btn"
+            type="button">
+      ✋ Apply trapezius squeeze
+    </button>
+
+  </div>
+
+  <div id="motorScoreGrid" class="verbal-score-grid">
+  </div>
+
+  <div id="motorAssessmentFeedback"
+       class="assessment-feedback-card hidden"
+       aria-live="polite">
+  </div>
+
+  <button id="restartMotorScenarioBtn"
+          class="btn secondary assessment-restart hidden"
+          type="button">
+    Restart this patient
+  </button>
+
+</div>
+
       <div id="options" class="option-grid"></div>
       <div id="pupilSelectAnswer" class="pupil-select-grid hidden">
         <div class="pupil-select-field">
@@ -1255,10 +1320,21 @@ const verbalDomainProgress=document.getElementById("verbalDomainProgress");
 const verbalScoreGrid=document.getElementById("verbalScoreGrid");
 const verbalAssessmentFeedback=document.getElementById("verbalAssessmentFeedback");
 const restartVerbalScenarioBtn=document.getElementById("restartVerbalScenarioBtn");
+const interactiveMotorAssessment=document.getElementById("interactiveMotorAssessment");
+const motorPatientImage=document.getElementById("motorPatientImage");
+const motorResponseText=document.getElementById("motorResponseText");
+const motorCommandBtn=document.getElementById("motorCommandBtn");
+const motorPainBtn=document.getElementById("motorPainBtn");
+const motorScoreGrid=document.getElementById("motorScoreGrid");
+const motorAssessmentFeedback=document.getElementById("motorAssessmentFeedback");
+const restartMotorScenarioBtn=document.getElementById("restartMotorScenarioBtn");
 let verbalAskedQuestions=new Set();
 let verbalPatient=null;
 let verbalTokens={};
-
+let motorCommandUsed=false;
+let motorPainUsed=false;
+let motorResponseEstablished=false;
+let motorScenarioInvalid=false;
 let leftPupilTimer=null;
 let rightPupilTimer=null;
 let ambientPupilTimer=null;
@@ -2050,6 +2126,15 @@ async function preloadModuleImages(){
       assessmentVisuals.states?.half?.left||"foundations/images/eyes_lh.png",
       assessmentVisuals.states?.half?.right||"foundations/images/eyes_rh.png"
     );
+    if(isInteractiveMotorAssessment()){
+  assessmentImagePaths.push(
+    moduleData.assessment?.patientImage,
+    ...(moduleData.assessment?.scenarios||[]).flatMap(s=>[
+      s.commandResponse?.image,
+      s.painResponse?.image
+    ])
+  );
+}
   }
 
   const imagePaths=[...new Set([
@@ -3085,6 +3170,7 @@ async function showInteractiveVerbalScenario(){
   pupilSelectAnswer.classList.add("hidden");
   interactiveEyeAssessment.classList.add("hidden");
   interactiveVerbalAssessment.classList.remove("hidden");
+  interactiveMotorAssessment.classList.add("hidden");
   document.getElementById("options").innerHTML="";
   document.getElementById("feedback").textContent="";
   document.getElementById("quizNextBtn").classList.add("hidden");
@@ -3111,11 +3197,288 @@ async function showInteractiveVerbalScenario(){
 }
 restartVerbalScenarioBtn.onclick=async()=>await showInteractiveVerbalScenario();
 
+async function startInteractiveMotorAssessment(){
+
+  assessmentMode="interactive_motor";
+
+  assessmentItems=[
+    ...(moduleData.assessment?.scenarios||[])
+  ];
+
+  if(!assessmentItems.length){
+    alert("No Motor assessment scenarios were found in the JSON.");
+    return;
+  }
+
+  assessmentItems=shuffleArray(assessmentItems);
+
+  questionIndex=0;
+  score=0;
+  techniqueScore=0;
+
+  interactiveEyeAssessment.classList.add("hidden");
+  interactiveVerbalAssessment.classList.add("hidden");
+  interactiveMotorAssessment.classList.remove("hidden");
+
+  questionCard.classList.add("hidden");
+
+  nextBtn.classList.add("hidden");
+  finishBtn.classList.add("hidden");
+
+  await showInteractiveMotorScenario();
+}
+async function showInteractiveMotorScenario(){
+
+  const scenario=assessmentItems[questionIndex];
+
+  if(!scenario){
+    finishModule();
+    return;
+  }
+
+  motorCommandUsed=false;
+  motorPainUsed=false;
+  motorResponseEstablished=false;
+  motorScenarioInvalid=false;
+
+  motorAssessmentFeedback.classList.add("hidden");
+  motorAssessmentFeedback.innerHTML="";
+
+  restartMotorScenarioBtn.classList.add("hidden");
+  nextBtn.classList.add("hidden");
+  finishBtn.classList.add("hidden");
+
+  motorPatientImage.src=
+    moduleData.assessment?.patientImage||
+    "foundations/images/gcs_man.png";
+
+  motorResponseText.textContent=
+    "Assess the patient and select the most appropriate Motor score.";
+
+  motorResponseText.classList.add("silent");
+
+  motorCommandBtn.disabled=false;
+  motorPainBtn.disabled=false;
+
+  motorCommandBtn.classList.remove("selected");
+  motorPainBtn.classList.remove("selected");
+
+  motorScoreGrid.innerHTML="";
+
+  const scoreOptions=
+    moduleData.assessment?.scoreOptions||[
+      {score:6,label:"M6 Obeys commands"},
+      {score:5,label:"M5 Localises pain"},
+      {score:4,label:"M4 Withdraws from pain"},
+      {score:3,label:"M3 Abnormal flexion"},
+      {score:2,label:"M2 Extension"},
+      {score:1,label:"M1 No response"}
+    ];
+
+  scoreOptions.forEach(option=>{
+
+    const button=document.createElement("button");
+
+    button.type="button";
+    button.className="verbal-score-btn";
+    button.textContent=option.label;
+
+    button.onclick=()=>{
+      submitMotorScore(option.score);
+    };
+
+    motorScoreGrid.appendChild(button);
+
+  });
+
+}
+motorCommandBtn.onclick=()=>{
+
+  const scenario=assessmentItems[questionIndex];
+
+  motorCommandUsed=true;
+  motorCommandBtn.classList.add("selected");
+
+  const response=scenario.commandResponse||{};
+
+  motorPatientImage.src=
+    response.image||
+    moduleData.assessment?.patientImage||
+    "foundations/images/gcs_man.png";
+
+  motorResponseText.textContent=
+    response.text||
+    "The patient does not respond to the command.";
+
+  motorResponseText.classList.remove("silent");
+
+  if(response.obeys===true){
+    motorResponseEstablished=true;
+  }
+
+};
+motorPainBtn.onclick=()=>{
+
+  const scenario=assessmentItems[questionIndex];
+
+  if(!motorCommandUsed){
+    motorScenarioInvalid=true;
+  }
+
+  if(
+    motorCommandUsed &&
+    scenario.commandResponse?.obeys===true
+  ){
+    motorScenarioInvalid=true;
+  }
+
+  motorPainUsed=true;
+  motorPainBtn.classList.add("selected");
+
+  const response=scenario.painResponse||{};
+
+  motorPatientImage.src=
+    response.image||
+    moduleData.assessment?.patientImage||
+    "foundations/images/gcs_man.png";
+
+  motorResponseText.textContent=
+    response.text||
+    "The patient shows no response to painful stimulus.";
+
+  motorResponseText.classList.remove("silent");
+
+  motorResponseEstablished=true;
+
+};
+function submitMotorScore(selectedScore){
+
+  const scenario=assessmentItems[questionIndex];
+
+  const correctScore=Number(scenario.correctScore);
+  const chosenScore=Number(selectedScore);
+
+  const scoreButtons=[
+    ...motorScoreGrid.querySelectorAll("button")
+  ];
+
+  scoreButtons.forEach(button=>{
+    button.disabled=true;
+  });
+
+  motorCommandBtn.disabled=true;
+  motorPainBtn.disabled=true;
+
+  const isCorrect=chosenScore===correctScore;
+
+  if(isCorrect){
+    score++;
+  }
+
+  let techniqueIssue=false;
+  const techniqueMessages=[];
+
+  if(!motorCommandUsed){
+    techniqueIssue=true;
+    techniqueMessages.push(
+      "You selected a Motor score before testing whether the patient could obey a command."
+    );
+  }
+
+  if(motorPainUsed && !motorCommandUsed){
+    techniqueIssue=true;
+    techniqueMessages.push(
+      "Painful stimulus was applied before giving the patient a clear command."
+    );
+  }
+
+  if(
+    motorPainUsed &&
+    scenario.commandResponse?.obeys===true
+  ){
+    techniqueIssue=true;
+    techniqueMessages.push(
+      "The patient obeyed the command, so painful stimulus was unnecessary."
+    );
+  }
+
+  if(
+    chosenScore<6 &&
+    !motorPainUsed &&
+    scenario.commandResponse?.obeys!==true
+  ){
+    techniqueIssue=true;
+    techniqueMessages.push(
+      "The patient did not obey the command, but a painful stimulus was not used to establish their best Motor response."
+    );
+  }
+
+  if(!techniqueIssue){
+    techniqueScore++;
+  }
+
+  let feedbackHtml="";
+
+  if(isCorrect){
+    feedbackHtml+=`
+      <div class="assessment-feedback-title correct">
+        Correct — M${correctScore}
+      </div>
+    `;
+  }else{
+    feedbackHtml+=`
+      <div class="assessment-feedback-title incorrect">
+        Not quite — the correct score is M${correctScore}
+      </div>
+    `;
+  }
+
+  if(scenario.feedback){
+    feedbackHtml+=`
+      <p>${scenario.feedback}</p>
+    `;
+  }
+
+  if(techniqueMessages.length){
+    feedbackHtml+=`
+      <div class="assessment-technique-warning">
+        <strong>Assessment technique:</strong>
+        <ul>
+          ${techniqueMessages
+            .map(message=>`<li>${message}</li>`)
+            .join("")}
+        </ul>
+      </div>
+    `;
+  }else{
+    feedbackHtml+=`
+      <div class="assessment-technique-good">
+        Assessment technique completed in the correct order.
+      </div>
+    `;
+  }
+
+  motorAssessmentFeedback.innerHTML=feedbackHtml;
+  motorAssessmentFeedback.classList.remove("hidden");
+
+  restartMotorScenarioBtn.classList.remove("hidden");
+
+  if(questionIndex<assessmentItems.length-1){
+    nextBtn.textContent="Next patient";
+    nextBtn.classList.remove("hidden");
+  }else{
+    finishBtn.classList.remove("hidden");
+  }
+}
+restartMotorScenarioBtn.onclick=async()=>{
+  await showInteractiveMotorScenario();
+};
 function startQuiz(){
   assessmentMode="legacy";
   assessmentItems=getLegacyQuestions();
   interactiveEyeAssessment.classList.add("hidden");
   interactiveVerbalAssessment.classList.add("hidden");
+  interactiveMotorAssessment.classList.add("hidden");
 
   const quizNextBtn=document.getElementById("quizNextBtn");
   const quizCard=document.querySelector("#quizSection .quiz-card");
@@ -3150,6 +3513,8 @@ function showQuizPupils(question){
 function showQuestion(){
   answered=false;
   interactiveEyeAssessment.classList.add("hidden");
+  interactiveVerbalAssessment.classList.add("hidden");
+  interactiveMotorAssessment.classList.add("hidden");
   const questions=moduleData.questions||moduleData.quiz||[];
   const q=questions[questionIndex];
 
@@ -3285,6 +3650,16 @@ document.getElementById("quizNextBtn").onclick=async()=>{
     }
     return;
   }
+  
+if(assessmentMode==="interactive_motor"){
+  if(questionIndex<assessmentItems.length-1){
+    questionIndex++;
+    await showInteractiveMotorScenario();
+  }else{
+    finishModule();
+  }
+  return;
+}
 
   const questions=getLegacyQuestions();
   if(questionIndex<questions.length-1){questionIndex++;showQuestion()}
@@ -3530,6 +3905,7 @@ document.getElementById("restartBtn").onclick=()=>{
   assessmentItems=[];
   interactiveEyeAssessment.classList.add("hidden");
   interactiveVerbalAssessment.classList.add("hidden");
+  interactiveMotorAssessment.classList.add("hidden");
   document.getElementById("phaseTransitionSection").classList.add("hidden");
   document.getElementById("resultSection").classList.add("hidden");
   document.getElementById("lessonSection").classList.remove("hidden");

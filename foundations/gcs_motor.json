@@ -66,27 +66,27 @@
     ],
     "scoreOptions": [
       {
-        "value": 6,
+        "score": 6,
         "label": "M6 – Obeys commands"
       },
       {
-        "value": 5,
+        "score": 5,
         "label": "M5 – Localises pain"
       },
       {
-        "value": 4,
+        "score": 4,
         "label": "M4 – Flexion withdrawal"
       },
       {
-        "value": 3,
+        "score": 3,
         "label": "M3 – Abnormal flexion"
       },
       {
-        "value": 2,
+        "score": 2,
         "label": "M2 – Extension"
       },
       {
-        "value": 1,
+        "score": 1,
         "label": "M1 – No motor response"
       }
     ],
