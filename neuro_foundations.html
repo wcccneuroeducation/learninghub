@@ -2613,7 +2613,7 @@ function isInteractiveMotorAssessment(){
 }
 
 function getAssessmentTotal(){
-  return ["interactive_eye","interactive_verbal"].includes(assessmentMode)
+  return ["interactive_eye","interactive_verbal","interactive_motor"].includes(assessmentMode)
     ?assessmentItems.length
     :getLegacyQuestions().length;
 }
@@ -3395,9 +3395,9 @@ async function saveQuizAttempt({
     [`cpd/modules/${moduleData.id}/assessmentType`]:
       assessmentMode,
     [`cpd/modules/${moduleData.id}/latestTechniqueScore`]:
-      ["interactive_eye","interactive_verbal"].includes(assessmentMode)?techniqueScore:null,
+      ["interactive_eye","interactive_verbal","interactive_motor"].includes(assessmentMode)?techniqueScore:null,
     [`cpd/modules/${moduleData.id}/latestTechniqueScoreOutOf`]:
-      ["interactive_eye","interactive_verbal"].includes(assessmentMode)?totalQuestions:null,
+      ["interactive_eye","interactive_verbal","interactive_motor"].includes(assessmentMode)?totalQuestions:null,
     [`cpd/modules/${moduleData.id}/lastAttemptStartedAt`]:
       quizAttemptStartedAt||nowIso
   };
