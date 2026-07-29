@@ -2655,6 +2655,7 @@ function showCard(){
     :"Next card";
   document.querySelector("#lessonSection > .controls").classList.toggle("quiz-start",isLastCard);
   saveResumeProgress("lesson");
+  refreshFlipCardDisplay();
 }
 
 [leftTorchBtn,rightTorchBtn,bothTorchBtn].forEach(button=>{
@@ -2704,7 +2705,19 @@ document.getElementById("nextBtn").onclick=async()=>{
   if(cardIndex<moduleData.cards.length-1){cardIndex++;showCard()}
   else await startAssessment();
 };
+function refreshFlipCardDisplay(){
+  const card=document.getElementById("flipCard");
+  const front=card.querySelector(".front");
 
+  requestAnimationFrame(()=>{
+    front.style.visibility="hidden";
+    void front.offsetHeight;
+
+    requestAnimationFrame(()=>{
+      front.style.visibility="";
+    });
+  });
+}
 
 function shuffleArray(items){
   const shuffled=[...items];
