@@ -448,13 +448,46 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 .verbal-domain-chip{padding:7px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px;font-weight:900}
 .verbal-domain-chip.complete{border-color:var(--good);color:var(--good);background:rgba(97,245,169,.08)}
 .verbal-score-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-top:14px}
+
+/* Motor assessment layout */
+.motor-assessment-stage{
+  margin-top:16px;
+}
+
+.motor-patient-visual{
+  width:100%;
+  min-height:500px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(3,10,22,.74);
+}
+
+.motor-patient-image{
+  display:block;
+  width:100%;
+  max-width:800px;
+  max-height:470px;
+  object-fit:contain;
+  filter:drop-shadow(0 0 22px rgba(71,243,255,.28));
+}
+#motorScoreGrid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+}
 @media(max-width:650px){
   .verbal-assessment-stage{grid-template-columns:1fr}
   .verbal-question-grid{grid-template-columns:1fr}
   .verbal-score-grid{grid-template-columns:1fr 1fr}
-  .verbal-score-grid .gcs-score-btn:last-child{grid-column:1 / -1}
+  #verbalScoreGrid .gcs-score-btn:last-child{grid-column:1 / -1}
+  #motorScoreGrid{grid-template-columns:1fr 1fr}
   .verbal-conversation-panel{min-height:250px}
-}
+  .motor-patient-visual{ min-height:300px;padding:10px;}
+.motor-patient-image{max-height:280px;}}
+
 
 /* Reusable clinical assessment renderer */
 .clinical-assessment{
@@ -559,7 +592,10 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
   width:min(260px,100%);
   margin:12px auto 0;
 }
-
+.verbal-question-btn.selected{
+  border-color:var(--cyan);
+  background:rgba(71,243,255,.11);
+}
 .feedback{min-height:48px;margin-top:16px;color:var(--muted);line-height:1.5}
 .reward{font-size:28px;font-weight:900;color:var(--cyan);margin:18px 0}
 .small{color:var(--muted);font-size:13px}
@@ -1035,40 +1071,25 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
         <button id="restartVerbalScenarioBtn" class="btn secondary assessment-restart hidden" type="button">Restart this patient</button>
       </div>
 
-<div id="interactiveMotorAssessment" class="clinical-assessment hidden">
+<div id="interactiveMotorAssessment"
+     class="clinical-assessment hidden">
 
-  <div class="verbal-assessment-stage">
+  <div class="motor-assessment-stage">
 
-    <section class="verbal-patient-panel" aria-label="Patient assessment">
+    <div class="motor-patient-visual"
+         aria-label="Patient motor response">
 
-      <div class="verbal-patient-heading">
-        Motor Assessment
-      </div>
+      <img id="motorPatientImage"
+           class="motor-patient-image"
+           src=""
+           alt="Patient demonstrating a motor response">
 
-      <div class="verbal-patient-visual">
-        <img id="motorPatientImage"
-             class="verbal-patient-image"
-             src=""
-             alt="Patient">
-      </div>
-
-    </section>
-
-    <section class="verbal-conversation-panel">
-
-      <div id="motorResponseText"
-           class="verbal-speech silent"
-           aria-live="polite">
-
-        Assess the patient. Ask them to lift both arms before applying pain.
-
-      </div>
-
-    </section>
+    </div>
 
   </div>
 
-  <div id="motorActionGrid" class="verbal-question-grid">
+  <div id="motorActionGrid"
+       class="verbal-question-grid">
 
     <button id="motorCommandBtn"
             class="verbal-question-btn"
@@ -1084,7 +1105,8 @@ main{width:min(920px,calc(100% - 24px));margin:0 auto;padding:28px 0 50px}
 
   </div>
 
-  <div id="motorScoreGrid" class="verbal-score-grid">
+  <div id="motorScoreGrid"
+       class="verbal-score-grid">
   </div>
 
   <div id="motorAssessmentFeedback"
@@ -1322,7 +1344,7 @@ const verbalAssessmentFeedback=document.getElementById("verbalAssessmentFeedback
 const restartVerbalScenarioBtn=document.getElementById("restartVerbalScenarioBtn");
 const interactiveMotorAssessment=document.getElementById("interactiveMotorAssessment");
 const motorPatientImage=document.getElementById("motorPatientImage");
-const motorResponseText=document.getElementById("motorResponseText");
+
 const motorCommandBtn=document.getElementById("motorCommandBtn");
 const motorPainBtn=document.getElementById("motorPainBtn");
 const motorScoreGrid=document.getElementById("motorScoreGrid");
@@ -2119,14 +2141,16 @@ async function preloadModuleImages(){
   ].filter(Boolean);
 
   if(isInteractiveEyeAssessment()){
-    assessmentImagePaths.push(
-      assessmentVisuals.baseImage||"foundations/images/eyes_gcs.png",
-      assessmentVisuals.states?.closed?.left||"foundations/images/eyes_lc.png",
-      assessmentVisuals.states?.closed?.right||"foundations/images/eyes_rc.png",
-      assessmentVisuals.states?.half?.left||"foundations/images/eyes_lh.png",
-      assessmentVisuals.states?.half?.right||"foundations/images/eyes_rh.png"
-    );
-    if(isInteractiveMotorAssessment()){
+  assessmentImagePaths.push(
+    assessmentVisuals.baseImage||"foundations/images/eyes_gcs.png",
+    assessmentVisuals.states?.closed?.left||"foundations/images/eyes_lc.png",
+    assessmentVisuals.states?.closed?.right||"foundations/images/eyes_rc.png",
+    assessmentVisuals.states?.half?.left||"foundations/images/eyes_lh.png",
+    assessmentVisuals.states?.half?.right||"foundations/images/eyes_rh.png"
+  );
+  }
+
+if(isInteractiveMotorAssessment()){
   assessmentImagePaths.push(
     moduleData.assessment?.patientImage,
     ...(moduleData.assessment?.scenarios||[]).flatMap(s=>[
@@ -2135,7 +2159,8 @@ async function preloadModuleImages(){
     ])
   );
 }
-  }
+
+
 
   const imagePaths=[...new Set([
     ...cardImagePaths,
@@ -3273,10 +3298,7 @@ document.getElementById("questionText").textContent=
     moduleData.assessment?.patientImage||
     "foundations/images/gcs_man.png";
 
-  motorResponseText.textContent=
-    "Assess the patient. Start with a command before considering painful stimulus.";
-
-  motorResponseText.classList.add("silent");
+  
 
   motorCommandBtn.disabled=false;
   motorPainBtn.disabled=false;
@@ -3327,11 +3349,7 @@ motorCommandBtn.onclick=()=>{
     moduleData.assessment?.patientImage||
     "foundations/images/gcs_man.png";
 
-  motorResponseText.textContent=
-    response.text||
-    "The patient does not respond to the command.";
-
-  motorResponseText.classList.remove("silent");
+  
 
   if(response.obeys===true){
     motorResponseEstablished=true;
@@ -3363,11 +3381,7 @@ motorPainBtn.onclick=()=>{
     moduleData.assessment?.patientImage||
     "foundations/images/gcs_man.png";
 
-  motorResponseText.textContent=
-    response.text||
-    "The patient shows no response to painful stimulus.";
-
-  motorResponseText.classList.remove("silent");
+  
 
   motorResponseEstablished=true;
 
