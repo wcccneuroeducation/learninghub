@@ -3248,7 +3248,15 @@ quizNextBtn.classList.add("hidden");
 interactiveMotorAssessment.appendChild(quizNextBtn);
 
 const assessment=moduleData.assessment||{};
+quizPupilStage.classList.add("hidden");
+pupilSelectAnswer.classList.add("hidden");
 
+interactiveEyeAssessment.classList.add("hidden");
+interactiveVerbalAssessment.classList.add("hidden");
+interactiveMotorAssessment.classList.remove("hidden");
+
+document.getElementById("options").innerHTML="";
+document.getElementById("feedback").textContent="";
 document.getElementById("questionCounter").textContent=
   `Patient ${questionIndex+1} of ${assessmentItems.length}`;
 
