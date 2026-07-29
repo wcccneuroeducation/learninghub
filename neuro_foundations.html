@@ -3243,15 +3243,30 @@ async function showInteractiveMotorScenario(){
   motorAssessmentFeedback.innerHTML="";
 
   restartMotorScenarioBtn.classList.add("hidden");
-  nextBtn.classList.add("hidden");
-  finishBtn.classList.add("hidden");
+  const quizNextBtn=document.getElementById("quizNextBtn");
+quizNextBtn.classList.add("hidden");
+interactiveMotorAssessment.appendChild(quizNextBtn);
 
+const assessment=moduleData.assessment||{};
+
+document.getElementById("questionCounter").textContent=
+  `Patient ${questionIndex+1} of ${assessmentItems.length}`;
+
+document.getElementById("scoreText").textContent=
+  `Accuracy: ${score} · Technique: ${techniqueScore}`;
+
+document.getElementById("quizFill").style.width=
+  `${((questionIndex+1)/assessmentItems.length)*100}%`;
+
+document.getElementById("questionText").textContent=
+  assessment.instructions||
+  "Assess the patient, establish their best motor response, then select the GCS Motor score.";
   motorPatientImage.src=
     moduleData.assessment?.patientImage||
     "foundations/images/gcs_man.png";
 
   motorResponseText.textContent=
-    "Assess the patient and select the most appropriate Motor score.";
+    "Assess the patient. Start with a command before considering painful stimulus.";
 
   motorResponseText.classList.add("silent");
 
@@ -3278,7 +3293,7 @@ async function showInteractiveMotorScenario(){
     const button=document.createElement("button");
 
     button.type="button";
-    button.className="verbal-score-btn";
+    button.className="gcs-score-btn";
     button.textContent=option.label;
 
     button.onclick=()=>{
@@ -3461,12 +3476,14 @@ function submitMotorScore(selectedScore){
 
   restartMotorScenarioBtn.classList.remove("hidden");
 
-  if(questionIndex<assessmentItems.length-1){
-    nextBtn.textContent="Next patient";
-    nextBtn.classList.remove("hidden");
-  }else{
-    finishBtn.classList.remove("hidden");
-  }
+ const quizNextBtn=document.getElementById("quizNextBtn");
+
+quizNextBtn.textContent=
+    questionIndex===assessmentItems.length-1
+        ? "See result"
+        : "Next patient";
+
+quizNextBtn.classList.remove("hidden");
 }
 restartMotorScenarioBtn.onclick=async()=>{
   await showInteractiveMotorScenario();
