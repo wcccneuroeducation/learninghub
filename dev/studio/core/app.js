@@ -32,7 +32,7 @@ export class StudioApp {
     this.populateSelect(byId("topicSelect"), STUDIO_CONFIG.topics);
     this.populateSelect(byId("categorySelect"), STUDIO_CONFIG.categories);
     this.populateSelect(byId("difficultySelect"), STUDIO_CONFIG.difficulties);
-
+    this.populateSelect(byId("subtopicInput"), STUDIO_CONFIG.subtopics);
     const destinationHost = byId("destinationChecks");
     destinationHost.innerHTML = "";
     STUDIO_CONFIG.destinations.forEach(destination => {
