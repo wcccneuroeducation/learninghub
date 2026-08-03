@@ -98,14 +98,39 @@
           </details>
 
           <details class="studio-section">
-            <summary>Optional hosted image</summary>
-            <div class="section-body">
-              <label class="field">
-                <span>Image path or full URL</span>
-                <input id="sharedImageInput" placeholder="assets/images/sah/sah_001.png">
-              </label>
-            </div>
-          </details>
+  <summary>Images and overlays</summary>
+<div class="section-body">
+ <label class="field">
+      <span>Base image</span>
+<input
+        id="sharedImageInput"
+        placeholder="assets/images/sah/sah_001.png">
+<small>
+        The main image displayed throughout the question.
+      </small>
+    </label>
+
+    <label class="field">
+      <span>Overlay shown before answering</span>
+<input
+        id="beforeAnswerOverlayInput"
+        placeholder="assets/images/sah/overlays/sah_001_before.png">
+
+      <small>
+        Optional overlay visible while the learner is answering.
+      </small>
+    </label>
+ <label class="field">
+      <span>Overlay revealed after answering</span>
+ <input
+        id="afterAnswerOverlayInput"
+        placeholder="assets/images/sah/overlays/sah_001_answer.png">
+ <small>
+        Optional answer or teaching overlay shown after submission.
+      </small>
+    </label>
+</div>
+</details>
 
           <div class="action-row">
             <button id="generateButton" class="button primary">Generate JSON</button>
