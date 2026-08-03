@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "sah_match_001",
+  "type": "matching",
+  "topic": "sah",
+  "subtopic": "complications",
+  "category": "assessment",
+  "difficulty": "beginner",
+  "primaryDestination": "neuroSkills",
+  "useIn": {
+    "neuroSkills": true
+  },
+  "tags": [
+    "observations",
+    "deterioration"
+  ],
+  "estimatedSeconds": 40,
+  "mobileFriendly": true,
+  "prompt": "Match each observed change with the complication it may indicate.",
+  "content": {
+    "randomiseLeft": true,
+    "randomiseRight": true,
+    "pairs": [
+      {
+        "id": "pair_01",
+        "left": "New focal limb weakness",
+        "right": "Delayed cerebral ischaemia"
+      },
+      {
+        "id": "pair_02",
+        "left": "Reduced conscious level with enlarging ventricles",
+        "right": "Hydrocephalus"
+      },
+      {
+        "id": "pair_03",
+        "left": "Sudden recurrent severe headache",
+        "right": "Rebleeding"
+      }
+    ]
+  },
+  "feedback": {
+    "explanation": "Changes in conscious level, headache and focal neurology require prompt assessment and escalation."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "sah_tf_001",
+  "type": "true_false",
+  "topic": "sah",
+  "subtopic": "complications",
+  "category": "knowledge",
+  "difficulty": "beginner",
+  "primaryDestination": "neuroSkills",
+  "useIn": {
+    "neuroSkills": true,
+    "dailyNeuro": true
+  },
+  "tags": [
+    "deterioration",
+    "complications"
+  ],
+  "estimatedSeconds": 15,
+  "mobileFriendly": true,
+  "prompt": "A patient cannot deteriorate after successful aneurysm treatment.",
+  "content": {
+    "correctAnswer": false
+  },
+  "feedback": {
+    "explanation": "Patients can still deteriorate from complications such as hydrocephalus, rebleeding, seizures or delayed cerebral ischaemia."
+  }
+}

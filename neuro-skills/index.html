@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Neuro Skills</title>
+<link rel="stylesheet" href="skills.css">
+</head>
+<body>
+<header class="topbar">
+  <div><div class="eyebrow">Learning Hub</div><h1>Neuro Skills</h1></div>
+  <div id="progressText" class="progress-text">0 / 0</div>
+</header>
+<main class="shell">
+  <section id="startScreen" class="panel start-panel">
+    <div class="hero-icon">🧠</div>
+    <div class="eyebrow">Test pathway</div>
+    <h2>Subarachnoid Haemorrhage</h2>
+    <p>This first test loads individual interaction JSON files through one reusable learner page.</p>
+    <button id="startButton" class="button primary">Start test module</button>
+  </section>
+
+  <section id="learningScreen" class="panel hidden">
+    <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+    <div id="interactionHost"></div>
+    <div class="footer-actions">
+      <button id="submitButton" class="button primary">Submit answer</button>
+      <button id="nextButton" class="button primary hidden">Next</button>
+    </div>
+  </section>
+
+  <section id="completeScreen" class="panel hidden complete-panel">
+    <div class="hero-icon">🏆</div>
+    <div class="eyebrow">Module complete</div>
+    <h2>Well done</h2>
+    <p id="scoreSummary"></p>
+    <button id="restartButton" class="button secondary">Restart test</button>
+  </section>
+</main>
+<script type="module" src="skills.js"></script>
+</body>
+</html>

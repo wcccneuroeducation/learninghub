@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "sah_mcq_001",
+  "type": "mcq",
+  "topic": "sah",
+  "subtopic": "presentation",
+  "category": "recognition",
+  "difficulty": "beginner",
+  "primaryDestination": "neuroSkills",
+  "useIn": {
+    "neuroSkills": true,
+    "dailyNeuro": true
+  },
+  "tags": [
+    "headache",
+    "presentation"
+  ],
+  "estimatedSeconds": 20,
+  "mobileFriendly": true,
+  "image": "assets/images/sah/sah_001.png",
+  "prompt": "Which symptom is classically associated with subarachnoid haemorrhage?",
+  "content": {
+    "options": [
+      "Gradual loss of hearing",
+      "Thunderclap headache",
+      "Progressive ankle swelling",
+      "Isolated abdominal pain"
+    ],
+    "correctIndex": 1
+  },
+  "feedback": {
+    "explanation": "A sudden severe thunderclap headache is a classic presentation of subarachnoid haemorrhage."
+  }
+}

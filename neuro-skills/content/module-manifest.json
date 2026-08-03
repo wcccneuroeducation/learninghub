@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "sah_test_module",
+  "title": "Subarachnoid Haemorrhage",
+  "interactions": [
+    {
+      "id": "sah_mcq_001",
+      "path": "content/interactions/sah/sah_mcq_001.json"
+    },
+    {
+      "id": "sah_tf_001",
+      "path": "content/interactions/sah/sah_tf_001.json"
+    },
+    {
+      "id": "sah_match_001",
+      "path": "content/interactions/sah/sah_match_001.json"
+    }
+  ]
+}
