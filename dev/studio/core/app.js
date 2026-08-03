@@ -87,7 +87,8 @@ export class StudioApp {
   bindSharedEvents() {
     [
       "topicSelect","subtopicInput","categorySelect","difficultySelect",
-      "questionNumberInput","estimatedSecondsInput","tagsInput","sharedImageInput"
+      "questionNumberInput","estimatedSecondsInput","tagsInput","sharedImageInput","beforeAnswerOverlayInput",
+    "afterAnswerOverlayInput"
     ].forEach(id => {
       byId(id).addEventListener("input", () => this.refresh());
       byId(id).addEventListener("change", () => this.refresh());
@@ -175,14 +176,46 @@ export class StudioApp {
       mobileFriendly: true
     };
   }
+getSharedOverlays() {
 
+    const overlays = [];
+
+    const before =
+        byId("beforeAnswerOverlayInput")?.value.trim();
+
+    const after =
+        byId("afterAnswerOverlayInput")?.value.trim();
+
+    if (before) {
+        overlays.push({
+            id: "before_answer",
+            image: before,
+            showOn: "beforeAnswer",
+            visibleByDefault: true
+        });
+    }
+
+    if (after) {
+        overlays.push({
+            id: "after_answer",
+            image: after,
+            showOn: "afterAnswer",
+            visibleByDefault: false
+        });
+    }
+
+    return overlays;
+}
   generate() {
     const shared = this.getSharedMetadata();
     const editorData = this.activeEditor.getData(this.context);
-    const interaction = {
-      ...shared,
-      ...editorData
-    };
+    const overlays = this.getSharedOverlays();
+
+const interaction = {
+    ...shared,
+    ...editorData,
+    ...(overlays.length ? { overlays } : {})
+};
 
     const errors = [
       ...this.validateShared(shared),
